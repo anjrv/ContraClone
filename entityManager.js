@@ -28,6 +28,7 @@ const entityManager = {
   // _ships: [],
 
   // _bShowRocks: true,
+  _player: [],
 
   // "PRIVATE" METHODS
 
@@ -49,10 +50,11 @@ const entityManager = {
   //
   deferredSetup: function () {
     // this._categories = [this._rocks, this._bullets, this._ships];
-    this._categories = [];
+    this._categories = [this._player];
   },
 
   init: function () {
+    this._player.push(new Player({}));
   },
 
   fireBullet: function (cx, cy, velX, velY, rotation) {
@@ -95,8 +97,6 @@ const entityManager = {
 
     for (let c = 0; c < this._categories.length; ++c) {
       const aCategory = this._categories[c];
-
-      if (!this._bShowRocks && aCategory == this._rocks) continue;
 
       for (let i = 0; i < aCategory.length; ++i) {
         aCategory[i].render(ctx);

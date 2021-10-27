@@ -70,7 +70,7 @@ function updateSimulation(du) {
 // GAME-SPECIFIC DIAGNOSTICS
 
 let g_allowMixedActions = true;
-let g_useGravity = false;
+let g_useGravity = true;
 let g_useAveVel = true;
 let g_renderSpatialDebug = false;
 
@@ -122,14 +122,17 @@ function renderSimulation(ctx) {
 const g_images = {};
 
 function requestPreloads() {
-  preloadDone();
+  const requiredImages = {
+    character: './Sprites/palette.png'
+  }
+  imagesPreload(requiredImages, g_images, preloadDone);
 }
 
 const g_sprites = {};
 
 function preloadDone() {
+  g_sprites.character = new Sprite(g_images.character)
   entityManager.init();
-
   main.init();
 }
 
