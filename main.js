@@ -26,6 +26,7 @@ const main = {
   // "Frame Time" is a (potentially high-precision) frame-clock for animations
   _frameTime_ms: null,
   _frameTimeDelta_ms: null,
+  _aspectRatio: 16 / 9
 };
 
 // Perform one iteration of the mainloop
@@ -125,6 +126,21 @@ main.init = function () {
   // so let's use a fillStyle which works against that...
   //
   g_ctx.fillStyle = 'white';
+  this.scaleCanvas();
+  window.addEventListener('resize', this.scaleCanvas.bind(this));
 
   this._requestNextIteration();
+};
+
+main.scaleCanvas = function () {
+  // Scale the canvas so it keeps the same aspect ratio
+  console.log('resizing');
+  if (window.innerWidth / this._aspectRatio < window.innerHeight) {
+    console.log(window.innerWidth);
+    g_canvas.width = window.innerWidth;
+    g_canvas.height = window.innerWidth / this._aspectRatio;
+  } else {
+    g_canvas.width = window.innerHeight * this._aspectRatio;
+    g_canvas.height = window.innerHeight;
+  }
 };

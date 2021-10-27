@@ -3,18 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <title>ASTEROIDS!</title>
+    <style>
+      body, * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body>
     <canvas
       id="myCanvas"
-      width="600"
-      height="600"
-      style="border: 1px solid black"
     >
       Sorry, but your browser does not support the HTML5 canvas tag.
     </canvas>
-
-    <div id="output"></div>
 
     <script src="globals.js"></script>
     <script src="consts.js"></script>
@@ -28,7 +36,7 @@
     <script src="Sprite.js"></script>
 
     <script src="Entity.js"></script>
-    
+
     <script src="update.js"></script>
     <script src="render.js"></script>
 
