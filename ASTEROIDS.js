@@ -38,17 +38,6 @@ need to tweak it if you do something "non-obvious" in yours.
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
 
-// ====================
-// CREATE INITIAL SHIPS
-// ====================
-
-function createInitialShips() {
-  entityManager.generateShip({
-    cx: 200,
-    cy: 200,
-  });
-}
-
 // =============
 // GATHER INPUTS
 // =============
@@ -76,8 +65,6 @@ function updateSimulation(du) {
 
   entityManager.update(du);
 
-  // Prevent perpetual firing!
-  eatKey(Ship.prototype.KEY_FIRE);
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
@@ -107,29 +94,6 @@ function processDiagnostics() {
 
   if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
 
-  if (eatKey(KEY_HALT)) entityManager.haltShips();
-
-  if (eatKey(KEY_RESET)) entityManager.resetShips();
-
-  if (eatKey(KEY_0)) entityManager.toggleRocks();
-
-  if (eatKey(KEY_1))
-    entityManager.generateShip({
-      cx: g_mouseX,
-      cy: g_mouseY,
-
-      sprite: g_sprites.ship,
-    });
-
-  if (eatKey(KEY_2))
-    entityManager.generateShip({
-      cx: g_mouseX,
-      cy: g_mouseY,
-
-      sprite: g_sprites.ship2,
-    });
-
-  if (eatKey(KEY_K)) entityManager.killNearestShip(g_mouseX, g_mouseY);
 }
 
 // =================
@@ -158,27 +122,13 @@ function renderSimulation(ctx) {
 const g_images = {};
 
 function requestPreloads() {
-  const requiredImages = {
-    ship: 'https://notendur.hi.is/~pk/308G/images/ship.png',
-    ship2: 'https://notendur.hi.is/~pk/308G/images/ship_2.png',
-    rock: 'https://notendur.hi.is/~pk/308G/images/rock.png',
-  };
-
-  imagesPreload(requiredImages, g_images, preloadDone);
+  preloadDone();
 }
 
 const g_sprites = {};
 
 function preloadDone() {
-  g_sprites.ship = new Sprite(g_images.ship);
-  g_sprites.ship2 = new Sprite(g_images.ship2);
-  g_sprites.rock = new Sprite(g_images.rock);
-
-  g_sprites.bullet = new Sprite(g_images.ship);
-  g_sprites.bullet.scale = 0.25;
-
   entityManager.init();
-  createInitialShips();
 
   main.init();
 }

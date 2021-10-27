@@ -23,51 +23,13 @@ with suitable 'data' and 'methods'.
 const entityManager = {
   // "PRIVATE" DATA
 
-  _rocks: [],
-  _bullets: [],
-  _ships: [],
+  // _rocks: [],
+  // _bullets: [],
+  // _ships: [],
 
-  _bShowRocks: true,
+  // _bShowRocks: true,
 
   // "PRIVATE" METHODS
-
-  _generateRocks: function () {
-    let i,
-      NUM_ROCKS = 4;
-
-    for (i = 0; i < NUM_ROCKS; ++i) {
-      this.generateRock();
-    }
-  },
-
-  _findNearestShip: function (posX, posY) {
-    let closestShip = null,
-      closestIndex = -1,
-      closestSq = 1000 * 1000;
-
-    for (let i = 0; i < this._ships.length; ++i) {
-      const thisShip = this._ships[i];
-      const shipPos = thisShip.getPos();
-      const distSq = util.wrappedDistSq(
-        shipPos.posX,
-        shipPos.posY,
-        posX,
-        posY,
-        g_canvas.width,
-        g_canvas.height,
-      );
-
-      if (distSq < closestSq) {
-        closestShip = thisShip;
-        closestIndex = i;
-        closestSq = distSq;
-      }
-    }
-    return {
-      theShip: closestShip,
-      theIndex: closestIndex,
-    };
-  },
 
   _forEachOf: function (aCategory, fn) {
     for (let i = 0; i < aCategory.length; ++i) {
@@ -86,60 +48,26 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    this._categories = [this._rocks, this._bullets, this._ships];
+    // this._categories = [this._rocks, this._bullets, this._ships];
+    this._categories = [];
   },
 
   init: function () {
-    this._generateRocks();
-    //this._generateShip();
   },
 
   fireBullet: function (cx, cy, velX, velY, rotation) {
-    this._bullets.push(
-      new Bullet({
-        cx: cx,
-        cy: cy,
-        velX: velX,
-        velY: velY,
+    // this._bullets.push(
+    //   new Bullet({
+    //     cx: cx,
+    //     cy: cy,
+    //     velX: velX,
+    //     velY: velY,
 
-        rotation: rotation,
-      }),
-    );
+    //     rotation: rotation,
+    //   }),
+    // );
   },
 
-  generateRock: function (descr) {
-    this._rocks.push(new Rock(descr));
-  },
-
-  generateShip: function (descr) {
-    this._ships.push(new Ship(descr));
-  },
-
-  killNearestShip: function (xPos, yPos) {
-    const theShip = this._findNearestShip(xPos, yPos).theShip;
-    if (theShip) {
-      theShip.kill();
-    }
-  },
-
-  yoinkNearestShip: function (xPos, yPos) {
-    const theShip = this._findNearestShip(xPos, yPos).theShip;
-    if (theShip) {
-      theShip.setPos(xPos, yPos);
-    }
-  },
-
-  resetShips: function () {
-    this._forEachOf(this._ships, Ship.prototype.reset);
-  },
-
-  haltShips: function () {
-    this._forEachOf(this._ships, Ship.prototype.halt);
-  },
-
-  toggleRocks: function () {
-    this._bShowRocks = !this._bShowRocks;
-  },
 
   update: function (du) {
     for (let c = 0; c < this._categories.length; ++c) {
@@ -159,7 +87,6 @@ const entityManager = {
       }
     }
 
-    if (this._rocks.length === 0) this._generateRocks();
   },
 
   render: function (ctx) {
