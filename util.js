@@ -99,4 +99,8 @@ const util = {
     ctx.fillRect(x, y, w, h);
     ctx.fillStyle = oldStyle;
   },
+
+  lerp: function (start, end, amt) {
+    return start + (end - start) * amt;
+  }
 };

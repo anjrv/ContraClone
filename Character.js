@@ -79,23 +79,15 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
   // Collision with the floor
   // TODO: allow variable heights of the floor
 
+  const floorHeight = 100;
   const minY = this.sprite.height / 2;
-  const maxY = g_canvas.height - minY;
+  const maxY = g_canvas.height - minY - floorHeight;
 
-  const MAX_BOUNCES = 3;
   if (this.velY < 0) this.onGround = false;
   if (nextY > maxY && !this.onGround) {
-    if (this.bounces < MAX_BOUNCES) {
-      this.velY = -this.velY * 0.3;
-      this.intervalVelY = this.velY;
-      this.bounces++;
-    } else {
-      this.velY = 0;
-      this.intervalVelY = 0;
-      this.bounces = 0;
-      this.onGround = true;
-    }
-  } 
+    this.onGround = true;
+  }
+  if (this.onGround) this.velY = 0;
   // s = s + v_ave * t
   this.cx += du * intervalVelX;
   this.cy = Math.min(maxY, du * intervalVelY + this.cy);
