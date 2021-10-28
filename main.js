@@ -47,7 +47,13 @@ main.iter = function (frameTime) {
 main._updateClocks = function (frameTime) {
   // First-time initialisation
   if (this._frameTime_ms === null) this._frameTime_ms = frameTime;
-
+  
+  if (g_play_recording) {
+    this._frameTimeDelta_ms = DEBUGGER.get_next_frametime_delta();
+    this._frameTime_ms += this._frameTimeDelta_ms;
+    return;
+  }
+  
   // Track frameTime and its delta
   this._frameTimeDelta_ms = frameTime - this._frameTime_ms;
   this._frameTime_ms = frameTime;

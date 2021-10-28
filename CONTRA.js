@@ -38,31 +38,35 @@ function updateSimulation(du) {
 
 // GAME-SPECIFIC DIAGNOSTICS
 
-// let g_allowMixedActions = true;
-// let g_useGravity = false;
-// let g_useAveVel = true;
+let g_allowMixedActions = true;
+let g_useGravity = true;
+let g_useAveVel = true;
 let g_renderSpatialDebug = false;
+let g_play_recording = false;
 
-// const KEY_MIXED = keyCode('M');
-// const KEY_GRAVITY = keyCode('G');
-// const KEY_AVE_VEL = keyCode('V');
+const KEY_MIXED = keyCode('M');
+const KEY_GRAVITY = keyCode('G');
+const KEY_AVE_VEL = keyCode('V');
 const KEY_SPATIAL = keyCode('X');
 const KEY_HALT = keyCode('H');
 const KEY_RESET = keyCode('R');
-// const KEY_0 = keyCode('0');
-// const KEY_1 = keyCode('1');
-// const KEY_2 = keyCode('2');
-// const KEY_K = keyCode('K');
+const KEY_0 = keyCode('0');
+const KEY_1 = keyCode('1');
+const KEY_2 = keyCode('2');
+const KEY_K = keyCode('K');
+const KEY_PLAY_RECORDING = keyCode('9');
+
 
 function processDiagnostics() {
-  // if (eatKey(KEY_MIXED)) g_allowMixedActions = !g_allowMixedActions;
+  if (eatKey(KEY_MIXED)) g_allowMixedActions = !g_allowMixedActions;
 
-  // if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
+  if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
 
-  // if (eatKey(KEY_AVE_VEL)) g_useAveVel = !g_useAveVel;
+  if (eatKey(KEY_AVE_VEL)) g_useAveVel = !g_useAveVel;
 
   if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
 
+  if (eatKey(KEY_PLAY_RECORDING)) g_play_recording = true;
 }
 
 // =================
