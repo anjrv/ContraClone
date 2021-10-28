@@ -25,5 +25,5 @@ function handleMouse(evt) {
 }
 
 // Handle "down" and "move" events the same way.
-window.addEventListener('mousedown', handleMouse);
-window.addEventListener('mousemove', handleMouse);
+// window.addEventListener('mousedown', handleMouse);
+// window.addEventListener('mousemove', handleMouse);

@@ -117,10 +117,7 @@ main._debugRender = function (ctx) {
 };
 
 main.init = function () {
-  // Grabbing focus is good, but it sometimes screws up jsfiddle,
-  // so it's a risky option during "development"
-  //
-  //window.focus(true);
+  window.focus(true);
 
   // We'll be working on a black background here,
   // so let's use a fillStyle which works against that...

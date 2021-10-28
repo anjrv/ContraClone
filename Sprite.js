@@ -43,6 +43,8 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
   ctx.restore();
 };
 
+// jks - I don't think we will need this function
+// TODO maybe remove
 Sprite.prototype.drawWrappedCentredAt = function (ctx, cx, cy, rotation) {
   // Get "screen width"
   const sw = g_canvas.width;
@@ -54,7 +56,8 @@ Sprite.prototype.drawWrappedCentredAt = function (ctx, cx, cy, rotation) {
   this.drawWrappedVerticalCentredAt(ctx, cx - sw, cy, rotation);
   this.drawWrappedVerticalCentredAt(ctx, cx + sw, cy, rotation);
 };
-
+// jks - same here I think this is not useful
+// TODO maybe remove
 Sprite.prototype.drawWrappedVerticalCentredAt = function (
   ctx,
   cx,
