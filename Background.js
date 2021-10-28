@@ -17,7 +17,7 @@ Background.prototype.scroll = function (dx) {
 
 Background.prototype.update = function (du) {
   // maybe we want something here
-  this.posX += 0.1
+  this.posX -= 0.1
 }
 
 // TODO
@@ -30,6 +30,8 @@ Background.prototype.render = function (ctx) {
   this.layer1.drawCentredAt(ctx, this.layer1.scale*this.layer1.width*1.5, ctx.canvas.height/2);
   this.layer1.scale = origScale;
 
+  this.layer3.drawCentredAt(ctx, ctx.canvas.width/2, ctx.canvas.height/2)
+
   origScale = this.layer2.scale;
   this.layer2.scale = ctx.canvas.width /( 2 * this.layer2.width );
 
@@ -37,4 +39,5 @@ Background.prototype.render = function (ctx) {
   this.layer2.drawCentredAt(ctx, this.posX + this.layer2.scale*this.layer2.width*1.5, ctx.canvas.height/2);
 
   this.layer2.scale = origScale;
+
 } 
