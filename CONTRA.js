@@ -90,14 +90,17 @@ const g_images = {};
 
 // Makes sure everything is preloaded before initialization.
 function requestPreloads() {
-  preloadDone();
+  const requiredImages = {
+    character: './Sprites/palette.png'
+  }
+  imagesPreload(requiredImages, g_images, preloadDone);
 }
 
 const g_sprites = {};
 
 function preloadDone() {
+  g_sprites.character = new Sprite(g_images.character)
   entityManager.init();
-
   main.init();
 }
 
