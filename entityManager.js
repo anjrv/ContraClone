@@ -55,6 +55,7 @@ const entityManager = {
 
   init: function () {
     this._player.push(new Player({}));
+    this._background = new Background();
   },
 
   fireBullet: function (cx, cy, velX, velY, rotation) {
@@ -72,6 +73,7 @@ const entityManager = {
 
 
   update: function (du) {
+    this._background.update(du);
     for (let c = 0; c < this._categories.length; ++c) {
       const aCategory = this._categories[c];
       let i = 0;
@@ -92,6 +94,7 @@ const entityManager = {
   },
 
   render: function (ctx) {
+    this._background.render(ctx);
     let debugX = 10,
       debugY = 100;
 
