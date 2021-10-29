@@ -73,8 +73,28 @@ main._iterCore = function (dt) {
 
   gatherInputs();
   update(dt);
+  if (g_record && this.should_save_timeframe) this.saveTimeframe();
   render(g_ctx);
 };
+
+main.should_save_timeframe = false;
+
+main.saveTimeframe = function () {
+  let timeframe = document.createElement('timeframe');
+  let dt = document.createElement('dt');
+  dt.innerHTML = this._frameTimeDelta_ms;
+  timeframe.appendChild(dt);
+  
+  for (var ID in keys) {
+    if (!keys[ID]) continue;
+    let key = document.createElement('key');
+    key.innerHTML = String.fromCharCode(ID);
+    timeframe.appendChild(key);
+  }
+
+  this.recording.appendChild(timeframe);
+}
+
 
 main._isGameOver = false;
 
@@ -133,8 +153,8 @@ main.init = function () {
   this.scaleCanvas();
   window.addEventListener('resize', this.scaleCanvas.bind(this));
 
-  this.recording = document.implementation.createDocument(null, 'recording');
-  console.log(this.recording);
+  let recording = document.implementation.createDocument(null, 'recording');
+  this.recording = recording.getElementsByTagName('recording')[0];
 
   this._requestNextIteration();
 };

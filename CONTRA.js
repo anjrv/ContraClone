@@ -44,6 +44,7 @@ let g_useGravity = true;
 let g_useAveVel = true;
 let g_renderSpatialDebug = false;
 let g_play_recording = false;
+let g_record = false;
 
 const KEY_MIXED = keyCode('M');
 const KEY_GRAVITY = keyCode('G');
@@ -56,6 +57,7 @@ const KEY_1 = keyCode('1');
 const KEY_2 = keyCode('2');
 const KEY_K = keyCode('K');
 const KEY_PLAY_RECORDING = keyCode('9');
+const KEY_RECORD = keyCode('8');
 
 
 function processDiagnostics() {
@@ -68,6 +70,8 @@ function processDiagnostics() {
   if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
 
   if (eatKey(KEY_PLAY_RECORDING)) g_play_recording = true;
+
+  if (eatKey(KEY_RECORD)) g_record = !g_record;
 }
 
 // =================

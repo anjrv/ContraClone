@@ -13,10 +13,13 @@ var g_prevUpdateDu = null;
 var g_isUpdateOdd = false;
 
 function update(dt) {
+  main.should_save_timeframe = false;
   // Get out if skipping (e.g. due to pause-mode)
   //
   if (shouldSkipUpdate()) return;
-  
+  // if we don't update we shouldn't store the timeframe
+  main.should_save_timeframe = true;
+
   // Remember this for later
   //
   var original_dt = dt;
