@@ -73,7 +73,6 @@ main._iterCore = function (dt) {
 
   gatherInputs();
   update(dt);
-  if (g_record && this.should_save_timeframe) this.saveTimeframe();
   render(g_ctx);
 };
 
@@ -86,6 +85,7 @@ main.saveTimeframe = function () {
   timeframe.appendChild(dt);
   
   for (var ID in keys) {
+    if(ID === ' '.charCodeAt) console.log(keys[ID]);
     if (!keys[ID]) continue;
     let key = document.createElement('key');
     key.innerHTML = String.fromCharCode(ID);
