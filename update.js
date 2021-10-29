@@ -34,6 +34,7 @@ function update(dt) {
   var du = dt / NOMINAL_UPDATE_INTERVAL;
 
   updateSimulation(du);
+  if (g_play_recording) DEBUGGER.nextFrame();
 
   g_prevUpdateDt = original_dt;
   g_prevUpdateDu = du;
