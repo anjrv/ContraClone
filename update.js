@@ -16,7 +16,7 @@ function update(dt) {
   // Get out if skipping (e.g. due to pause-mode)
   //
   if (shouldSkipUpdate()) return;
-
+  
   // Remember this for later
   //
   var original_dt = dt;
@@ -34,7 +34,7 @@ function update(dt) {
   var du = dt / NOMINAL_UPDATE_INTERVAL;
 
   updateSimulation(du);
-  if (g_play_recording) DEBUGGER.nextFrame();
+  if (g_play_recording) RECORDINGPLAYER.nextFrame();
 
   g_prevUpdateDt = original_dt;
   g_prevUpdateDu = du;

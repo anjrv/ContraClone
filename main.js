@@ -48,8 +48,9 @@ main._updateClocks = function (frameTime) {
   // First-time initialisation
   if (this._frameTime_ms === null) this._frameTime_ms = frameTime;
   
+  // If we are playing a recording we set our time explicitly by the recording values 
   if (g_play_recording) {
-    this._frameTimeDelta_ms = DEBUGGER.getNextFrameDelta_ms();
+    this._frameTimeDelta_ms = RECORDINGPLAYER.getNextFrameDelta_ms();
     this._frameTime_ms += this._frameTimeDelta_ms;
     return;
   }
@@ -131,6 +132,9 @@ main.init = function () {
   g_ctx.fillStyle = 'white';
   this.scaleCanvas();
   window.addEventListener('resize', this.scaleCanvas.bind(this));
+
+  this.recording = document.implementation.createDocument(null, 'recording');
+  console.log(this.recording);
 
   this._requestNextIteration();
 };

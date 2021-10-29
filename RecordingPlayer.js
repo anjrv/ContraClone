@@ -1,9 +1,8 @@
-// Debugger class that can provide dt values to the _update_clocks routine in main
+//  RecordingPlayer class that can provide dt values to the _update_clocks routine in main
 // and simultanuously set all the pressed down keys to true
 
-
 // Constructor
-function Debugger() {
+function RecordingPlayer() {
   this.frame_count = 0;
   this.keys = [];
   this.xml = `
@@ -92,21 +91,18 @@ function Debugger() {
   console.log(this.timestamps);
 }
 
-// Request that the debugger moves to the next frame
+// Request that the player moves to the next frame
 // Has to be seperate because the update is sometimes paused but the clocks are still 
 // update-ing
-Debugger.prototype.nextFrame = function () {
+RecordingPlayer.prototype.nextFrame = function () {
   this.frame_count++;
 }
 
-// Returns the dt value for the next frame and updates the global keys array so that
-// the correct keys are in the pressed down state. 
-Debugger.prototype.getNextFrameDelta_ms = function() {
-  // We are manipulating the keys arrays and have to clean up after ourselves
-  this.cleanupKeys();
-
+// Returns the dt value for the current frame
+RecordingPlayer.prototype.getNextFrameDelta_ms = function() {
   // When the recording is over we turn off the recording and reset the framecount to 0
   if (this.frame_count >= this.timestamps.length) {
+    this.cleanupKeys();
     this.frame_count = 0;
     g_play_recording = false;
     return NOMINAL_UPDATE_INTERVAL;
@@ -115,7 +111,16 @@ Debugger.prototype.getNextFrameDelta_ms = function() {
   let dt = this.timestamps[this.frame_count]
     .getElementsByTagName('dt')[0]
     .innerHTML;
-  
+
+  return Number.parseFloat(dt);
+}
+
+// Updates the global keys array so that the correct keys are in the pressed down state 
+// for the current frame
+RecordingPlayer.prototype.setKeys = function () {
+  // We are manipulating the keys arrays and have to clean up after ourselves
+  this.cleanupKeys();
+
   let keys_this_frame = this.timestamps[this.frame_count]
     .getElementsByTagName('key');
 
@@ -124,17 +129,15 @@ Debugger.prototype.getNextFrameDelta_ms = function() {
     keys[keyCode(key)] = true;
     this.keys.push(key);
   }
-
-  return Number.parseFloat(dt);
 }
 
 // Sets all the keys we have explicitly set to true back to false 
 // Prevents contamination of input between frames
-Debugger.prototype.cleanupKeys = function () {
+RecordingPlayer.prototype.cleanupKeys = function () {
   for (let i = this.keys.length - 1; i >= 0; i--) {
     keys[keyCode(this.keys[i])] = false;
     this.keys.splice(i, 1);
   }
 }
 
-const DEBUGGER = new Debugger();
+const RECORDINGPLAYER = new RecordingPlayer();

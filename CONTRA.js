@@ -17,6 +17,7 @@ A sort-of-playable version of the classic arcade game.
 
 function gatherInputs() {
   // we keep it here for future debugging functionality
+  if (g_play_recording) RECORDINGPLAYER.setKeys();
 }
 
 // =================
