@@ -95,6 +95,15 @@ main.saveTimeframe = function () {
   this.recording.appendChild(timeframe);
 }
 
+main.createRecord = function () {
+  let recording = document.implementation.createDocument(null, 'recording');
+  this.recording = recording.getElementsByTagName('recording')[0];
+}
+
+main.storeRecord = function () {
+  localStorage.setItem('recording', new XMLSerializer().serializeToString(this.recording));
+}
+
 
 main._isGameOver = false;
 
@@ -152,9 +161,6 @@ main.init = function () {
   g_ctx.fillStyle = 'white';
   this.scaleCanvas();
   window.addEventListener('resize', this.scaleCanvas.bind(this));
-
-  let recording = document.implementation.createDocument(null, 'recording');
-  this.recording = recording.getElementsByTagName('recording')[0];
 
   this._requestNextIteration();
 };

@@ -71,7 +71,11 @@ function processDiagnostics() {
 
   if (eatKey(KEY_PLAY_RECORDING)) g_play_recording = true;
 
-  if (eatKey(KEY_RECORD)) g_record = !g_record;
+  if (eatKey(KEY_RECORD)) { 
+    if (g_record) main.storeRecord();
+    else main.createRecord();
+    g_record = !g_record;
+  }
 }
 
 // =================
