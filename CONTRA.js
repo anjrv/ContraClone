@@ -39,8 +39,8 @@ function updateSimulation(du) {
 // GAME-SPECIFIC DIAGNOSTICS
 
 // let g_allowMixedActions = true;
-// let g_useGravity = false;
-// let g_useAveVel = true;
+let g_useGravity = true;
+let g_useAveVel = true;
 let g_renderSpatialDebug = false;
 
 // const KEY_MIXED = keyCode('M');
@@ -91,7 +91,22 @@ const g_images = {};
 // Makes sure everything is preloaded before initialization.
 function requestPreloads() {
   const requiredImages = {
-    character: './Sprites/palette.png'
+    palette       :   './Sprites/palette.png',
+    player        :   './Sprites/char-sheet-alpha.png',
+    impactWhite   :   './Sprites/impacts-sheet-colour-1-alpha.png',
+    impactAcid    :   './Sprites/impacts-sheet-colour-2-alpha.png',
+    impactFire    :   './Sprites/impacts-sheet-colour-3-alpha.png',
+    impactPlasma  :   './Sprites/impacts-sheet-colour-4-alpha.png',
+    impactSun     :   './Sprites/impacts-sheet-colour-5-alpha.png',
+    explosion     :   './Sprites/jrob774-explosion_2-sheet-alpha.png',
+    powerups      :   './Sprites/powerups-sheet-alpha.png',
+    projectiles   :   './Sprites/projectiles-sheet-alpha.png',
+    flashWhite    :   './Sprites/weaponflash-sheet-colour-1-alpha.png',
+    flashAcid     :   './Sprites/weaponflash-sheet-colour-2-alpha.png',
+    flashFire     :   './Sprites/weaponflash-sheet-colour-3-alpha.png',
+    flashPlasma   :   './Sprites/weaponflash-sheet-colour-4-alpha.png',
+    flashSun      :   './Sprites/weaponflash-sheet-colour-5-alpha.png',
+    enemies       :   './Sprites/enemies-sheet-alpha.png'
   }
   imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -99,7 +114,22 @@ function requestPreloads() {
 const g_sprites = {};
 
 function preloadDone() {
-  g_sprites.character = new Sprite(g_images.character)
+  g_sprites.palette      = new Sprite(g_images.palette)
+  g_sprites.player       = new Sprite(g_images.player)
+  g_sprites.impactWhite  = new Sprite(g_images.impactWhite)
+  g_sprites.impactAcid   = new Sprite(g_images.impactAcid)
+  g_sprites.impactFire   = new Sprite(g_images.impactFire)
+  g_sprites.impactPlasma = new Sprite(g_images.impactPlasma)
+  g_sprites.impactSun    = new Sprite(g_images.impactSun)
+  g_sprites.explosion    = new Sprite(g_images.explosion)
+  g_sprites.powerups     = new Sprite(g_images.powerups)
+  g_sprites.projectiles  = new Sprite(g_images.projectiles)
+  g_sprites.flashWhite   = new Sprite(g_images.flashWhite)
+  g_sprites.flashAcid    = new Sprite(g_images.flashAcid)
+  g_sprites.flashFire    = new Sprite(g_images.flashFire)
+  g_sprites.flashPlasma  = new Sprite(g_images.flashPlasma)
+  g_sprites.flashSun     = new Sprite(g_images.flashSun)
+  g_sprites.enemies      = new Sprite(g_images.enemies)
   entityManager.init();
   main.init();
 }
