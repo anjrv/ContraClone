@@ -68,7 +68,7 @@ Character.prototype.computeGravity = function () {
   return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
-Character.prototype.applyAccel = function (accelX, accelY, du) {
+Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
   // u = original velocity
   const oldVelX = this.velX;
   const oldVelY = this.velY;
@@ -103,8 +103,12 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
   }
   if (this.onGround) this.velY = 0;
   // s = s + v_ave * t
-  this.cx += du * intervalVelX;
-  this.cy = Math.min(maxY, du * intervalVelY + this.cy);
+  if (player) {
+    worldMap.updateCamera(du * intervalVelX, du * intervalVelY);
+  } else {
+    this.cx += du * intervalVelX;
+    this.cy = Math.min(maxY, du * intervalVelY + this.cy);
+  }
 };
 
 // TODO: change this into a rectangle hitbox

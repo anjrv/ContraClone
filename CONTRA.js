@@ -33,6 +33,7 @@ function gatherInputs() {
 function updateSimulation(du) {
   processDiagnostics();
 
+  worldMap.update(du);
   entityManager.update(du);
 }
 
@@ -77,6 +78,7 @@ function processDiagnostics() {
 // GAME-SPECIFIC RENDERING
 
 function renderSimulation(ctx) {
+  worldMap.render(ctx);
   entityManager.render(ctx);
 
   if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -131,6 +133,7 @@ function preloadDone() {
   g_sprites.flashSun     = new Sprite(g_images.flashSun)
   g_sprites.enemies      = new Sprite(g_images.enemies)
   entityManager.init();
+  worldMap.init(level1);
   main.init();
 }
 

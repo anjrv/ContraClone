@@ -93,7 +93,10 @@ Player.prototype.computeSubStep = function (du) {
     this.jumps++;
   }
 
-  this.applyAccel(acceleration, gravityAcc, du);
+  this.applyAccel(acceleration, gravityAcc, du, true);
+
+  this.cx = g_ctx.canvas.width/2;
+  this.cy = g_ctx.canvas.height/2;
 
   return acceleration;
 };

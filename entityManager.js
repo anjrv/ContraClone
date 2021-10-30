@@ -54,7 +54,7 @@ const entityManager = {
   },
 
   init: function () {
-    this._player.push(new Player({}));
+    this._player.push(new Player({ }));
   },
 
   fireBullet: function (cx, cy, velX, velY, rotation) {
