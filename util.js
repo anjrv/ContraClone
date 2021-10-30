@@ -100,6 +100,13 @@ const util = {
     ctx.fillStyle = oldStyle;
   },
 
+  fillBoxCentered: function (ctx, x, y, w, h, style) {
+    const oldStyle = ctx.fillStyle;
+    ctx.fillStyle = style;
+    ctx.fillRect(x - w / 2, y - h / 2, w, h);
+    ctx.fillStyle = oldStyle;
+  },
+
   lerp: function (start, end, amt) {
     return start + (end - start) * amt;
   }

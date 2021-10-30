@@ -63,8 +63,8 @@ function gatherInputs() {
 function updateSimulation(du) {
   processDiagnostics();
 
+  worldMap.update(du);
   entityManager.update(du);
-
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
@@ -110,6 +110,7 @@ function processDiagnostics() {
 // GAME-SPECIFIC RENDERING
 
 function renderSimulation(ctx) {
+  worldMap.render(ctx);
   entityManager.render(ctx);
 
   if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -133,6 +134,7 @@ const g_sprites = {};
 function preloadDone() {
   g_sprites.character = new Sprite(g_images.character)
   entityManager.init();
+  worldMap.init(level1);
   main.init();
 }
 
