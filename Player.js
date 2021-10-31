@@ -14,8 +14,11 @@ var p_scale = 2;
 // Size of the spriteSheet
 var p_ssHeight = 2240;
 
-// To 
+// Calculate where the sprite should appear
+// NOTE! It was made unnecessary after worldmap update
 var p_ground = (p_ssHeight/2);
+
+var p_ground2 = 0;
 
 function Player(descr) {
   this.speed = 1;
@@ -29,7 +32,7 @@ function Player(descr) {
   this.spritePosition = 0;
   this.spriteScale = p_scale;
   this.ssHeight = p_ssHeight;
-  this.floor = p_ground;
+  this.floor = p_ground2;
 
   // Direction 1 is right, -1 is left.
   this.direction = 1;
@@ -122,9 +125,10 @@ Player.prototype.changeSprite = function(du) {
   // Change the direction of player to mirror sprite
   this.direction = (this.velX < 0) ? -1 : 1;
 
-  // Adjust the sprite position and reset when reach end
   // In the character sprite there is a crouch sprite which we skip
   if (this.spritePosition === 1) this.spritePosition += 1;
+
+  // Reset when reached end of spritesheet row
   if (this.spritePosition === this.spriteNumber) this.spritePosition = 0;
 
   // Change to standing sprite when player stops

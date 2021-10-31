@@ -47,8 +47,7 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation, entity) {
         let scale = entity.spriteScale;
         let posX = (dir === -1) ? width * dir * scale : 0;
         ctx.drawImage(this.image,beginX,beginY,width,height,
-                        posX,entity.floor-scale*height,width*scale,height*scale);
-
+                        posX,entity.floor-height,width*scale,height*scale);
     } else {
         ctx.drawImage(this.image, -w/2, -h/2);
     }
