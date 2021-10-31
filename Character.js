@@ -136,6 +136,6 @@ Character.prototype.render = function (ctx) {
   const origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-  this.sprite.drawCentredAt(ctx, this.cx - this.spriteWidth, this.cy, 0, this);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this);
   this.sprite.scale = origScale;
 };
