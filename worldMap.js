@@ -21,6 +21,7 @@ const worldMap = {
       cx: this._cameraTile.cx * this._tileSize + this._tileSize / 2,
       cy: this._cameraTile.cy * this._tileSize + this._tileSize / 2,
     };
+    // Clear spawn point for "collision"
     this._layers[0][playerIndex] = 'E';
   },
 
@@ -45,14 +46,15 @@ const worldMap = {
     if (this.getTile(this._cameraTile.cx, nextCameraY, 0) === "E") {
       this._cameraTile.cy = Math.floor(newY / this._tileSize);
       this._mapCameraCoords.cy = newY;
-      //this._offsetY = ... should apply offset to smooth rendering, need to know charsize
     }
 
     if (this.getTile(nextCameraX, this._cameraTile.cy, 0) === "E") {
       this._cameraTile.cx = Math.floor(newX / this._tileSize);
       this._mapCameraCoords.cx = newX;
-      //this._offsetX = ... should apply offset to smooth rendering, need to know charsize
     }
+
+    this._offsetY = -this._mapCameraCoords.cy + this._cameraTile.cy * this._tileSize; 
+    this._offsetX = -this._mapCameraCoords.cx + this._cameraTile.cx * this._tileSize; 
   },
 
   update: function (du) {
@@ -64,8 +66,8 @@ const worldMap = {
   render: function (ctx) {
     const playerX = ctx.canvas.width / 2;
     const playerY = ctx.canvas.height / 2;
-    const numHalfCols = Math.ceil(ctx.canvas.height / this._tileSize);
-    const numHalfRows = Math.ceil(ctx.canvas.width / this._tileSize);
+    const numHalfCols = Math.floor(ctx.canvas.height / this._tileSize);
+    const numHalfRows = Math.floor(ctx.canvas.width / this._tileSize);
 
     for (let i = 0; i < this._layers.length; i++) {
       for (let col = -numHalfCols; col <= numHalfCols; col++) {
@@ -78,8 +80,8 @@ const worldMap = {
           if (val === 'G') {
             util.fillBoxCentered(
               ctx,
-              playerX + this._tileSize * col + this._offsetX,
-              playerY + this._tileSize * row + this._offsetY,
+              playerX + this._tileSize * (col + 1) + this._offsetX,
+              playerY + this._tileSize * (row + 1) + this._offsetY,
               this._tileSize,
               this._tileSize,
               'green',
@@ -87,8 +89,8 @@ const worldMap = {
           } else if (val === 'F') {
             util.fillBoxCentered(
               ctx,
-              playerX + this._tileSize * col + this._offsetX,
-              playerY + this._tileSize * row + this._offsetY,
+              playerX + this._tileSize * (col + 1) + this._offsetX,
+              playerY + this._tileSize * (row + 1) + this._offsetY,
               this._tileSize,
               this._tileSize,
               'orange',
