@@ -2,7 +2,7 @@
 // SHIP STUFF
 // ==========
 
-'use strict';
+"use strict";
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
@@ -89,22 +89,22 @@ Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
   const nextX = this.cx + intervalVelX * du;
   const nextY = this.cy + intervalVelY * du;
 
-
   // Collision with the floor
   // TODO: allow variable heights of the floor
 
-  const floorHeight = 100;
-  const minY = this.sprite.height / 2;
-  const maxY = g_canvas.height - minY - floorHeight;
+  const minY = this.spriteHeight
+    ? this.spriteHeight / 2
+    : this.sprite.height / 2;
+  const maxY = g_canvas.height - minY;
 
   if (this.velY < 0) this.onGround = false;
-  if (nextY > maxY && !this.onGround) {
+  if (nextY > maxY && !this.onGround && this.velY >= 0) {
     this.onGround = true;
   }
   if (this.onGround) this.velY = 0;
   // s = s + v_ave * t
   if (player) {
-    worldMap.updateCamera(du * intervalVelX, du * intervalVelY);
+    this.onGround = worldMap.updateCamera(du * intervalVelX, du * intervalVelY);
   } else {
     this.cx += du * intervalVelX;
     this.cy = Math.min(maxY, du * intervalVelY + this.cy);
