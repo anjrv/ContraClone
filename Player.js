@@ -11,6 +11,8 @@ var p_sn = 6;
 // How big the sprite should be scaled
 var p_scale = 2;
 
+var p_realSize = p_scale * p_size;
+
 // Size of the spriteSheet
 var p_ssHeight = 2240;
 
@@ -37,9 +39,9 @@ function Player(descr) {
     type: 'Box',
     cx: 0,
     cy: 0,
-    width: p_scale * p_size * 0.4,
-    height: p_scale * p_size * 0.75,
-    offsetY: p_scale * p_size * 0.125,
+    width: p_realSize * 0.4,
+    height: p_realSize * 0.75,
+    offsetY: p_realSize * 0.125,
   })
 
   // Direction 1 is right, -1 is left.
