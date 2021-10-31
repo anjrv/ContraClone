@@ -98,6 +98,7 @@ main.saveTimeframe = function () {
 main.createRecord = function () {
   let recording = document.implementation.createDocument(null, 'recording');
   this.recording = recording.getElementsByTagName('recording')[0];
+  // TODO store the state of all entities in the entity manager. 
 }
 
 main.storeRecord = function () {
