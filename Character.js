@@ -109,6 +109,10 @@ Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
     this.cx += du * intervalVelX;
     this.cy = Math.min(maxY, du * intervalVelY + this.cy);
   }
+  if (this.collider) {
+    this.collider.cx = this.cx;
+    this.collider.cy = this.cy;
+  }
 };
 
 // TODO: change this into a rectangle hitbox
@@ -132,6 +136,6 @@ Character.prototype.render = function (ctx) {
   const origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this);
+  this.sprite.drawCentredAt(ctx, this.cx - this.spriteWidth, this.cy, 0, this);
   this.sprite.scale = origScale;
 };

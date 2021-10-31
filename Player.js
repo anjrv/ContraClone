@@ -33,6 +33,14 @@ function Player(descr) {
   this.spriteScale = p_scale;
   this.ssHeight = p_ssHeight;
   this.floor = p_ground2;
+  this.collider = new Collider({
+    type: 'Box',
+    cx: 0,
+    cy: 0,
+    width: p_scale * p_size * 0.4,
+    height: p_scale * p_size * 0.75,
+    offsetY: p_scale * p_size * 0.125,
+  })
 
   // Direction 1 is right, -1 is left.
   this.direction = 1;

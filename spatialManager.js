@@ -43,18 +43,13 @@ const spatialManager = {
     this._entities[spatialID] = null;
   },
 
-  findEntityInRange: function (posX, posY, radius) {
+  findEntityInRange: function (collider) {
     for (let ID in this._entities) {
       const e = this._entities[ID];
 
-      if (e) {
-        const ePos = e.getPos();
-        const eRad = e.getRadius();
-
-        if (
-          Math.pow(posX - ePos.posX, 2) + Math.pow(posY - ePos.posY, 2) <=
-          Math.pow(radius + eRad, 2)
-        ) {
+      if (e?.collider) {
+        const collision = collider.collide(e.collider);
+        if (collision) {
           return e;
         }
       }
@@ -64,17 +59,9 @@ const spatialManager = {
   },
 
   render: function (ctx) {
-    const oldStyle = ctx.strokeStyle;
-    ctx.strokeStyle = 'red';
-
     for (let ID in this._entities) {
       const e = this._entities[ID];
-      if (e) {
-        const ePos = e.getPos();
-        const eRad = e.getRadius();
-        util.strokeCircle(ctx, ePos.posX, ePos.posY, eRad);
-      }
+      e?.collider.render(ctx);
     }
-    ctx.strokeStyle = oldStyle;
   },
 };

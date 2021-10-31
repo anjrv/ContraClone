@@ -64,8 +64,8 @@ Entity.prototype.kill = function () {
 };
 
 Entity.prototype.findHitEntity = function () {
-  const pos = this.getPos();
-  return spatialManager.findEntityInRange(pos.posX, pos.posY, this.getRadius());
+  if (!this.collider) return null;
+  return spatialManager.findEntityInRange(this.collider);
 };
 
 // This is just little "convenience wrapper"
