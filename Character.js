@@ -18,26 +18,9 @@ function Character(descr) {
 
   this.rememberResets();
 
-  // Default sprite, if not otherwise specified
-  this.sprite = this.sprite;
-
   // Set normal drawing scale, and warp state off
   this._scale = 1;
   this._isWarping = false;
-
-  // Variables for generalized spritesheet navigation
-  // SpriteSheetBegin
-  this.ssbX = this.ssbX;
-  this.ssbY = this.ssbY;
-
-  // SpriteWidth, SpiteHeight & Number of used sprites in sheet
-  this.spriteWidth = this.spriteWidth;
-  this.spriteHeight = this.spriteHeight;
-  this.spriteNumber = this.spriteNumber;
-  this.spritePosition = this.spritePosition;
-  this.floor = this.floor;
-  this.spriteScale = this.spriteScale;
-  this.direction = this.direction;
 }
 
 Character.prototype = new Entity();
