@@ -105,6 +105,60 @@ const entityManager = {
       debugY += 10;
     }
   },
+
+  wipeEntities: function () { 
+    this._player = [];
+    for (let c = 0; c < this._categories.length; c++) {
+      this._categories[c] = [];
+    }
+  },
+
+  // takes in root and appends entities object to it that carries all the information 
+  // the entity manager needs to restore the game state.
+  recordEntities: function (root) {
+    for (let c = 0; c < this._categories.length; c++) {
+      let category = this._categories[c];
+      for (let i = 0; i < category.length; i++) {
+        let entity = category[i];
+        let pos = entity.getPos();
+        let velX = entity.velX;
+        let velY = entity.velY;
+        let type = entity.constructor.name;
+        let record = document.createElement('entity');
+        record.setAttribute('type', type);
+        record.setAttribute('posx', pos.posX);
+        record.setAttribute('posy', pos.posY);
+        record.setAttribute('velx', velX);
+        record.setAttribute('vely', velY);
+        root.appendChild(record);
+      }
+    }
+  },
+
+  // takes a xml/json object from recordEntities and restores the game state. 
+  restoreEntities: function (entities) {
+    this.wipeEntities();
+
+    let entitiesList = entities.getElementsByTagName('entity');
+    for (let i = 0; i < entitiesList.length; i++) {
+      let e = entitiesList[i];
+      let type = e.attributes.type.nodeValue;
+      let posX = Number.parseFloat(e.attributes.posx.nodeValue);
+      let posY = Number.parseFloat(e.attributes.posy.nodeValue);
+      let velX = Number.parseFloat(e.attributes.velx.nodeValue);
+      let velY = Number.parseFloat(e.attributes.vely.nodeValue);
+      if (type === Player.name) {
+        let descr = {
+          cx: posX,
+          cy: posY,
+          velX, 
+          //velY
+        }
+        this._player.push(new Player(descr));
+      }
+    }
+    this._categories = [this._player]
+  }
 };
 
 // Some deferred setup which needs the object to have been created first
