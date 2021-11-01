@@ -160,6 +160,7 @@ const entityManager = {
           velX,
           velY
         }
+        this._bullets.push(new Bullet(descr));
       }
       else if (type === Player.name) {
         let descr = {
