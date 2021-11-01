@@ -20,7 +20,7 @@ const worldMap = {
 
     this._mapCameraCoords = {
       cx: this._cameraTile.cx * this._tileSize + this._tileSize / 2,
-      cy: this._cameraTile.cy * this._tileSize + this._tileSize / 2,
+      cy: this._cameraTile.cy * this._tileSize + this._tileSize,
     };
     // Clear spawn point for "collision"
     this._layers[0][playerIndex] = 'E';
