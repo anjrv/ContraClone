@@ -153,7 +153,15 @@ const entityManager = {
       let posY = Number.parseFloat(e.attributes.posy.nodeValue);
       let velX = Number.parseFloat(e.attributes.velx.nodeValue);
       let velY = Number.parseFloat(e.attributes.vely.nodeValue);
-      if (type === Player.name) {
+      if (type === Bullet.name) {
+        let descr = {
+          cx: posX, 
+          cy: posY, 
+          velX,
+          velY
+        }
+      }
+      else if (type === Player.name) {
         let descr = {
           cx: posX,
           cy: posY,
@@ -162,6 +170,7 @@ const entityManager = {
         }
         this._player.push(new Player(descr));
       }
+      
     }
     this._categories = [this._player, this._bullets];
   }
