@@ -107,6 +107,13 @@ const util = {
     ctx.fillStyle = oldStyle;
   },
 
+  strokeBoxCentered: function (ctx, x, y, w, h, style) {
+    const oldStyle = ctx.strokeStyle;
+    ctx.strokeStyle = style;
+    ctx.strokeRect(x - w / 2, y - h / 2, w, h);
+    ctx.strokeStyle = oldStyle;
+  },
+
   lerp: function (start, end, amt) {
     return start + (end - start) * amt;
   }

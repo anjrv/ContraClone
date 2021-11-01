@@ -12,11 +12,12 @@ const worldMap = {
 
     // Grab initial spawn tile, currently we assume layer 0 but we need to decide how many layers we use
     const playerIndex = this._layers[0].indexOf('0');
+
     this._cameraTile = {
       cx: playerIndex % this._cols,
       cy: Math.floor(playerIndex / this._cols),
     };
-    // Assume we start in the middle of the spawning tile
+
     this._mapCameraCoords = {
       cx: this._cameraTile.cx * this._tileSize + this._tileSize / 2,
       cy: this._cameraTile.cy * this._tileSize + this._tileSize / 2,
@@ -29,12 +30,8 @@ const worldMap = {
     return this._layers[layer][row * this._cols + col];
   },
 
-  getPlayerFloorInfo: function () {
-    // Todo for multifloors, return relative Y distance from "current" floor and whether you could drop floors
-    return {
-      distanceToNextFloor: 1,
-      currentFloorNumber: 1,
-    };
+  getRelativeWorldInfo: function (top, right, bottom, left) {
+    return {};
   },
 
   updateCamera: function (changeX, changeY) {
@@ -43,20 +40,24 @@ const worldMap = {
     const nextCameraX = Math.floor(newX / this._tileSize);
     const nextCameraY = Math.floor(newY / this._tileSize);
 
-    if (this.getTile(this._cameraTile.cx, nextCameraY, 0) === "E") {
-      this._cameraTile.cy = Math.floor(newY / this._tileSize);
+    if (this.getTile(this._cameraTile.cx, nextCameraY, 0) === 'E') {
+      this._cameraTile.cy = nextCameraY;
       this._mapCameraCoords.cy = newY;
     }
 
-    if (this.getTile(nextCameraX, this._cameraTile.cy, 0) === "E") {
-      this._cameraTile.cx = Math.floor(newX / this._tileSize);
+    if (this.getTile(nextCameraX, this._cameraTile.cy, 0) === 'E') {
+      this._cameraTile.cx = nextCameraX;
       this._mapCameraCoords.cx = newX;
     }
 
-    this._offsetY = -this._mapCameraCoords.cy + this._cameraTile.cy * this._tileSize; 
-    this._offsetX = -this._mapCameraCoords.cx + this._cameraTile.cx * this._tileSize; 
+    this._offsetY =
+      -this._mapCameraCoords.cy + this._cameraTile.cy * this._tileSize;
+    this._offsetX =
+      -this._mapCameraCoords.cx + this._cameraTile.cx * this._tileSize;
 
-    return this.getTile(this._cameraTile.cx, nextCameraY, 0) !== "E"
+    console.log(this._offsetY, this._offsetX);
+
+    return this.getTile(this._cameraTile.cx, nextCameraY, 0) !== 'E';
   },
 
   update: function (du) {
@@ -66,8 +67,8 @@ const worldMap = {
   },
 
   render: function (ctx) {
-    const playerX = ctx.canvas.width / 2;
-    const playerY = ctx.canvas.height / 2;
+    const playerX = ctx.canvas.width / 2 + this._tileSize / 2;
+    const playerY = ctx.canvas.height / 2 + this._tileSize;
     const numHalfCols = Math.floor(ctx.canvas.height / this._tileSize);
     const numHalfRows = Math.floor(ctx.canvas.width / this._tileSize);
 
@@ -79,11 +80,21 @@ const worldMap = {
             this._cameraTile.cy + row,
             i,
           );
+          if (g_renderSpatialDebug && val) {
+            util.strokeBoxCentered(
+              ctx,
+              playerX + this._tileSize * col + this._offsetX,
+              playerY + this._tileSize * row + this._offsetY,
+              this._tileSize,
+              this._tileSize,
+              'cyan',
+            );
+          }
           if (val === 'G') {
             util.fillBoxCentered(
               ctx,
-              playerX + this._tileSize * (col + 1) + this._offsetX,
-              playerY + this._tileSize * (row + 1) + this._offsetY,
+              playerX + this._tileSize * col + this._offsetX,
+              playerY + this._tileSize * row + this._offsetY,
               this._tileSize,
               this._tileSize,
               'green',
@@ -91,8 +102,8 @@ const worldMap = {
           } else if (val === 'F') {
             util.fillBoxCentered(
               ctx,
-              playerX + this._tileSize * (col + 1) + this._offsetX,
-              playerY + this._tileSize * (row + 1) + this._offsetY,
+              playerX + this._tileSize * col + this._offsetX,
+              playerY + this._tileSize * row + this._offsetY,
               this._tileSize,
               this._tileSize,
               'orange',
