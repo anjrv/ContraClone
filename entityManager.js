@@ -162,7 +162,8 @@ const entityManager = {
         this._player.push(new Player(descr));
       }
     }
-    this._categories = [this._player]
+    this._bullets = [];
+    this._categories = [this._player, this._bullets];
   }
 };
 
