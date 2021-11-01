@@ -24,7 +24,7 @@ const entityManager = {
   // "PRIVATE" DATA
 
   // _rocks: [],
-  // _bullets: [],
+     _bullets: [],
   // _ships: [],
 
   // _bShowRocks: true,
@@ -50,24 +50,29 @@ const entityManager = {
   //
   deferredSetup: function () {
     // this._categories = [this._rocks, this._bullets, this._ships];
-    this._categories = [this._player];
+    this._categories = [this._player, this._bullets];
   },
 
   init: function () {
     this._player.push(new Player({ }));
   },
 
-  fireBullet: function (cx, cy, velX, velY, rotation) {
-    // this._bullets.push(
-    //   new Bullet({
-    //     cx: cx,
-    //     cy: cy,
-    //     velX: velX,
-    //     velY: velY,
-
-    //     rotation: rotation,
-    //   }),
-    // );
+  firePlayerBullet: function (cx, cy, velX, velY, dirX, dirY, yDir, sV,sH,sDU,sDD) {
+     this._bullets.push(
+       new Bullet({
+         cx: cx,
+         cy: cy,
+         velX: velX,
+         velY: velY,
+         dirX: dirX,
+         dirY: dirY,
+         yDir: yDir,
+         shootV: sV,
+         shootH: sH,
+         shootDU: sDU,
+         shootDD: sDD
+       }),
+     );
   },
 
 

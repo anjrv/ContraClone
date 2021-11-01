@@ -16,8 +16,24 @@ function Bullet(descr) {
   // Common inherited setup logic from Entity
   this.setup(descr);
 
+  //Sprite stuff
+  this.sprite = g_sprites.projectiles;
+  this.spritePosition;
+  if (this.shootH) this.spritePosition = 0;
+  if (this.shootV) this.spritePosition = 12;
+  if (this.shootDU || this.shootDD) this.spritePosition = 6;
+  this.spriteWidth = 28;
+  this.spriteHeight = 28;
+  this.ssbX = this.spritePosition * this.spriteWidth;
+  this.ssbY = 46;
+  this.spriteNumber = 13;
+  this.spriteScale = 1;
+  this.ssHeight = 1024;
+  this.floor = 0;
+  this.realSize = this.spriteWidth*this.spriteScale;
+
   // Make a noise when I am created (i.e. fired)
-  this.fireSound.play();
+  //this.fireSound.play();
 
   /*
     // Diagnostics to check inheritance stuff
@@ -43,19 +59,16 @@ Bullet.prototype.velY = 1;
 Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
 Bullet.prototype.update = function (du) {
-  // TODO: YOUR STUFF HERE! --- Unregister and check for death
   spatialManager.unregister(this);
 
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-  this.cx += this.velX * du;
-  this.cy += this.velY * du;
+  this.cx += this.velX * du - p_velX;
+  this.cy += this.velY * du - p_velY;
 
   this.rotation += 1 * du;
   this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
-
-  this.wrapPosition();
 
   // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
   //
@@ -90,7 +103,7 @@ Bullet.prototype.render = function (ctx) {
     ctx.globalAlpha = this.lifeSpan / fadeThresh;
   }
 
-  g_sprites.bullet.drawWrappedCentredAt(ctx, this.cx, this.cy, this.rotation);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this, this.yDir);
 
   ctx.globalAlpha = 1;
 };

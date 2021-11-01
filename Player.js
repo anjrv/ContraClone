@@ -25,6 +25,8 @@ var p_ground2 = 0;
 function Player(descr) {
   this.speed = 1;
   this.jumps = 0;
+
+  //Sprite stuff
   this.sprite = g_sprites.player;
   this.ssbX = p_ssbX;
   this.ssbY = p_ssbY;
@@ -35,6 +37,9 @@ function Player(descr) {
   this.spriteScale = p_scale;
   this.ssHeight = p_ssHeight;
   this.floor = p_ground2;
+  this.realSize = p_realSize;
+
+  // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: 0,
@@ -45,7 +50,7 @@ function Player(descr) {
   })
 
   // Direction 1 is right, -1 is left.
-  this.direction = 1;
+  this.dirX = 1;
   Character.call(this, descr);
 }
 
@@ -57,7 +62,11 @@ Player.prototype.KEY_UP    = "W".charCodeAt(0);
 Player.prototype.KEY_DOWN  = "S".charCodeAt(0);
 
 Player.prototype.KEY_JUMP  = " ".charCodeAt(0);
+Player.prototype.KEY_SHOOT = "J".charCodeAt(0);
 
+// Variables that bullets can use.
+var p_velX;
+var p_velY;
 Player.prototype.update = function (du) {
   spatialManager.unregister(this);
 
@@ -65,6 +74,9 @@ Player.prototype.update = function (du) {
 
   this.computeSubStep(du);
   this.changeSprite(du);
+  this.maybeShoot();
+  p_velX = this.velX;
+  p_velY = this.velY;
 
   spatialManager.register(this);
 };
@@ -114,6 +126,38 @@ Player.prototype.computeSubStep = function (du) {
   return acceleration;
 };
 
+Player.prototype.maybeShoot = function () {
+  if (keys[this.KEY_SHOOT]) {
+    let vX = (this.shootV) ? 0 : this.dirX * g_bulletSpeed;
+    let vY;
+    switch (this.dirY) {
+      case 0:
+        vY = -1;
+        break;
+      case 0.25:
+        vY = -1;
+        break;
+      case 0.5:
+        vY = 0;
+        break;
+      case 0.75:
+        vY = 1;
+        break;
+      case 1:
+        vY = 1;
+        break;
+    }
+    vY *= g_bulletSpeed;
+    console.log(vY);
+    let dX = (this.shootV) ? this.cx : this.cx + (this.realSize/2 * this.dirX);
+    let dY = (this.shootV) ? this.cy + (this.realSize/2 * this.dirY) : this.cy + this.dirY;
+    if (this.shootDU)       { dY -= this.realSize/2; }
+    else if (this.shootDD)  { dY += this.realSize/2; }
+    else if (this.shootV && vY === -1 * g_bulletSpeed) {dY = this.cy - (this.realSize/2); }
+    entityManager.firePlayerBullet(dX,dY,vX,vY,this.dirX,this.dirY, vY/g_bulletSpeed, this.shootV, this.shootH, this.shootDU, this.shootDD);
+  }
+}
+
 // Maybe TODO later, make changeCounter adjusted to Speed
 var p_changeCounter = 77;
 var p_changeBase = p_changeCounter;
@@ -133,7 +177,7 @@ Player.prototype.changeSprite = function(du) {
   }
 
   // Change the direction of player to mirror sprite
-  this.direction = (this.velX < 0) ? -1 : 1;
+  this.dirX = (this.velX < 0) ? -1 : 1;
 
   // In the character sprite there is a crouch sprite which we skip
   if (this.spritePosition === 1) this.spritePosition += 1;
@@ -149,16 +193,43 @@ Player.prototype.changeSprite = function(du) {
 
   // Extra complicated for player sprite, different sprites when aiming.
   if ((keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) && keys[this.KEY_UP]) { 
+    this.shootV = false;
+    this.shootH = false;
+    this.shootDU = true;
+    this.shootDD = false;
+    this.dirY = 0.25
     this.ssbY = this.spriteHeight * p_UR; 
   } 
   else if ((keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) && keys[this.KEY_DOWN]) {
+    this.shootH = false;
+    this.shootV = false;
+    this.shootDU = false;
+    this.shootDD = true;
+    this.dirY = 0.75;
     this.ssbY = this.spriteHeight * p_DR;
   }
   else if (keys[this.KEY_DOWN]) {
+    this.shootV = true;
+    this.shootH = false;
+    this.shootDU = false;
+    this.shootDD = false;
+    this.dirY = 1;
     this.ssbY = this.spriteHeight * p_D;
   }
   else if (keys[this.KEY_UP]) {
+    this.shootV = true;
+    this.shootH = false;
+    this.shootDU = false;
+    this.shootDD = false;
+    this.dirY = 0;
     this.ssbY = this.spriteHeight * p_U;
   }
-  else { this.ssbY = 0 }
+  else { 
+    this.shootV = false;
+    this.shootH = true;
+    this.shootDU = false;
+    this.shootDD = false;
+    this.dirY = 0.5;
+    this.ssbY = 0 
+  }
 }
