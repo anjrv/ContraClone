@@ -55,8 +55,6 @@ const worldMap = {
     this._offsetX =
       -this._mapCameraCoords.cx + this._cameraTile.cx * this._tileSize;
 
-    console.log(this._offsetY, this._offsetX);
-
     return this.getTile(this._cameraTile.cx, nextCameraY, 0) !== 'E';
   },
 
