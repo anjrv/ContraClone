@@ -113,6 +113,7 @@ const entityManager = {
 
   wipeEntities: function () { 
     this._player = [];
+    this._bullets = [];
     for (let c = 0; c < this._categories.length; c++) {
       this._categories[c] = [];
     }
@@ -157,12 +158,11 @@ const entityManager = {
           cx: posX,
           cy: posY,
           velX, 
-          //velY
+          velY
         }
         this._player.push(new Player(descr));
       }
     }
-    this._bullets = [];
     this._categories = [this._player, this._bullets];
   }
 };
