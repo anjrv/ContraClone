@@ -55,6 +55,7 @@ function Player(descr) {
 }
 
 Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
 Player.prototype.KEY_LEFT  = "A".charCodeAt(0);
 Player.prototype.KEY_RIGHT = "D".charCodeAt(0);

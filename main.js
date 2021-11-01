@@ -47,7 +47,14 @@ main.iter = function (frameTime) {
 main._updateClocks = function (frameTime) {
   // First-time initialisation
   if (this._frameTime_ms === null) this._frameTime_ms = frameTime;
-
+  
+  // If we are playing a recording we set our time explicitly by the recording values 
+  if (g_play_recording) {
+    this._frameTimeDelta_ms = RECORDINGPLAYER.getNextFrameDelta_ms();
+    this._frameTime_ms += this._frameTimeDelta_ms;
+    return;
+  }
+  
   // Track frameTime and its delta
   this._frameTimeDelta_ms = frameTime - this._frameTime_ms;
   this._frameTime_ms = frameTime;
@@ -68,6 +75,38 @@ main._iterCore = function (dt) {
   update(dt);
   render(g_ctx);
 };
+
+main.should_save_timeframe = false;
+
+main.saveTimeframe = function () {
+  let timeframe = document.createElement('timeframe');
+  let dt = document.createElement('dt');
+  dt.innerHTML = this._frameTimeDelta_ms;
+  timeframe.appendChild(dt);
+  
+  for (var ID in keys) {
+    if(ID === ' '.charCodeAt) console.log(keys[ID]);
+    if (!keys[ID]) continue;
+    let key = document.createElement('key');
+    key.innerHTML = String.fromCharCode(ID);
+    timeframe.appendChild(key);
+  }
+
+  this.recording.appendChild(timeframe);
+}
+
+main.createRecord = function () {
+  let recording = document.implementation.createDocument(null, 'recording');
+  this.recording = recording.getElementsByTagName('recording')[0];
+  let entities = document.createElement('entities');
+  entityManager.recordEntities(entities);
+  this.recording.appendChild(entities);
+}
+
+main.storeRecord = function () {
+  localStorage.setItem('recording', new XMLSerializer().serializeToString(this.recording));
+}
+
 
 main._isGameOver = false;
 
