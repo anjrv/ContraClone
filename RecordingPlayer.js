@@ -9,6 +9,7 @@ function RecordingPlayer() {
   let xml_object = parser.parseFromString(recording, 'text/xml');
   this.timestamps = xml_object.getElementsByTagName('timeframe');
   this.entities = xml_object.getElementsByTagName('entities')[0];
+  this.worldMap = xml_object.getElementsByTagName('worldmap')[0];
 }
 
 // Request that the player moves to the next frame
@@ -20,7 +21,10 @@ RecordingPlayer.prototype.nextFrame = function () {
 
 // Returns the dt value for the current frame
 RecordingPlayer.prototype.getNextFrameDelta_ms = function() {
-  if (this.frame_count === 0) entityManager.restoreEntities(this.entities);
+  if (this.frame_count === 0) {
+    worldMap.restoreCameraRecord(this.worldMap);
+    entityManager.restoreEntities(this.entities);
+  }
   // When the recording is over we turn off the recording and reset the framecount to 0
   if (this.frame_count >= this.timestamps.length) {
     this.cleanupKeys();

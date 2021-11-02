@@ -126,17 +126,10 @@ const entityManager = {
       let category = this._categories[c];
       for (let i = 0; i < category.length; i++) {
         let entity = category[i];
-        let pos = entity.getPos();
-        let velX = entity.velX;
-        let velY = entity.velY;
-        let type = entity.constructor.name;
-        let record = document.createElement('entity');
-        record.setAttribute('type', type);
-        record.setAttribute('posx', pos.posX);
-        record.setAttribute('posy', pos.posY);
-        record.setAttribute('velx', velX);
-        record.setAttribute('vely', velY);
-        root.appendChild(record);
+        let tag = document.createElement('entity');
+        let entityRecord = entity.record(tag);
+
+        root.appendChild(entityRecord);
       }
     }
   },
@@ -149,26 +142,13 @@ const entityManager = {
     for (let i = 0; i < entitiesList.length; i++) {
       let e = entitiesList[i];
       let type = e.attributes.type.nodeValue;
-      let posX = Number.parseFloat(e.attributes.posx.nodeValue);
-      let posY = Number.parseFloat(e.attributes.posy.nodeValue);
-      let velX = Number.parseFloat(e.attributes.velx.nodeValue);
-      let velY = Number.parseFloat(e.attributes.vely.nodeValue);
+      
       if (type === Bullet.name) {
-        let descr = {
-          cx: posX, 
-          cy: posY, 
-          velX,
-          velY
-        }
+        let descr = Bullet.parseRecord(e);
         this._bullets.push(new Bullet(descr));
       }
       else if (type === Player.name) {
-        let descr = {
-          cx: posX,
-          cy: posY,
-          velX, 
-          velY
-        }
+        let descr = Player.parseRecord(e);
         this._player.push(new Player(descr));
       }
       

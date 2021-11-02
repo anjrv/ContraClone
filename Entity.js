@@ -77,3 +77,13 @@ Entity.prototype.wrapPosition = function () {
   this.cx = util.wrapRange(this.cx, 0, g_canvas.width);
   this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
 };
+
+// Records variables needed to restore Entity 
+Entity.prototype.record = function (tag) {
+  throw new Error(`record function not implemented for ${this.constructor.name}`);
+}
+
+// Parses a xml record and returns object to be passed into constructor
+Entity.prototype.parseRecord = function (record) {
+  throw new Error(`parseRecord function is not implemented for ${this.constructor.name}`);
+}

@@ -124,3 +124,37 @@ Bullet.prototype.render = function (ctx) {
 
   ctx.globalAlpha = 1;
 };
+
+Bullet.prototype.record = function (tag) {
+  tag.setAttribute('type', this.constructor.name);
+  tag.setAttribute('posx', this.cx);
+  tag.setAttribute('posy', this.cy);
+  tag.setAttribute('velx', this.velX);
+  tag.setAttribute('vely', this.velY);
+  tag.setAttribute('shootv', this.shootV);
+  tag.setAttribute('shooth', this.shootH);
+  tag.setAttribute('shootdu', this.shootDU);
+  tag.setAttribute('shootdd', this.shootDD);
+  tag.setAttribute('dirx', this.dirX);
+  tag.setAttribute('diry', this.dirY);
+  tag.setAttribute('ydir', this.yDir);
+  
+  return tag;
+}
+
+Bullet.parseRecord = function (record) {
+  let cx = Number.parseFloat(record.attributes.posx.nodeValue);
+  let cy = Number.parseFloat(record.attributes.posy.nodeValue);
+  let velX = Number.parseFloat(record.attributes.velx.nodeValue);
+  let velY = Number.parseFloat(record.attributes.vely.nodeValue);
+
+  let shootV = record.attributes.shootv.nodeValue === 'true';
+  let shootH = record.attributes.shooth.nodeValue === 'true';
+  let shootDU = record.attributes.shootdu.nodeValue === 'true';
+  let shootDD = record.attributes.shootdd.nodeValue === 'true';
+  let yDir = Number.parseInt(record.attributes.ydir.nodeValue);
+  let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
+  let dirY = Number.parseInt(record.attributes.diry.nodeValue);
+
+  return {cx, cy, velX, velY, shootV, shootH, shootDU, shootDD, yDir, dirX, dirY};
+}

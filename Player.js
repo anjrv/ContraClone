@@ -233,3 +233,25 @@ Player.prototype.changeSprite = function(du) {
     this.ssbY = 0 
   }
 }
+
+Player.prototype.record = function (tag) {
+  tag.setAttribute('type', this.constructor.name);
+  tag.setAttribute('posx', this.cx);
+  tag.setAttribute('posy', this.cy);
+  tag.setAttribute('velx', this.velX);
+  tag.setAttribute('vely', this.velY);
+  tag.setAttribute('jumps', this.jumps);
+  tag.setAttribute('dirx', this.dirX);
+  return tag;
+}
+
+Player.parseRecord = function (record) {
+  let cx = Number.parseFloat(record.attributes.posx.nodeValue);
+  let cy = Number.parseFloat(record.attributes.posy.nodeValue);
+  let velX = Number.parseFloat(record.attributes.velx.nodeValue);
+  let velY = Number.parseFloat(record.attributes.vely.nodeValue);
+  let jumps = Number.parseInt(record.attributes.jumps.nodeValue);
+  let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
+
+  return {cx, cy, velX, velY, jumps, dirX};
+}
