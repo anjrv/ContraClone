@@ -111,4 +111,28 @@ const worldMap = {
       }
     }
   },
+
+  recordCameraInfo: function (tag) { 
+    tag.setAttribute('camtilecx', this._cameraTile.cx);
+    tag.setAttribute('camtilecy', this._cameraTile.cy);
+    tag.setAttribute('mapcamcoordscx', this._mapCameraCoords.cx);
+    tag.setAttribute('mapcamcoordscy', this._mapCameraCoords.cy);
+  },
+
+  restoreCameraRecord: function (record)  {
+    let camTile_cx = Number.parseFloat(record.attributes.camtilecx.nodeValue);
+    let camTile_cy = Number.parseFloat(record.attributes.camtilecy.nodeValue);
+    let mapCamCoords_cx = Number.parseFloat(record.attributes.mapcamcoordscx.nodeValue);
+    let mapCamCoords_cy = Number.parseFloat(record.attributes.mapcamcoordscy.nodeValue);
+    if (Number.isNaN(camTile_cx)
+      || Number.isNaN(camTile_cy)
+      || Number.isNaN(mapCamCoords_cx)
+      || Number.isNaN(mapCamCoords_cy)
+    ) throw new Error('Camera could not be restored properly');
+
+    this._cameraTile.cx = camTile_cx;
+    this._cameraTile.cy = camTile_cy;
+    this._mapCameraCoords.cx = mapCamCoords_cx;
+    this._mapCameraCoords.cy = mapCamCoords_cy;
+  },
 };
