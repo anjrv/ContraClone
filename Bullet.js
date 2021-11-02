@@ -65,14 +65,15 @@ Bullet.prototype.update = function (du) {
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-  this.cx += this.velX * du - p_velX;
-  this.cy += this.velY * du - p_velY;
+  // Adjust for world shift and adjacent tiles 
+  const worldInfo = worldMap.getRelativeWorldInfo(this.cx, this.cy);
+
+  this.cx += this.velX * du - worldInfo.cameraShiftX;
+  this.cy += this.velY * du - worldInfo.cameraShiftY;
 
   this.rotation += 1 * du;
   this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
 
-  // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
-  //
   // Handle collisions
   //
   const hitEntity = this.findHitEntity();
