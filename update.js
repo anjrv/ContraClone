@@ -16,6 +16,8 @@ function update(dt) {
   // Get out if skipping (e.g. due to pause-mode)
   //
   if (shouldSkipUpdate()) return;
+  // we have to record the frame before we start eating keys
+  if (g_record) main.saveTimeframe();
 
   // Remember this for later
   //
@@ -32,7 +34,10 @@ function update(dt) {
   // giving us a conveniently scaled "du" to work with.
   //
   var du = dt / NOMINAL_UPDATE_INTERVAL;
-
+  
+  // g_play_recording is set in processDiagnostics that happens in updateSimulation
+  // so we cant update our frame counter on the same frame that g_play_recording is set
+  if (g_play_recording) RECORDINGPLAYER.nextFrame();
   updateSimulation(du);
 
   g_prevUpdateDt = original_dt;

@@ -2,7 +2,7 @@
 
 entityManager.js
 
-A module which handles arbitrary entity-management for "Asteroids"
+A module which handles arbitrary entity-management for "Contra"
 
 
 We create this module as a single global object, and initialise it
@@ -24,7 +24,7 @@ const entityManager = {
   // "PRIVATE" DATA
 
   // _rocks: [],
-  // _bullets: [],
+     _bullets: [],
   // _ships: [],
 
   // _bShowRocks: true,
@@ -50,7 +50,7 @@ const entityManager = {
   //
   deferredSetup: function () {
     // this._categories = [this._rocks, this._bullets, this._ships];
-    this._categories = [this._player];
+    this._categories = [this._player, this._bullets];
   },
 
   init: function () {
@@ -58,17 +58,22 @@ const entityManager = {
     this._background = new Background();
   },
 
-  fireBullet: function (cx, cy, velX, velY, rotation) {
-    // this._bullets.push(
-    //   new Bullet({
-    //     cx: cx,
-    //     cy: cy,
-    //     velX: velX,
-    //     velY: velY,
-
-    //     rotation: rotation,
-    //   }),
-    // );
+  firePlayerBullet: function (cx, cy, velX, velY, dirX, dirY, yDir, sV,sH,sDU,sDD) {
+     this._bullets.push(
+       new Bullet({
+         cx: cx,
+         cy: cy,
+         velX: velX,
+         velY: velY,
+         dirX: dirX,
+         dirY: dirY,
+         yDir: yDir,
+         shootV: sV,
+         shootH: sH,
+         shootDU: sDU,
+         shootDD: sDD
+       }),
+     );
   },
 
 
@@ -108,6 +113,51 @@ const entityManager = {
       debugY += 10;
     }
   },
+
+  wipeEntities: function () { 
+    this._player = [];
+    this._bullets = [];
+    for (let c = 0; c < this._categories.length; c++) {
+      this._categories[c] = [];
+    }
+  },
+
+  // takes in root and appends entities object to it that carries all the information 
+  // the entity manager needs to restore the game state.
+  recordEntities: function (root) {
+    for (let c = 0; c < this._categories.length; c++) {
+      let category = this._categories[c];
+      for (let i = 0; i < category.length; i++) {
+        let entity = category[i];
+        let tag = document.createElement('entity');
+        let entityRecord = entity.record(tag);
+
+        root.appendChild(entityRecord);
+      }
+    }
+  },
+
+  // takes a xml/json object from recordEntities and restores the game state. 
+  restoreEntities: function (entities) {
+    this.wipeEntities();
+
+    let entitiesList = entities.getElementsByTagName('entity');
+    for (let i = 0; i < entitiesList.length; i++) {
+      let e = entitiesList[i];
+      let type = e.attributes.type.nodeValue;
+      
+      if (type === Bullet.name) {
+        let descr = Bullet.parseRecord(e);
+        this._bullets.push(new Bullet(descr));
+      }
+      else if (type === Player.name) {
+        let descr = Player.parseRecord(e);
+        this._player.push(new Player(descr));
+      }
+      
+    }
+    this._categories = [this._player, this._bullets];
+  }
 };
 
 // Some deferred setup which needs the object to have been created first

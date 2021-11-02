@@ -2,7 +2,7 @@
 // SHIP STUFF
 // ==========
 
-'use strict';
+"use strict";
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
@@ -17,9 +17,6 @@ function Character(descr) {
   this.setup(descr);
 
   this.rememberResets();
-
-  // Default sprite, if not otherwise specified
-  this.sprite = this.sprite || g_sprites.character;
 
   // Set normal drawing scale, and warp state off
   this._scale = 1;
@@ -54,7 +51,7 @@ Character.prototype.computeGravity = function () {
   return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
-Character.prototype.applyAccel = function (accelX, accelY, du) {
+Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
   // u = original velocity
   const oldVelX = this.velX;
   const oldVelY = this.velY;
@@ -75,30 +72,30 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
   const nextX = this.cx + intervalVelX * du;
   const nextY = this.cy + intervalVelY * du;
 
-
   // Collision with the floor
   // TODO: allow variable heights of the floor
 
-  const minY = this.sprite.height / 2;
+  const minY = this.spriteHeight
+    ? this.spriteHeight / 2
+    : this.sprite.height / 2;
   const maxY = g_canvas.height - minY;
 
-  const MAX_BOUNCES = 3;
   if (this.velY < 0) this.onGround = false;
-  if (nextY > maxY && !this.onGround) {
-    if (this.bounces < MAX_BOUNCES) {
-      this.velY = -this.velY * 0.3;
-      this.intervalVelY = this.velY;
-      this.bounces++;
-    } else {
-      this.velY = 0;
-      this.intervalVelY = 0;
-      this.bounces = 0;
-      this.onGround = true;
-    }
-  } 
+  if (nextY > maxY && !this.onGround && this.velY >= 0) {
+    this.onGround = true;
+  }
+  if (this.onGround) this.velY = 0;
   // s = s + v_ave * t
-  this.cx += du * intervalVelX;
-  this.cy = Math.min(maxY, du * intervalVelY + this.cy);
+  if (player) {
+    this.onGround = worldMap.updateCamera(du * intervalVelX, du * intervalVelY);
+  } else {
+    this.cx += du * intervalVelX;
+    this.cy = Math.min(maxY, du * intervalVelY + this.cy);
+  }
+  if (this.collider) {
+    this.collider.cx = this.cx;
+    this.collider.cy = this.cy;
+  }
 };
 
 // TODO: change this into a rectangle hitbox
@@ -122,6 +119,6 @@ Character.prototype.render = function (ctx) {
   const origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-  this.sprite.drawWrappedCentredAt(ctx, this.cx, this.cy, 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this);
   this.sprite.scale = origScale;
 };

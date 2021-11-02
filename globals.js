@@ -13,6 +13,7 @@ Evil, ugly (but "necessary") globals, which everyone can use.
 
 const g_canvas = document.getElementById('myCanvas');
 const g_ctx = g_canvas.getContext('2d');
+const g_bulletSpeed = 15;
 
 // The "nominal interval" is the one that all of our time-based units are
 // calibrated to e.g. a velocity unit is "pixels per nominal interval"
