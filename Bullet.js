@@ -31,6 +31,12 @@ function Bullet(descr) {
   this.ssHeight = 1024;
   this.floor = 0;
   this.realSize = this.spriteWidth*this.spriteScale;
+  // this.collider = new Collider({
+  //   type: 'Circle',
+  //   cx: this.cx,
+  //   cy: this.cy,
+  //   radius: this.realSize
+  // })
 
   // Make a noise when I am created (i.e. fired)
   //this.fireSound.play();
@@ -65,11 +71,20 @@ Bullet.prototype.update = function (du) {
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-  // Adjust for world shift and adjacent tiles 
-  const worldInfo = worldMap.getRelativeWorldInfo(this.cx, this.cy);
+  const cameraInfo = worldMap.getCameraShift();
 
-  this.cx += this.velX * du - worldInfo.cameraShiftX;
-  this.cy += this.velY * du - worldInfo.cameraShiftY;
+  const nextX = this.cx + this.velX * du - cameraInfo.cameraShiftX;
+  const nextY = this.cy + this.velY * du - cameraInfo.cameraShiftY;
+  const worldInfo = worldMap.getRelativeWorldInfo(nextX, nextY);
+
+  if (worldInfo.tileType === 'E') {
+    this.cx = nextX;
+    this.cy = nextY;
+  } else {
+    // React in some manner to next tile being terrain
+    return entityManager.KILL_ME_NOW;
+  }
+
 
   this.rotation += 1 * du;
   this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);

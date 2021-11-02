@@ -33,63 +33,51 @@ const worldMap = {
   },
 
   getTileFromCoords(cx, cy) {
-    const playerX = g_ctx.canvas.width / 2 + this._tileSize / 2;
-    const playerY = g_ctx.canvas.height / 2 + this._tileSize / 2;
+    const playerX = g_ctx.canvas.width / 2 + this._offsetX + this._tileSize / 2 - this._currChangeX;
+    const playerY = g_ctx.canvas.height / 2 + this._offsetY + this._tileSize - this._currChangeY;
 
     const xDiff = playerX - cx;
     const yDiff = playerY - cy;
 
-    const c = this._cameraTile.cx - Math.floor(xDiff / this._tileSize);
-    const r = this._cameraTile.cy - Math.floor(yDiff / this._tileSize);
-
+    const c = this._cameraTile.cx - Math.round(xDiff / this._tileSize);
+    const r = this._cameraTile.cy - Math.round(yDiff / this._tileSize);
 
     return {
       col: c,
       row: r,
-      // Offset from the middle of the current tile
-      // Use to calculate distance to next obstacle
-      offsetX: -(xDiff % this._tileSize + this._offsetX),
-      offsetY: -(yDiff % this._tileSize + this._offsetY)
     };
   },
 
+  getCameraShift: function () {
+    return {
+      cameraShiftX: this._currChangeX,
+      cameraShiftY: this._currChangeY,
+    }
+  },
+
   getRelativeWorldInfo: function (cx, cy) {
-    // Get unit tile from player pos
     const currTile = this.getTileFromCoords(cx, cy);
 
-    // Start off allowing a tiles worth of distance
-    let left = this._tileSize;
-    let right = left;
-    let down = left;
-    let up = left;
-
-    // TODO, if bullets can go faster than a tile a sec we need to do some line calculations instead
-    // // Adjust based on adjacent tiles, apply smaller max dist where applicable
-    // if (this.getTile(currTile.col - 1, currTile.row, 0) !== 'E') {
-    //   left = left + currTile.offsetX;
-    // }
-
-    // if (this.getTile(currTile.col + 1, currTile.row, 0) !== 'E') {
-    //   right = right - currTile.offsetX;
-    // }
-
-    // if (this.getTile(currTile.col, currTile.row + 1, 0) !== 'E') {
-    //   down = down - currTile.offsetY;
-    // }
-
-    // if (this.getTile(currTile.col, currTile.row - 1, 0) !== 'E') {
-    //   up = up + currTile.offsetY;
-    // }
-
     return {
-      distLeft: left,
-      distRight: right,
-      distDown: down,
-      distUp: up,
-      cameraShiftX: this._currChangeX,
-      cameraShiftY: this._currChangeY
-      // Add amount of floors for the drop floor effect? Would just iterate further down
+      tileType: this.getTile(currTile.col, currTile.row, 0),
+      tileSize: this._tileSize
     };
+  },
+
+  getCameraInfo: function() {
+    return {
+      col: this._cameraTile.cx,
+      row: this._cameraTile.cy,
+      cx: this._mapCameraCoords.cx,
+      cy: this._mapCameraCoords.cy
+    };
+  },
+
+  setCameraInfo: function(col, row, cx, cy) {
+    this._cameraTile.cx = col;
+    this._cameraTile.cy = row;
+    this._mapCameraCoords.cx = cx;
+    this._mapCameraCoords.cy = cy;
   },
 
   updateCamera: function (changeX, changeY) {
@@ -131,8 +119,8 @@ const worldMap = {
   render: function (ctx) {
     const playerX = ctx.canvas.width / 2 + this._tileSize / 2;
     const playerY = ctx.canvas.height / 2 + this._tileSize;
-    const numHalfCols = Math.floor(ctx.canvas.height / this._tileSize);
-    const numHalfRows = Math.floor(ctx.canvas.width / this._tileSize);
+    const numHalfCols = Math.ceil(ctx.canvas.height / this._tileSize);
+    const numHalfRows = Math.ceil(ctx.canvas.width / this._tileSize);
 
     for (let i = 0; i < this._layers.length; i++) {
       for (let col = -numHalfCols; col <= numHalfCols; col++) {

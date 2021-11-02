@@ -149,7 +149,6 @@ Player.prototype.maybeShoot = function () {
         break;
     }
     vY *= g_bulletSpeed;
-    console.log(vY);
     let dX = (this.shootV) ? this.cx : this.cx + (this.realSize/2 * this.dirX);
     let dY = (this.shootV) ? this.cy + (this.realSize/2 * this.dirY) : this.cy + this.dirY;
     if (this.shootDU)       { dY -= this.realSize/2; }
