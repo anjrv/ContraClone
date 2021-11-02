@@ -96,8 +96,10 @@ function processDiagnostics() {
 // GAME-SPECIFIC RENDERING
 
 function renderSimulation(ctx) {
-  worldMap.render(ctx);
+  // render entityManager first because background is drawn in there and it draws
+  // over every thing
   entityManager.render(ctx);
+  worldMap.render(ctx);
 
   if (g_renderSpatialDebug) spatialManager.render(ctx);
 }

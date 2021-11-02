@@ -17,8 +17,8 @@ Background.prototype.scroll = function (dx) {
 
 Background.prototype.update = function (du) {
   // maybe we want something here
-  this.posX -= 1;
-  this.posX %= 10000; // TODO this causes jerk sometimes
+  //this.posX -= 1;
+  //this.posX %= 10000; // TODO this causes jerk sometimes
 }
 
 Background.prototype.tileFillScreen = function(ctx, tile, dx = 0) {
