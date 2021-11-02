@@ -31,12 +31,12 @@ function Bullet(descr) {
   this.ssHeight = 1024;
   this.floor = 0;
   this.realSize = this.spriteWidth*this.spriteScale;
-  // this.collider = new Collider({
-  //   type: 'Circle',
-  //   cx: this.cx,
-  //   cy: this.cy,
-  //   radius: this.realSize
-  // })
+  this.collider = new Collider({
+    type: 'Circle',
+    cx: 0,
+    cy: 0,
+    radius: 0,
+  });
 
   // Make a noise when I am created (i.e. fired)
   //this.fireSound.play();

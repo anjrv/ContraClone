@@ -64,22 +64,6 @@ const worldMap = {
     };
   },
 
-  getCameraInfo: function() {
-    return {
-      col: this._cameraTile.cx,
-      row: this._cameraTile.cy,
-      cx: this._mapCameraCoords.cx,
-      cy: this._mapCameraCoords.cy
-    };
-  },
-
-  setCameraInfo: function(col, row, cx, cy) {
-    this._cameraTile.cx = col;
-    this._cameraTile.cy = row;
-    this._mapCameraCoords.cx = cx;
-    this._mapCameraCoords.cy = cy;
-  },
-
   updateCamera: function (changeX, changeY) {
     const newX = this._mapCameraCoords.cx + changeX;
     const newY = this._mapCameraCoords.cy + changeY;
