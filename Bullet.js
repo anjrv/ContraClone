@@ -31,7 +31,12 @@ function Bullet(descr) {
   this.ssHeight = 1024;
   this.floor = 0;
   this.realSize = this.spriteWidth*this.spriteScale;
-
+  this.collider = new Collider({
+    type: 'Circle',
+    cx: this.cx,
+    cy: this.cy,
+    radius: this.realSize/2,
+  });
   // Make a noise when I am created (i.e. fired)
   //this.fireSound.play();
 
@@ -43,10 +48,11 @@ function Bullet(descr) {
 }
 
 Bullet.prototype = new Entity();
+Bullet.prototype.constructor = Bullet
 
 // HACKED-IN AUDIO (no preloading)
-Bullet.prototype.fireSound = new Audio('sounds/bulletFire.ogg');
-Bullet.prototype.zappedSound = new Audio('sounds/bulletZapped.ogg');
+//Bullet.prototype.fireSound = new Audio('sounds/bulletFire.ogg');
+//Bullet.prototype.zappedSound = new Audio('sounds/bulletZapped.ogg');
 
 // Initial, inheritable, default values
 Bullet.prototype.rotation = 0;
@@ -64,13 +70,25 @@ Bullet.prototype.update = function (du) {
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-  this.cx += this.velX * du;
-  this.cy += this.velY * du
+  const cameraInfo = worldMap.getCameraShift();
+
+  const nextX = this.cx + this.velX * du - cameraInfo.cameraShiftX;
+  const nextY = this.cy + this.velY * du - cameraInfo.cameraShiftY;
+  const worldInfo = worldMap.getRelativeWorldInfo(nextX, nextY);
+
+  if (worldInfo.tileType === 'E') {
+    this.cx = nextX;
+    this.cy = nextY;
+  } else {
+    // React in some manner to next tile being terrain
+    return entityManager.KILL_ME_NOW;
+  }
+  this.collider.cx = this.cx;
+  this.collider.cy = this.cy;
+
   this.rotation += 1 * du;
   this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
 
-  // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
-  //
   // Handle collisions
   //
   const hitEntity = this.findHitEntity();
@@ -92,7 +110,7 @@ Bullet.prototype.takeBulletHit = function () {
   this.kill();
 
   // Make a noise when I am zapped by another bullet
-  this.zappedSound.play();
+  // this.zappedSound.play();
 };
 
 Bullet.prototype.render = function (ctx) {
@@ -101,8 +119,42 @@ Bullet.prototype.render = function (ctx) {
   if (this.lifeSpan < fadeThresh) {
     ctx.globalAlpha = this.lifeSpan / fadeThresh;
   }
-
+  this.sprite.animation = "LASER";
   this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this, this.yDir);
 
   ctx.globalAlpha = 1;
 };
+
+Bullet.prototype.record = function (tag) {
+  tag.setAttribute('type', this.constructor.name);
+  tag.setAttribute('posx', this.cx);
+  tag.setAttribute('posy', this.cy);
+  tag.setAttribute('velx', this.velX);
+  tag.setAttribute('vely', this.velY);
+  tag.setAttribute('shootv', this.shootV);
+  tag.setAttribute('shooth', this.shootH);
+  tag.setAttribute('shootdu', this.shootDU);
+  tag.setAttribute('shootdd', this.shootDD);
+  tag.setAttribute('dirx', this.dirX);
+  tag.setAttribute('diry', this.dirY);
+  tag.setAttribute('ydir', this.yDir);
+  
+  return tag;
+}
+
+Bullet.parseRecord = function (record) {
+  let cx = Number.parseFloat(record.attributes.posx.nodeValue);
+  let cy = Number.parseFloat(record.attributes.posy.nodeValue);
+  let velX = Number.parseFloat(record.attributes.velx.nodeValue);
+  let velY = Number.parseFloat(record.attributes.vely.nodeValue);
+
+  let shootV = record.attributes.shootv.nodeValue === 'true';
+  let shootH = record.attributes.shooth.nodeValue === 'true';
+  let shootDU = record.attributes.shootdu.nodeValue === 'true';
+  let shootDD = record.attributes.shootdd.nodeValue === 'true';
+  let yDir = Number.parseInt(record.attributes.ydir.nodeValue);
+  let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
+  let dirY = Number.parseInt(record.attributes.diry.nodeValue);
+
+  return {cx, cy, velX, velY, shootV, shootH, shootDU, shootDD, yDir, dirX, dirY};
+}

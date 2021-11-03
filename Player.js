@@ -131,10 +131,11 @@ Player.prototype.computeSubStep = function (du) {
   return acceleration;
 };
 
+
+
 Player.prototype.maybeShoot = function () {
   if (keys[this.KEY_SHOOT]) {
     // Calculate the direction of the bullet.
-    console.log(this.angle)
     let vX = Math.sign(this.velX) * Math.cos(this.angle) * g_bulletSpeed;
     let vY = -Math.sin(this.angle) * g_bulletSpeed;
     entityManager.firePlayerBullet(this.cx, this.cy, vX, vY, Math.sign(this.velX), -Math.sign(this.angle), 0.5, true, false, false, false);
@@ -217,4 +218,26 @@ Player.prototype.changeSprite = function(du) {
     this.sprite.animation = "CROUCH"
     return;
   }
+}
+
+Player.prototype.record = function (tag) {
+  tag.setAttribute('type', this.constructor.name);
+  tag.setAttribute('posx', this.cx);
+  tag.setAttribute('posy', this.cy);
+  tag.setAttribute('velx', this.velX);
+  tag.setAttribute('vely', this.velY);
+  tag.setAttribute('jumps', this.jumps);
+  tag.setAttribute('dirx', this.dirX);
+  return tag;
+}
+
+Player.parseRecord = function (record) {
+  let cx = Number.parseFloat(record.attributes.posx.nodeValue);
+  let cy = Number.parseFloat(record.attributes.posy.nodeValue);
+  let velX = Number.parseFloat(record.attributes.velx.nodeValue);
+  let velY = Number.parseFloat(record.attributes.vely.nodeValue);
+  let jumps = Number.parseInt(record.attributes.jumps.nodeValue);
+  let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
+
+  return {cx, cy, velX, velY, jumps, dirX};
 }

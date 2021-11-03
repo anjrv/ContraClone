@@ -70,21 +70,21 @@ const entityManager = {
     sDU,
     sDD
   ) {
-    this._bullets.push(
-      new Bullet({
-        cx: cx,
-        cy: cy,
-        velX: velX,
-        velY: velY,
-        dirX: dirX,
-        dirY: dirY,
-        yDir: yDir,
-        shootV: sV,
-        shootH: sH,
-        shootDU: sDU,
-        shootDD: sDD,
-      })
-    );
+    const bullet = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      dirX: dirX,
+      dirY: dirY,
+      yDir: yDir,
+      shootV: sV,
+      shootH: sH,
+      shootDU: sDU,
+      shootDD: sDD,
+    })
+    this._bullets.push(bullet);
+    console.log(bullet, this._bullets)
   },
 
   update: function (du) {
@@ -123,6 +123,7 @@ const entityManager = {
 
   wipeEntities: function () {
     this._player = [];
+    this._bullets = [];
     for (let c = 0; c < this._categories.length; c++) {
       this._categories[c] = [];
     }
@@ -135,17 +136,10 @@ const entityManager = {
       let category = this._categories[c];
       for (let i = 0; i < category.length; i++) {
         let entity = category[i];
-        let pos = entity.getPos();
-        let velX = entity.velX;
-        let velY = entity.velY;
-        let type = entity.constructor.name;
-        let record = document.createElement("entity");
-        record.setAttribute("type", type);
-        record.setAttribute("posx", pos.posX);
-        record.setAttribute("posy", pos.posY);
-        record.setAttribute("velx", velX);
-        record.setAttribute("vely", velY);
-        root.appendChild(record);
+        let tag = document.createElement('entity');
+        let entityRecord = entity.record(tag);
+
+        root.appendChild(entityRecord);
       }
     }
   },
@@ -158,22 +152,19 @@ const entityManager = {
     for (let i = 0; i < entitiesList.length; i++) {
       let e = entitiesList[i];
       let type = e.attributes.type.nodeValue;
-      let posX = Number.parseFloat(e.attributes.posx.nodeValue);
-      let posY = Number.parseFloat(e.attributes.posy.nodeValue);
-      let velX = Number.parseFloat(e.attributes.velx.nodeValue);
-      let velY = Number.parseFloat(e.attributes.vely.nodeValue);
-      if (type === Player.name) {
-        let descr = {
-          cx: posX,
-          cy: posY,
-          velX,
-          //velY
-        };
+      
+      if (type === Bullet.name) {
+        let descr = Bullet.parseRecord(e);
+        this._bullets.push(new Bullet(descr));
+      }
+      else if (type === Player.name) {
+        let descr = Player.parseRecord(e);
         this._player.push(new Player(descr));
       }
+      
     }
-    this._categories = [this._player];
-  },
+    this._categories = [this._player, this._bullets];
+  }
 };
 
 // Some deferred setup which needs the object to have been created first
