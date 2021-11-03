@@ -55,6 +55,7 @@ function Player(descr) {
   // Direction 1 is right, -1 is left.
   this.dirX = 1;
   this.scale = p_scale;
+  this.jumping = false;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -113,19 +114,23 @@ Player.prototype.computeSubStep = function (du) {
     acceleration -= NOMINAL_FRICTION * this.velX;
   }
 
+  
   let gravityAcc = this.computeGravity();
+
+  if (!keys[this.KEY_JUMP] && this.jumping) {
+    this.velY *= 0.5;
+    this.jumping = false;
+  }
   if (this.onGround) {
     this.jumps = 0;
   }
-  if (eatKey(this.KEY_JUMP) && this.jumps < MAX_JUMPS) {
+  if (keys[this.KEY_JUMP] && !this.jumping) {
     gravityAcc = -20.0;
-    this.jumps++;
+    // this.jumps++;
+    this.jumping = true;
   }
 
   this.applyAccel(acceleration, gravityAcc, du);
-
-  // this.cx = g_ctx.canvas.width / 2;
-  // this.cy = g_ctx.canvas.height / 2;
 
   return acceleration;
 };
