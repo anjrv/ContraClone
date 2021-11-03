@@ -151,6 +151,7 @@ function preloadDone() {
   g_sprites.projectiles.animations = {
     LASER: [0],
     PLASMA: [13],
+    FIRE: [26],
   };
   g_sprites.flashWhite   = new Sprite(g_images.flashWhite)
   g_sprites.flashAcid    = new Sprite(g_images.flashAcid)

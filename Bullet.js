@@ -86,9 +86,6 @@ Bullet.prototype.update = function (du) {
   this.collider.cx = this.cx;
   this.collider.cy = this.cy;
 
-  // this.rotation += 1 * du;
-  // this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
-
   // Handle collisions
   //
   const hitEntity = this.findHitEntity();
@@ -119,7 +116,7 @@ Bullet.prototype.render = function (ctx) {
   if (this.lifeSpan < fadeThresh) {
     ctx.globalAlpha = this.lifeSpan / fadeThresh;
   }
-  this.sprite.animation = "PLASMA";
+  this.sprite.animation = "FIRE";
   this.sprite.updateFrame(0);
   this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 

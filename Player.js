@@ -19,7 +19,7 @@ var p_ssHeight = 2240;
 
 // Calculate where the sprite should appear
 // NOTE! It was made unnecessary after worldmap update
-var p_ground = (p_ssHeight/2);
+var p_ground = p_ssHeight / 2;
 
 var p_ground2 = 0;
 
@@ -44,13 +44,13 @@ function Player(descr) {
 
   // Collisions
   this.collider = new Collider({
-    type: 'Box',
+    type: "Box",
     cx: 0,
     cy: 0,
     width: p_realSize * 0.4,
     height: p_realSize * 0.75,
     offsetY: p_realSize * 0.125,
-  })
+  });
 
   // Direction 1 is right, -1 is left.
   this.dirX = 1;
@@ -60,14 +60,14 @@ function Player(descr) {
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.KEY_LEFT  = "A".charCodeAt(0);
+Player.prototype.KEY_LEFT = "A".charCodeAt(0);
 Player.prototype.KEY_RIGHT = "D".charCodeAt(0);
-Player.prototype.KEY_UP    = "W".charCodeAt(0);
-Player.prototype.KEY_DOWN  = "S".charCodeAt(0);
+Player.prototype.KEY_UP = "W".charCodeAt(0);
+Player.prototype.KEY_DOWN = "S".charCodeAt(0);
 
-Player.prototype.KEY_JUMP  = " ".charCodeAt(0);
+Player.prototype.KEY_JUMP = " ".charCodeAt(0);
 Player.prototype.KEY_SHOOT = "J".charCodeAt(0);
-Player.prototype.KEY_CROUCH= 16;
+Player.prototype.KEY_CROUCH = 16;
 
 // Variables that bullets can use.
 var p_velX;
@@ -125,59 +125,36 @@ Player.prototype.computeSubStep = function (du) {
 
   this.applyAccel(acceleration, gravityAcc, du, true);
 
-  this.cx = g_ctx.canvas.width/2;
-  this.cy = g_ctx.canvas.height/2;
+  this.cx = g_ctx.canvas.width / 2;
+  this.cy = g_ctx.canvas.height / 2;
 
   return acceleration;
 };
 
-
-
 Player.prototype.maybeShoot = function () {
   if (keys[this.KEY_SHOOT]) {
     // Calculate the direction of the bullet.
-    let vX = Math.sign(this.velX) * Math.cos(this.angle) * g_bulletSpeed;
-    let vY = -Math.sin(this.angle) * g_bulletSpeed;
-    entityManager.firePlayerBullet(this.cx, this.cy, vX, vY, this.angle);
-
-    // let vX = (this.shootV) ? 0 : Math.sign(this.velX) * g_bulletSpeed;
-    // let vY;
-    // switch (this.dirY) {
-    //   case 0:
-    //     vY = -1;
-    //     break;
-    //   case 0.25:
-    //     vY = -1;
-    //     break;
-    //   case 0.5:
-    //     vY = 0;
-    //     break;
-    //   case 0.75:
-    //     vY = 1;
-    //     break;
-    //   case 1:
-    //     vY = 1;
-    //     break;
-    // }
-    // vY *= g_bulletSpeed;
-    // console.log(vY);
-    // let dX = (this.shootV) ? this.cx : this.cx + (this.realSize/2 * this.dirX);
-    // let dY = (this.shootV) ? this.cy + (this.realSize/2 * this.dirY) : this.cy + this.dirY;
-    // if (this.shootDU)       { dY -= this.realSize/2; }
-    // else if (this.shootDD)  { dY += this.realSize/2; }
-    // else if (this.shootV && vY === -1 * g_bulletSpeed) {dY = this.cy - (this.realSize/2); }
-    // entityManager.firePlayerBullet(dX, dY, vX, vY, this.dirX, this.dirY, vY/g_bulletSpeed, this.shootV, this.shootH, this.shootDU, this.shootDD);
+    let vX = Math.sign(this.velX) * Math.cos(this.angle);
+    let vY = -Math.sin(this.angle);
+    let bulletAngle =
+      Math.sign(this.velX) > 0 ? this.angle : -this.angle + Math.PI;
+    entityManager.firePlayerBullet(
+      this.cx + (vX * this.sprite.sWidth) / 2,
+      this.cy + (vY * this.sprite.sHeight) / 2,
+      vX * g_bulletSpeed,
+      vY * g_bulletSpeed,
+      -bulletAngle
+    );
   }
-}
+};
 
 // Maybe TODO later, make changeCounter adjusted to Speed
 var p_changeCounter = 77;
 var p_changeBase = p_changeCounter;
 
-Player.prototype.changeSprite = function(du) {
-  
+Player.prototype.changeSprite = function (du) {
   // A counter that changes the sprite when du * velocity reaches a certain number.
-  p_changeCounter -= du*Math.abs(this.velX);
+  p_changeCounter -= du * Math.abs(this.velX);
   if (p_changeCounter < 0) {
     this.frame += 1;
     p_changeCounter = p_changeBase;
@@ -186,50 +163,50 @@ Player.prototype.changeSprite = function(du) {
   this.angle = 0;
 
   if (Math.abs(this.velX) < 1) {
-    this.sprite.animation = "IDLE"
+    this.sprite.animation = "IDLE";
   }
 
   if (keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) {
-    this.sprite.animation = "RUN_FORWARD"
+    this.sprite.animation = "RUN_FORWARD";
     if (keys[this.KEY_UP]) {
       this.angle = Math.PI / 4;
-      this.sprite.animation += "_UP"
+      this.sprite.animation += "_UP";
     }
     if (keys[this.KEY_DOWN]) {
       this.angle = -Math.PI / 4;
-      this.sprite.animation += "_DOWN"
+      this.sprite.animation += "_DOWN";
     }
     return;
   }
 
   if (keys[this.KEY_DOWN]) {
     this.angle = -Math.PI / 2;
-    this.sprite.animation = "LOOK_DOWN"
+    this.sprite.animation = "LOOK_DOWN";
     return;
   }
 
   if (keys[this.KEY_UP]) {
     this.angle = Math.PI / 2;
-    this.sprite.animation = "LOOK_UP"
+    this.sprite.animation = "LOOK_UP";
     return;
   }
 
   if (keys[this.KEY_CROUCH]) {
-    this.sprite.animation = "CROUCH"
+    this.sprite.animation = "CROUCH";
     return;
   }
-}
+};
 
 Player.prototype.record = function (tag) {
-  tag.setAttribute('type', this.constructor.name);
-  tag.setAttribute('posx', this.cx);
-  tag.setAttribute('posy', this.cy);
-  tag.setAttribute('velx', this.velX);
-  tag.setAttribute('vely', this.velY);
-  tag.setAttribute('jumps', this.jumps);
-  tag.setAttribute('dirx', this.dirX);
+  tag.setAttribute("type", this.constructor.name);
+  tag.setAttribute("posx", this.cx);
+  tag.setAttribute("posy", this.cy);
+  tag.setAttribute("velx", this.velX);
+  tag.setAttribute("vely", this.velY);
+  tag.setAttribute("jumps", this.jumps);
+  tag.setAttribute("dirx", this.dirX);
   return tag;
-}
+};
 
 Player.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.posx.nodeValue);
@@ -239,5 +216,5 @@ Player.parseRecord = function (record) {
   let jumps = Number.parseInt(record.attributes.jumps.nodeValue);
   let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
 
-  return {cx, cy, velX, velY, jumps, dirX};
-}
+  return { cx, cy, velX, velY, jumps, dirX };
+};
