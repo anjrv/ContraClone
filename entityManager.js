@@ -62,29 +62,16 @@ const entityManager = {
     cy,
     velX,
     velY,
-    dirX,
-    dirY,
-    yDir,
-    sV,
-    sH,
-    sDU,
-    sDD
+    rotation
   ) {
     const bullet = new Bullet({
       cx: cx,
       cy: cy,
       velX: velX,
       velY: velY,
-      dirX: dirX,
-      dirY: dirY,
-      yDir: yDir,
-      shootV: sV,
-      shootH: sH,
-      shootDU: sDU,
-      shootDD: sDD,
+      rotation: rotation
     })
     this._bullets.push(bullet);
-    console.log(bullet, this._bullets)
   },
 
   update: function (du) {

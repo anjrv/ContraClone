@@ -149,7 +149,8 @@ function preloadDone() {
   g_sprites.powerups     = new Sprite(g_images.powerups)
   g_sprites.projectiles  = new Sprite(g_images.projectiles, 13, 7, 28, 28)
   g_sprites.projectiles.animations = {
-    LASER: [0]
+    LASER: [0],
+    PLASMA: [13],
   };
   g_sprites.flashWhite   = new Sprite(g_images.flashWhite)
   g_sprites.flashAcid    = new Sprite(g_images.flashAcid)

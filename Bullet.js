@@ -18,19 +18,19 @@ function Bullet(descr) {
 
   //Sprite stuff
   this.sprite = g_sprites.projectiles;
-  this.spritePosition;
-  if (this.shootH) this.spritePosition = 0;
-  if (this.shootV) this.spritePosition = 12;
-  if (this.shootDU || this.shootDD) this.spritePosition = 6;
-  this.spriteWidth = 28;
-  this.spriteHeight = 28;
-  this.ssbX = this.spritePosition * this.spriteWidth;
-  this.ssbY = 46;
-  this.spriteNumber = 13;
-  this.spriteScale = 1;
-  this.ssHeight = 1024;
+  // this.spritePosition;
+  // if (this.shootH) this.spritePosition = 0;
+  // if (this.shootV) this.spritePosition = 12;
+  // if (this.shootDU || this.shootDD) this.spritePosition = 6;
+  // this.spriteWidth = 28;
+  // this.spriteHeight = 28;
+  // this.ssbX = this.spritePosition * this.spriteWidth;
+  // this.ssbY = 46;
+  // this.spriteNumber = 13;
+  // this.spriteScale = 1;
+  // this.ssHeight = 1024;
   this.floor = 0;
-  this.realSize = this.spriteWidth*this.spriteScale;
+  // this.realSize = this.spriteWidth*this.spriteScale;
   this.collider = new Collider({
     type: 'Circle',
     cx: this.cx,
@@ -86,17 +86,17 @@ Bullet.prototype.update = function (du) {
   this.collider.cx = this.cx;
   this.collider.cy = this.cy;
 
-  this.rotation += 1 * du;
-  this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
+  // this.rotation += 1 * du;
+  // this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
 
   // Handle collisions
   //
   const hitEntity = this.findHitEntity();
-  if (hitEntity) {
-    const canTakeHit = hitEntity.takeBulletHit;
-    if (canTakeHit) canTakeHit.call(hitEntity);
-    return entityManager.KILL_ME_NOW;
-  }
+  // if (hitEntity) {
+  //   const canTakeHit = hitEntity.takeBulletHit;
+  //   if (canTakeHit) canTakeHit.call(hitEntity);
+  //   return entityManager.KILL_ME_NOW;
+  // }
 
   // TODO: YOUR STUFF HERE! --- (Re-)Register
   spatialManager.register(this);
@@ -119,8 +119,9 @@ Bullet.prototype.render = function (ctx) {
   if (this.lifeSpan < fadeThresh) {
     ctx.globalAlpha = this.lifeSpan / fadeThresh;
   }
-  this.sprite.animation = "LASER";
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this, this.yDir);
+  this.sprite.animation = "PLASMA";
+  this.sprite.updateFrame(0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 
   ctx.globalAlpha = 1;
 };

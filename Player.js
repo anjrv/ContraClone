@@ -138,7 +138,7 @@ Player.prototype.maybeShoot = function () {
     // Calculate the direction of the bullet.
     let vX = Math.sign(this.velX) * Math.cos(this.angle) * g_bulletSpeed;
     let vY = -Math.sin(this.angle) * g_bulletSpeed;
-    entityManager.firePlayerBullet(this.cx, this.cy, vX, vY, Math.sign(this.velX), -Math.sign(this.angle), 0.5, true, false, false, false);
+    entityManager.firePlayerBullet(this.cx, this.cy, vX, vY, this.angle);
 
     // let vX = (this.shootV) ? 0 : Math.sign(this.velX) * g_bulletSpeed;
     // let vY;
