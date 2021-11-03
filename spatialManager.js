@@ -40,7 +40,9 @@ const spatialManager = {
 
   unregister: function (entity) {
     const spatialID = entity.getSpatialID();
-    this._entities[spatialID] = null;
+    // it is not enough to just set this._entities[spatialID]=null
+    // they still iterate over the null elements and cause performance issues
+    delete this._entities[spatialID];
   },
 
   findEntityInRange: function (collider) {
@@ -64,4 +66,12 @@ const spatialManager = {
       e?.collider.render(ctx);
     }
   },
+
+  wipeCollisionObjects: function() {
+    let i = 0;
+    for (let ID in this._entities) {
+      i++;
+      delete this._entities[ID];
+    }
+  }
 };

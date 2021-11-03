@@ -22,6 +22,7 @@ RecordingPlayer.prototype.nextFrame = function () {
 // Returns the dt value for the current frame
 RecordingPlayer.prototype.getNextFrameDelta_ms = function() {
   if (this.frame_count === 0) {
+    spatialManager.wipeCollisionObjects();
     worldMap.restoreCameraRecord(this.worldMap);
     entityManager.restoreEntities(this.entities);
   }
