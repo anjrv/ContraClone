@@ -6,57 +6,64 @@
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
-
 // Construct a "sprite" from the given `image`,
 //
-function Sprite(image) {
-    this.image = image;
-    this.width = image.width;
-    this.height = image.height;
-    this.scale = 1;
+function Sprite(image, cols = 1, rows = 1, sWidth = 0, sHeight = 0) {
+  this.image = image;
+  this.width = image.width;
+  this.height = image.height;
+  this.cols = cols;
+  this.rows = rows;
+  this.sWidth = sWidth || image.width;
+  this.sHeight = sHeight || image.height;
+  this.animations = {"NONE": Array(cols * rows).fill().map((x,i) => i)};
+  this.animation = "NONE";
+}
+
+// Sprite.prototype.sx = 0;
+// Sprite.prototype.sy = 0;
+Sprite.prototype.frame = 0;
+Sprite.prototype.scale = 1;
+
+Sprite.prototype.updateFrame = function(frame_num) {
+    const anim_frame = frame_num % this.animations[this.animation].length;
+    this.frame = this.animations[this.animation][anim_frame];
 }
 
 Sprite.prototype.drawAt = function (ctx, x, y) {
-    ctx.drawImage(this.image, 
-                  x, y);
+  ctx.drawImage(this.image, x, y);
 };
 
-Sprite.prototype.sx = 0;
-Sprite.prototype.sy = 0;
+Sprite.prototype.drawCentredAt = function (
+  ctx,
+  cx,
+  cy,
+  rotation = 0,
+  mirror = false
+) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rotation);
+  const mirrorMult = mirror ? -1 : 1;
+  ctx.scale(this.scale * mirrorMult, this.scale);
 
-Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation, entity, yDir) {
-    if (rotation === undefined) rotation = 0;
-    
-    var w = this.width,
-        h = this.height;
+  // drawImage expects "top-left" coords, so we offset our destination
+  // coords accordingly, to draw our sprite centred at the origin
 
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
-    ctx.scale(this.scale, this.scale);
-    
-    // drawImage expects "top-left" coords, so we offset our destination
-    // coords accordingly, to draw our sprite centred at the origin
-    if (entity) {
-        let width = entity.spriteWidth;
-        let height = entity.spriteHeight;
-        let scale = entity.spriteScale;
-        let realWidth = width * scale;
-        let realHeight = height * scale;
-        let beginX = entity.ssbX;
-        let beginY = entity.ssbY;
-        let dirX = entity.dirX;
-        let dirY = (yDir) ? -yDir : this.scale;
-        ctx.scale(dirX,dirY)
-        let posX = (dirX === -1) ? (realWidth * dirX)+(realWidth)/2 : (-realWidth*dirX)+(realWidth)/2;
-        let posY = entity.floor-(realHeight)+(realHeight/2);
-        ctx.drawImage(this.image,beginX,beginY,width,height,
-                        posX,posY,realWidth,realHeight);
-    } else {
-        ctx.drawImage(this.image, -w/2, -h/2);
-    }
-    ctx.restore();
-};  
+
+  ctx.drawImage(
+    this.image,
+    this.sWidth * (this.frame % this.cols),
+    this.sHeight * Math.floor(this.frame / this.cols),
+    this.sWidth,
+    this.sHeight,
+    -this.sWidth / 2,
+    -this.sHeight / 2,
+    this.sWidth,
+    this.sHeight
+  );
+  ctx.restore();
+};
 
 /*Sprite.prototype.drawWrappedCentredAt = function (ctx, cx, cy, rotation, entity) {
     
@@ -83,4 +90,3 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation, entity, yDir) 
     this.drawCentredAt(ctx, cx, cy - sh, rotation, entity);
     this.drawCentredAt(ctx, cx, cy + sh, rotation, entity);
 };*/
-

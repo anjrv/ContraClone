@@ -5,8 +5,9 @@ var p_ssbY = 0;
 // Sprite size
 var p_size = 46;
 
-// Number of sprites in row of spritesheet
+// Number of columns of spritesheet
 var p_sn = 6;
+// Number of rows of s
 
 // How big the sprite should be scaled
 var p_scale = 2;
@@ -23,21 +24,23 @@ var p_ground = (p_ssHeight/2);
 var p_ground2 = 0;
 
 function Player(descr) {
+  Character.call(this, descr);
   this.speed = 1;
   this.jumps = 0;
 
   //Sprite stuff
   this.sprite = g_sprites.player;
-  this.ssbX = p_ssbX;
-  this.ssbY = p_ssbY;
-  this.spriteWidth = p_size;
-  this.spriteHeight = p_size;
-  this.spriteNumber = p_sn;
-  this.spritePosition = 0;
-  this.spriteScale = p_scale;
-  this.ssHeight = p_ssHeight;
+  this.frame = 0;
+  // this.ssbX = p_ssbX;
+  // this.ssbY = p_ssbY;
+  // this.spriteWidth = p_size;
+  // this.spriteHeight = p_size;
+  // this.spriteNumber = p_sn;
+  // this.spriteScale = p_scale;
+  // this.ssHeight = p_ssHeight;
+  this.angle = 0;
+  this.realSize = g_sprites.player.sWidth * this.scale;
   this.floor = p_ground2;
-  this.realSize = p_realSize;
 
   // Collisions
   this.collider = new Collider({
@@ -51,7 +54,7 @@ function Player(descr) {
 
   // Direction 1 is right, -1 is left.
   this.dirX = 1;
-  Character.call(this, descr);
+  this.scale = p_scale;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -64,6 +67,7 @@ Player.prototype.KEY_DOWN  = "S".charCodeAt(0);
 
 Player.prototype.KEY_JUMP  = " ".charCodeAt(0);
 Player.prototype.KEY_SHOOT = "J".charCodeAt(0);
+Player.prototype.KEY_CROUCH= 16;
 
 // Variables that bullets can use.
 var p_velX;
@@ -129,33 +133,39 @@ Player.prototype.computeSubStep = function (du) {
 
 Player.prototype.maybeShoot = function () {
   if (keys[this.KEY_SHOOT]) {
-    let vX = (this.shootV) ? 0 : this.dirX * g_bulletSpeed;
-    let vY;
-    switch (this.dirY) {
-      case 0:
-        vY = -1;
-        break;
-      case 0.25:
-        vY = -1;
-        break;
-      case 0.5:
-        vY = 0;
-        break;
-      case 0.75:
-        vY = 1;
-        break;
-      case 1:
-        vY = 1;
-        break;
-    }
-    vY *= g_bulletSpeed;
-    console.log(vY);
-    let dX = (this.shootV) ? this.cx : this.cx + (this.realSize/2 * this.dirX);
-    let dY = (this.shootV) ? this.cy + (this.realSize/2 * this.dirY) : this.cy + this.dirY;
-    if (this.shootDU)       { dY -= this.realSize/2; }
-    else if (this.shootDD)  { dY += this.realSize/2; }
-    else if (this.shootV && vY === -1 * g_bulletSpeed) {dY = this.cy - (this.realSize/2); }
-    entityManager.firePlayerBullet(dX,dY,vX,vY,this.dirX,this.dirY, vY/g_bulletSpeed, this.shootV, this.shootH, this.shootDU, this.shootDD);
+    // Calculate the direction of the bullet.
+    console.log(this.angle)
+    let vX = Math.sign(this.velX) * Math.cos(this.angle) * g_bulletSpeed;
+    let vY = -Math.sin(this.angle) * g_bulletSpeed;
+    entityManager.firePlayerBullet(this.cx, this.cy, vX, vY, Math.sign(this.velX), -Math.sign(this.angle), 0.5, true, false, false, false);
+
+    // let vX = (this.shootV) ? 0 : Math.sign(this.velX) * g_bulletSpeed;
+    // let vY;
+    // switch (this.dirY) {
+    //   case 0:
+    //     vY = -1;
+    //     break;
+    //   case 0.25:
+    //     vY = -1;
+    //     break;
+    //   case 0.5:
+    //     vY = 0;
+    //     break;
+    //   case 0.75:
+    //     vY = 1;
+    //     break;
+    //   case 1:
+    //     vY = 1;
+    //     break;
+    // }
+    // vY *= g_bulletSpeed;
+    // console.log(vY);
+    // let dX = (this.shootV) ? this.cx : this.cx + (this.realSize/2 * this.dirX);
+    // let dY = (this.shootV) ? this.cy + (this.realSize/2 * this.dirY) : this.cy + this.dirY;
+    // if (this.shootDU)       { dY -= this.realSize/2; }
+    // else if (this.shootDD)  { dY += this.realSize/2; }
+    // else if (this.shootV && vY === -1 * g_bulletSpeed) {dY = this.cy - (this.realSize/2); }
+    // entityManager.firePlayerBullet(dX, dY, vX, vY, this.dirX, this.dirY, vY/g_bulletSpeed, this.shootV, this.shootH, this.shootDU, this.shootDD);
   }
 }
 
@@ -163,74 +173,48 @@ Player.prototype.maybeShoot = function () {
 var p_changeCounter = 77;
 var p_changeBase = p_changeCounter;
 
-// Row number in spritesheet
-var p_UR = 6;
-var p_U = 12;
-var p_DR = 43;
-var p_D = 36;
-
 Player.prototype.changeSprite = function(du) {
+  
   // A counter that changes the sprite when du * velocity reaches a certain number.
   p_changeCounter -= du*Math.abs(this.velX);
   if (p_changeCounter < 0) {
-    this.spritePosition += 1;
+    this.frame += 1;
     p_changeCounter = p_changeBase;
   }
 
-  // Change the direction of player to mirror sprite
-  this.dirX = (this.velX < 0) ? -1 : 1;
+  this.angle = 0;
 
-  // In the character sprite there is a crouch sprite which we skip
-  if (this.spritePosition === 1) this.spritePosition += 1;
-
-  // Reset when reached end of spritesheet row
-  if (this.spritePosition === this.spriteNumber) this.spritePosition = 0;
-
-  // Change to standing sprite when player stops
-  if (Math.abs(this.velX) < 1) this.spritePosition = 0;
-
-  // Make ready for the draw method
-  this.ssbX = this.spriteWidth * this.spritePosition;
-
-  // Extra complicated for player sprite, different sprites when aiming.
-  if ((keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) && keys[this.KEY_UP]) { 
-    this.shootV = false;
-    this.shootH = false;
-    this.shootDU = true;
-    this.shootDD = false;
-    this.dirY = 0.25
-    this.ssbY = this.spriteHeight * p_UR; 
-  } 
-  else if ((keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) && keys[this.KEY_DOWN]) {
-    this.shootH = false;
-    this.shootV = false;
-    this.shootDU = false;
-    this.shootDD = true;
-    this.dirY = 0.75;
-    this.ssbY = this.spriteHeight * p_DR;
+  if (Math.abs(this.velX) < 1) {
+    this.sprite.animation = "IDLE"
   }
-  else if (keys[this.KEY_DOWN]) {
-    this.shootV = true;
-    this.shootH = false;
-    this.shootDU = false;
-    this.shootDD = false;
-    this.dirY = 1;
-    this.ssbY = this.spriteHeight * p_D;
+
+  if (keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) {
+    this.sprite.animation = "RUN_FORWARD"
+    if (keys[this.KEY_UP]) {
+      this.angle = Math.PI / 4;
+      this.sprite.animation += "_UP"
+    }
+    if (keys[this.KEY_DOWN]) {
+      this.angle = -Math.PI / 4;
+      this.sprite.animation += "_DOWN"
+    }
+    return;
   }
-  else if (keys[this.KEY_UP]) {
-    this.shootV = true;
-    this.shootH = false;
-    this.shootDU = false;
-    this.shootDD = false;
-    this.dirY = 0;
-    this.ssbY = this.spriteHeight * p_U;
+
+  if (keys[this.KEY_DOWN]) {
+    this.angle = -Math.PI / 2;
+    this.sprite.animation = "LOOK_DOWN"
+    return;
   }
-  else { 
-    this.shootV = false;
-    this.shootH = true;
-    this.shootDU = false;
-    this.shootDD = false;
-    this.dirY = 0.5;
-    this.ssbY = 0 
+
+  if (keys[this.KEY_UP]) {
+    this.angle = Math.PI / 2;
+    this.sprite.animation = "LOOK_UP"
+    return;
+  }
+
+  if (keys[this.KEY_CROUCH]) {
+    this.sprite.animation = "CROUCH"
+    return;
   }
 }

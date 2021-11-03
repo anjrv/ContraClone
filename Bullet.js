@@ -64,9 +64,8 @@ Bullet.prototype.update = function (du) {
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-  this.cx += this.velX * du - p_velX;
-  this.cy += this.velY * du - p_velY;
-
+  this.cx += this.velX * du;
+  this.cy += this.velY * du
   this.rotation += 1 * du;
   this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
 

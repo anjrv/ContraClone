@@ -12,7 +12,7 @@ with suitable 'data' and 'methods'.
 
 */
 
-'use strict';
+"use strict";
 
 // Tell jslint not to complain about my use of underscore prefixes (nomen),
 // my flattening of some indentation (white), or my use of incr/decr ops
@@ -24,7 +24,7 @@ const entityManager = {
   // "PRIVATE" DATA
 
   // _rocks: [],
-     _bullets: [],
+  _bullets: [],
   // _ships: [],
 
   // _bShowRocks: true,
@@ -54,27 +54,38 @@ const entityManager = {
   },
 
   init: function () {
-    this._player.push(new Player({ }));
+    this._player.push(new Player({}));
   },
 
-  firePlayerBullet: function (cx, cy, velX, velY, dirX, dirY, yDir, sV,sH,sDU,sDD) {
-     this._bullets.push(
-       new Bullet({
-         cx: cx,
-         cy: cy,
-         velX: velX,
-         velY: velY,
-         dirX: dirX,
-         dirY: dirY,
-         yDir: yDir,
-         shootV: sV,
-         shootH: sH,
-         shootDU: sDU,
-         shootDD: sDD
-       }),
-     );
+  firePlayerBullet: function (
+    cx,
+    cy,
+    velX,
+    velY,
+    dirX,
+    dirY,
+    yDir,
+    sV,
+    sH,
+    sDU,
+    sDD
+  ) {
+    this._bullets.push(
+      new Bullet({
+        cx: cx,
+        cy: cy,
+        velX: velX,
+        velY: velY,
+        dirX: dirX,
+        dirY: dirY,
+        yDir: yDir,
+        shootV: sV,
+        shootH: sH,
+        shootDU: sDU,
+        shootDD: sDD,
+      })
+    );
   },
-
 
   update: function (du) {
     for (let c = 0; c < this._categories.length; ++c) {
@@ -93,7 +104,6 @@ const entityManager = {
         }
       }
     }
-
   },
 
   render: function (ctx) {
@@ -111,14 +121,14 @@ const entityManager = {
     }
   },
 
-  wipeEntities: function () { 
+  wipeEntities: function () {
     this._player = [];
     for (let c = 0; c < this._categories.length; c++) {
       this._categories[c] = [];
     }
   },
 
-  // takes in root and appends entities object to it that carries all the information 
+  // takes in root and appends entities object to it that carries all the information
   // the entity manager needs to restore the game state.
   recordEntities: function (root) {
     for (let c = 0; c < this._categories.length; c++) {
@@ -129,22 +139,22 @@ const entityManager = {
         let velX = entity.velX;
         let velY = entity.velY;
         let type = entity.constructor.name;
-        let record = document.createElement('entity');
-        record.setAttribute('type', type);
-        record.setAttribute('posx', pos.posX);
-        record.setAttribute('posy', pos.posY);
-        record.setAttribute('velx', velX);
-        record.setAttribute('vely', velY);
+        let record = document.createElement("entity");
+        record.setAttribute("type", type);
+        record.setAttribute("posx", pos.posX);
+        record.setAttribute("posy", pos.posY);
+        record.setAttribute("velx", velX);
+        record.setAttribute("vely", velY);
         root.appendChild(record);
       }
     }
   },
 
-  // takes a xml/json object from recordEntities and restores the game state. 
+  // takes a xml/json object from recordEntities and restores the game state.
   restoreEntities: function (entities) {
     this.wipeEntities();
 
-    let entitiesList = entities.getElementsByTagName('entity');
+    let entitiesList = entities.getElementsByTagName("entity");
     for (let i = 0; i < entitiesList.length; i++) {
       let e = entitiesList[i];
       let type = e.attributes.type.nodeValue;
@@ -156,14 +166,14 @@ const entityManager = {
         let descr = {
           cx: posX,
           cy: posY,
-          velX, 
+          velX,
           //velY
-        }
+        };
         this._player.push(new Player(descr));
       }
     }
-    this._categories = [this._player]
-  }
+    this._categories = [this._player];
+  },
 };
 
 // Some deferred setup which needs the object to have been created first

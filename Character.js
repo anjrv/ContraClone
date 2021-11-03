@@ -19,7 +19,6 @@ function Character(descr) {
   this.rememberResets();
 
   // Set normal drawing scale, and warp state off
-  this._scale = 1;
   this._isWarping = false;
 }
 
@@ -40,6 +39,7 @@ Character.prototype.launchVel = 2;
 Character.prototype.numSubSteps = 1;
 Character.prototype.bounces = 0;
 Character.prototype.onGround = false;
+Character.prototype.scale = 1;
 
 Character.prototype.update = function (du) {
   throw new Error(`Update function not implemented for Character`);
@@ -75,9 +75,7 @@ Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
   // Collision with the floor
   // TODO: allow variable heights of the floor
 
-  const minY = this.spriteHeight
-    ? this.spriteHeight / 2
-    : this.sprite.height / 2;
+  const minY = this.sprite.sHeight / 2;
   const maxY = g_canvas.height - minY;
 
   if (this.velY < 0) this.onGround = false;
@@ -116,9 +114,7 @@ Character.prototype.halt = function () {
 };
 
 Character.prototype.render = function (ctx) {
-  const origScale = this.sprite.scale;
-  // pass my scale into the sprite, for drawing
-  this.sprite.scale = this._scale;
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this);
-  this.sprite.scale = origScale;
+  this.sprite.scale = this.scale;
+  this.sprite.updateFrame(this.frame || 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this.velX < 0);
 };

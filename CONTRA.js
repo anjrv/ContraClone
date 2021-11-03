@@ -115,7 +115,7 @@ function requestPreloads() {
     impactSun     :   './Sprites/impacts-sheet-colour-5-alpha.png',
     explosion     :   './Sprites/jrob774-explosion_2-sheet-alpha.png',
     powerups      :   './Sprites/powerups-sheet-alpha.png',
-    projectiles   :   './Sprites/projectiles-sheet-alpha.png',
+    projectiles   :   './Sprites/updated_projectiles-sheet-alpha.png',
     flashWhite    :   './Sprites/weaponflash-sheet-colour-1-alpha.png',
     flashAcid     :   './Sprites/weaponflash-sheet-colour-2-alpha.png',
     flashFire     :   './Sprites/weaponflash-sheet-colour-3-alpha.png',
@@ -130,7 +130,16 @@ const g_sprites = {};
 
 function preloadDone() {
   g_sprites.palette      = new Sprite(g_images.palette)
-  g_sprites.player       = new Sprite(g_images.player)
+  g_sprites.player       = new Sprite(g_images.player, 6, 48, 46, 46);
+  g_sprites.player.animations = {
+    IDLE: [0],
+    LOOK_DOWN: [216],
+    LOOK_UP: [72],
+    RUN_FORWARD: [2,3,4,5],
+    RUN_FORWARD_UP: [38,39,40,41],
+    RUN_FORWARD_DOWN: [260,261,262,263],
+    CROUCH: [1]
+  };
   g_sprites.impactWhite  = new Sprite(g_images.impactWhite)
   g_sprites.impactAcid   = new Sprite(g_images.impactAcid)
   g_sprites.impactFire   = new Sprite(g_images.impactFire)
@@ -138,7 +147,7 @@ function preloadDone() {
   g_sprites.impactSun    = new Sprite(g_images.impactSun)
   g_sprites.explosion    = new Sprite(g_images.explosion)
   g_sprites.powerups     = new Sprite(g_images.powerups)
-  g_sprites.projectiles  = new Sprite(g_images.projectiles)
+  g_sprites.projectiles  = new Sprite(g_images.projectiles, 13, 7, 28, 28)
   g_sprites.flashWhite   = new Sprite(g_images.flashWhite)
   g_sprites.flashAcid    = new Sprite(g_images.flashAcid)
   g_sprites.flashFire    = new Sprite(g_images.flashFire)
