@@ -121,7 +121,8 @@ function requestPreloads() {
     flashFire     :   './Sprites/weaponflash-sheet-colour-3-alpha.png',
     flashPlasma   :   './Sprites/weaponflash-sheet-colour-4-alpha.png',
     flashSun      :   './Sprites/weaponflash-sheet-colour-5-alpha.png',
-    enemies       :   './Sprites/enemies-sheet-alpha.png'
+    enemies       :   './Sprites/enemies-sheet-alpha.png',
+    ground        :   './Sprites/test_ground.png',
   }
   imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -159,6 +160,11 @@ function preloadDone() {
   g_sprites.flashPlasma  = new Sprite(g_images.flashPlasma)
   g_sprites.flashSun     = new Sprite(g_images.flashSun)
   g_sprites.enemies      = new Sprite(g_images.enemies)
+  g_sprites.ground       = new Sprite(g_images.ground, 4, 4, 16, 16)
+  g_sprites.ground.animations = {
+    G: [0],
+    F: [1],
+  }
   entityManager.init();
   worldMap.init(level1);
   main.init();

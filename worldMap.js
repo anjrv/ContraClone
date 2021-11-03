@@ -3,172 +3,50 @@
 
 const worldMap = {
   init: function (mapData) {
+    // Map variables
     this._cols = mapData.cols;
     this._rows = mapData.rows;
     this._tileSize = mapData.tilesize;
     this._layers = mapData.layers;
+    this._sprite = g_sprites.ground;
+    this._sprite.scale = this._tileSize / this._sprite.sWidth;
+
+    // Camera variables
     this._offsetX = 0;
     this._offsetY = 0;
-    this._currChangeX = 0;
-    this._currChangeY = 0;
-
-    // Grab initial spawn tile, currently we assume layer 0 but we need to decide how many layers we use
-    const playerIndex = this._layers[0].indexOf('0');
-
-    this._cameraTile = {
-      cx: playerIndex % this._cols,
-      cy: Math.floor(playerIndex / this._cols),
-    };
-
-    this._mapCameraCoords = {
-      cx: this._cameraTile.cx * this._tileSize + this._tileSize / 2,
-      cy: this._cameraTile.cy * this._tileSize + this._tileSize,
-    };
-    // Clear spawn point for "collision"
-    this._layers[0][playerIndex] = 'E';
   },
 
-  getTile: function (col, row, layer) {
-    return this._layers[layer][row * this._cols + col];
-  },
-
-  getTileFromCoords(cx, cy) {
-    const playerX = g_ctx.canvas.width / 2 + this._offsetX + this._tileSize / 2 - this._currChangeX;
-    const playerY = g_ctx.canvas.height / 2 + this._offsetY + this._tileSize - this._currChangeY;
-
-    const xDiff = playerX - cx;
-    const yDiff = playerY - cy;
-
-    const c = this._cameraTile.cx - Math.round(xDiff / this._tileSize);
-    const r = this._cameraTile.cy - Math.round(yDiff / this._tileSize);
-
-    return {
-      col: c,
-      row: r,
-    };
-  },
-
-  getCameraShift: function () {
-    return {
-      cameraShiftX: this._currChangeX,
-      cameraShiftY: this._currChangeY,
+  update: function(du) {
+    const player = entityManager.getPlayer();
+    const diffX = Math.abs(player.cx + this._offsetX);
+    if (diffX > g_canvas.width / 1.5) {
+      console.log(diffX)
+      this._offsetX = -player.cx;
     }
+    //this._offsetX = -player.cx;
+
+    // const minOffset = g_canvas.width / 7;
+    // const maxOffset = g_canvas.width / 2;
+
+    // if (player.offsetX >= minOffset && player.offsetX <= maxOffset) {
+    //   if (Math.sign(player.velX) < 0) player.offsetX--;
+    //   else player.offsetX++;
+    // } else {
+    //   this._offsetX = player.offsetX;
+    // }
   },
-
-  getRelativeWorldInfo: function (cx, cy) {
-    const currTile = this.getTileFromCoords(cx, cy);
-
-    return {
-      tileType: this.getTile(currTile.col, currTile.row, 0),
-      tileSize: this._tileSize
-    };
-  },
-
-  updateCamera: function (changeX, changeY) {
-    const newX = this._mapCameraCoords.cx + changeX;
-    const newY = this._mapCameraCoords.cy + changeY;
-    const nextCameraX = Math.floor(newX / this._tileSize);
-    const nextCameraY = Math.floor(newY / this._tileSize);
-
-    if (this.getTile(this._cameraTile.cx, nextCameraY, 0) === 'E') {
-      this._cameraTile.cy = nextCameraY;
-      this._mapCameraCoords.cy = newY;
-      this._currChangeY = changeY;
-    } else {
-      this._currChangeY = 0;
+  
+  render: function(ctx) {
+    ctx.save();
+    ctx.translate(this._offsetX, this._offsetY);
+    for (let i = 0; i < this._layers[0].length; i++) {
+      const x = (i % this._cols) * this._tileSize;
+      const y = (Math.floor(i / this._cols)) * this._tileSize;
+      if (this._layers[0][i] === 'E' || this._layers[0][i] === '0') continue;
+      this._sprite.animation = this._layers[0][i];
+      this._sprite.updateFrame(0);
+      this._sprite.drawCentredAt(ctx, x + this._sprite.sWidth / 2, y + this._sprite.sWidth / 2, 0);
     }
-
-    if (this.getTile(nextCameraX, this._cameraTile.cy, 0) === 'E') {
-      this._cameraTile.cx = nextCameraX;
-      this._mapCameraCoords.cx = newX;
-      this._currChangeX = changeX;
-    } else {
-      this._currChangeX = 0;
-    }
-
-    this._offsetY =
-      -this._mapCameraCoords.cy + this._cameraTile.cy * this._tileSize;
-    this._offsetX =
-      -this._mapCameraCoords.cx + this._cameraTile.cx * this._tileSize;
-
-    return this.getTile(this._cameraTile.cx, nextCameraY, 0) !== 'E';
-  },
-
-  update: function (du) {
-    // Could use this to spawn new enemies when they come into the viewport
-
-    return;
-  },
-
-  render: function (ctx) {
-    const playerX = ctx.canvas.width / 2 + this._tileSize / 2;
-    const playerY = ctx.canvas.height / 2 + this._tileSize;
-    const numHalfCols = Math.ceil(ctx.canvas.height / this._tileSize);
-    const numHalfRows = Math.ceil(ctx.canvas.width / this._tileSize);
-
-    for (let i = 0; i < this._layers.length; i++) {
-      for (let col = -numHalfCols; col <= numHalfCols; col++) {
-        for (let row = -numHalfRows; row <= numHalfRows; row++) {
-          const val = this.getTile(
-            this._cameraTile.cx + col,
-            this._cameraTile.cy + row,
-            i,
-          );
-          if (g_renderSpatialDebug && val) {
-            util.strokeBoxCentered(
-              ctx,
-              playerX + this._tileSize * col + this._offsetX,
-              playerY + this._tileSize * row + this._offsetY,
-              this._tileSize,
-              this._tileSize,
-              'cyan',
-            );
-          }
-          if (val === 'G') {
-            util.fillBoxCentered(
-              ctx,
-              playerX + this._tileSize * col + this._offsetX,
-              playerY + this._tileSize * row + this._offsetY,
-              this._tileSize,
-              this._tileSize,
-              'green',
-            );
-          } else if (val === 'F') {
-            util.fillBoxCentered(
-              ctx,
-              playerX + this._tileSize * col + this._offsetX,
-              playerY + this._tileSize * row + this._offsetY,
-              this._tileSize,
-              this._tileSize,
-              'orange',
-            );
-          }
-        }
-      }
-    }
-  },
-
-  recordCameraInfo: function (tag) { 
-    tag.setAttribute('camtilecx', this._cameraTile.cx);
-    tag.setAttribute('camtilecy', this._cameraTile.cy);
-    tag.setAttribute('mapcamcoordscx', this._mapCameraCoords.cx);
-    tag.setAttribute('mapcamcoordscy', this._mapCameraCoords.cy);
-  },
-
-  restoreCameraRecord: function (record)  {
-    let camTile_cx = Number.parseFloat(record.attributes.camtilecx.nodeValue);
-    let camTile_cy = Number.parseFloat(record.attributes.camtilecy.nodeValue);
-    let mapCamCoords_cx = Number.parseFloat(record.attributes.mapcamcoordscx.nodeValue);
-    let mapCamCoords_cy = Number.parseFloat(record.attributes.mapcamcoordscy.nodeValue);
-    if (Number.isNaN(camTile_cx)
-      || Number.isNaN(camTile_cy)
-      || Number.isNaN(mapCamCoords_cx)
-      || Number.isNaN(mapCamCoords_cy)
-    ) throw new Error('Camera could not be restored properly');
-
-    this._cameraTile.cx = camTile_cx;
-    this._cameraTile.cy = camTile_cy;
-    this._mapCameraCoords.cx = mapCamCoords_cx;
-    this._mapCameraCoords.cy = mapCamCoords_cy;
-  },
-};
+    ctx.restore();
+  }
+}

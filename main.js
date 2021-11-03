@@ -167,21 +167,20 @@ main.init = function () {
   // so let's use a fillStyle which works against that...
   //
   g_ctx.fillStyle = 'white';
-  this.scaleCanvas();
-  window.addEventListener('resize', this.scaleCanvas.bind(this));
+  // this.scaleCanvas();
+  // window.addEventListener('resize', this.scaleCanvas.bind(this));
 
   this._requestNextIteration();
 };
 
-main.scaleCanvas = function () {
-  // Scale the canvas so it keeps the same aspect ratio
-  console.log('resizing');
-  if (window.innerWidth / this._aspectRatio < window.innerHeight) {
-    console.log(window.innerWidth);
-    g_canvas.width = window.innerWidth;
-    g_canvas.height = window.innerWidth / this._aspectRatio;
-  } else {
-    g_canvas.width = window.innerHeight * this._aspectRatio;
-    g_canvas.height = window.innerHeight;
-  }
-};
+// main.scaleCanvas = function () {
+//   // Scale the canvas so it keeps the same aspect ratio
+//   console.log('resizing');
+//   if (window.innerWidth / this._aspectRatio < window.innerHeight) {
+//     g_renderCanvas.width = window.innerWidth;
+//     g_renderCanvas.height = window.innerWidth / this._aspectRatio;
+//   } else {
+//     g_renderCanvas.width = window.innerHeight * this._aspectRatio;
+//     g_renderCanvas.height = window.innerHeight;
+//   }
+// };

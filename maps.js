@@ -2,7 +2,7 @@
 const level1 = {
   cols: 48,
   rows: 10,
-  tilesize : p_realSize,
+  tilesize : p_realSize / 2,
   // Structure layers as single rows that can be queried with row/col info
   // This allows us to add additional background/foreground layers somewhat easily 
   layers: [

@@ -41,6 +41,7 @@ function Player(descr) {
   this.angle = 0;
   this.realSize = g_sprites.player.sWidth * this.scale;
   this.floor = p_ground2;
+  this.offsetX = g_canvas.width/7;
 
   // Collisions
   this.collider = new Collider({
@@ -82,7 +83,6 @@ Player.prototype.update = function (du) {
   this.maybeShoot();
   p_velX = this.velX;
   p_velY = this.velY;
-
   spatialManager.register(this);
 };
 
@@ -123,10 +123,10 @@ Player.prototype.computeSubStep = function (du) {
     this.jumps++;
   }
 
-  this.applyAccel(acceleration, gravityAcc, du, true);
+  this.applyAccel(acceleration, gravityAcc, du);
 
-  this.cx = g_ctx.canvas.width / 2;
-  this.cy = g_ctx.canvas.height / 2;
+  // this.cx = g_ctx.canvas.width / 2;
+  // this.cy = g_ctx.canvas.height / 2;
 
   return acceleration;
 };
@@ -196,6 +196,12 @@ Player.prototype.changeSprite = function (du) {
     return;
   }
 };
+
+Player.prototype.render = function (ctx) {
+  this.sprite.scale = this.scale;
+  this.sprite.updateFrame(this.frame || 0);
+  this.sprite.drawCentredAt(ctx, g_canvas.width / 2, g_canvas.height / 2, 0, this.velX < 0)
+}
 
 Player.prototype.record = function (tag) {
   tag.setAttribute("type", this.constructor.name);
