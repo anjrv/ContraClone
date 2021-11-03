@@ -33,9 +33,9 @@ function Bullet(descr) {
   this.realSize = this.spriteWidth*this.spriteScale;
   this.collider = new Collider({
     type: 'Circle',
-    cx: 0,
-    cy: 0,
-    radius: 0,
+    cx: this.cx,
+    cy: this.cy,
+    radius: this.realSize/2,
   });
 
   // Make a noise when I am created (i.e. fired)
@@ -52,8 +52,8 @@ Bullet.prototype = new Entity();
 Bullet.prototype.constructor = Bullet
 
 // HACKED-IN AUDIO (no preloading)
-Bullet.prototype.fireSound = new Audio('sounds/bulletFire.ogg');
-Bullet.prototype.zappedSound = new Audio('sounds/bulletZapped.ogg');
+//Bullet.prototype.fireSound = new Audio('sounds/bulletFire.ogg');
+//Bullet.prototype.zappedSound = new Audio('sounds/bulletZapped.ogg');
 
 // Initial, inheritable, default values
 Bullet.prototype.rotation = 0;
@@ -84,7 +84,8 @@ Bullet.prototype.update = function (du) {
     // React in some manner to next tile being terrain
     return entityManager.KILL_ME_NOW;
   }
-
+  this.collider.cx = this.cx;
+  this.collider.cy = this.cy;
 
   this.rotation += 1 * du;
   this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
@@ -110,7 +111,7 @@ Bullet.prototype.takeBulletHit = function () {
   this.kill();
 
   // Make a noise when I am zapped by another bullet
-  this.zappedSound.play();
+  // this.zappedSound.play();
 };
 
 Bullet.prototype.render = function (ctx) {
