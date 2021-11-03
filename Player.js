@@ -199,8 +199,9 @@ Player.prototype.changeSprite = function (du) {
 
 Player.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
+
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, g_canvas.width / 2, g_canvas.height / 2, 0, this.velX < 0)
+  this.sprite.drawCentredAt(ctx, g_canvas.width / 4 + worldMap.diffX, g_canvas.height / 2 + worldMap.diffY, 0, this.velX < 0)
 }
 
 Player.prototype.record = function (tag) {

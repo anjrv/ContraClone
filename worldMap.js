@@ -11,33 +11,34 @@ const worldMap = {
     this._sprite = g_sprites.ground;
     this._sprite.scale = this._tileSize / this._sprite.sWidth;
 
+    
+    // Move Player to the start position
+    const player = entityManager.getPlayer();
+    player.cx = (mapData.playerSpawn % this._cols) * this._tileSize + this._tileSize / 2;
+    player.cy = Math.floor(mapData.playerSpawn / this._cols) * this._tileSize - this._tileSize / 2;
+    
     // Camera variables
-    this._offsetX = 0;
-    this._offsetY = 0;
+    this._offsetX = -player.cx;
+    this._offsetY = -player.cy;
+    this.diffX = 0;
+    this.diffY = 0;
   },
 
   update: function(du) {
     const player = entityManager.getPlayer();
-    const diffX = Math.abs(player.cx + this._offsetX);
-    if (diffX > g_canvas.width / 1.5) {
-      console.log(diffX)
-      this._offsetX = -player.cx;
+    this.diffX = player.cx + this._offsetX;
+    this.diffY = player.cy + this._offsetY;
+    if (Math.abs(this.diffX) > g_canvas.width / 12) {
+      this._offsetX = -(player.cx - Math.sign(this.diffX) * g_canvas.width / 12);
     }
-    //this._offsetX = -player.cx;
-
-    // const minOffset = g_canvas.width / 7;
-    // const maxOffset = g_canvas.width / 2;
-
-    // if (player.offsetX >= minOffset && player.offsetX <= maxOffset) {
-    //   if (Math.sign(player.velX) < 0) player.offsetX--;
-    //   else player.offsetX++;
-    // } else {
-    //   this._offsetX = player.offsetX;
-    // }
+    if (Math.abs(this.diffY) > g_canvas.width / 12) {
+      this._offsetY = -(player.cy - Math.sign(this.diffY) * g_canvas.width / 12);
+    }
   },
   
   render: function(ctx) {
     ctx.save();
+    //ctx.font = "10px Arial";
     ctx.translate(this._offsetX, this._offsetY);
     for (let i = 0; i < this._layers[0].length; i++) {
       const x = (i % this._cols) * this._tileSize;
@@ -45,7 +46,8 @@ const worldMap = {
       if (this._layers[0][i] === 'E' || this._layers[0][i] === '0') continue;
       this._sprite.animation = this._layers[0][i];
       this._sprite.updateFrame(0);
-      this._sprite.drawCentredAt(ctx, x + this._sprite.sWidth / 2, y + this._sprite.sWidth / 2, 0);
+      this._sprite.drawCentredAt(ctx, x + this._sprite.sWidth / 2 + g_canvas.width / 4, y + this._sprite.sWidth / 2 + g_canvas.height / 2, 0);
+      //ctx.fillText(`${x}, ${y}`, x, y);
     }
     ctx.restore();
   }
