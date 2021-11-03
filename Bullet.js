@@ -18,24 +18,12 @@ function Bullet(descr) {
 
   //Sprite stuff
   this.sprite = g_sprites.projectiles;
-  // this.spritePosition;
-  // if (this.shootH) this.spritePosition = 0;
-  // if (this.shootV) this.spritePosition = 12;
-  // if (this.shootDU || this.shootDD) this.spritePosition = 6;
-  // this.spriteWidth = 28;
-  // this.spriteHeight = 28;
-  // this.ssbX = this.spritePosition * this.spriteWidth;
-  // this.ssbY = 46;
-  // this.spriteNumber = 13;
-  // this.spriteScale = 1;
-  // this.ssHeight = 1024;
   this.floor = 0;
-  // this.realSize = this.spriteWidth*this.spriteScale;
   this.collider = new Collider({
     type: 'Circle',
     cx: this.cx,
     cy: this.cy,
-    radius: this.realSize/2,
+    radius: this.sprite.sWidth/2,
   });
   // Make a noise when I am created (i.e. fired)
   //this.fireSound.play();
@@ -70,19 +58,13 @@ Bullet.prototype.update = function (du) {
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-  const cameraInfo = worldMap.getCameraShift();
+  const nextX = this.cx + this.velX * du;
+  const nextY = this.cy + this.velY * du;
 
-  const nextX = this.cx + this.velX * du - cameraInfo.cameraShiftX;
-  const nextY = this.cy + this.velY * du - cameraInfo.cameraShiftY;
-  const worldInfo = worldMap.getRelativeWorldInfo(nextX, nextY);
 
-  if (worldInfo.tileType === 'E') {
-    this.cx = nextX;
-    this.cy = nextY;
-  } else {
-    // React in some manner to next tile being terrain
-    return entityManager.KILL_ME_NOW;
-  }
+  this.cx = nextX;
+  this.cy = nextY;
+
   this.collider.cx = this.cx;
   this.collider.cy = this.cy;
 

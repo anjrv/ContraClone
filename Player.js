@@ -41,7 +41,6 @@ function Player(descr) {
   this.angle = 0;
   this.realSize = g_sprites.player.sWidth * this.scale;
   this.floor = p_ground2;
-  this.offsetX = g_canvas.width/7;
 
   // Collisions
   this.collider = new Collider({
@@ -139,8 +138,8 @@ Player.prototype.maybeShoot = function () {
     let bulletAngle =
       Math.sign(this.velX) > 0 ? this.angle : -this.angle + Math.PI;
     entityManager.firePlayerBullet(
-      this.cx + (vX * this.sprite.sWidth) / 2,
-      this.cy + (vY * this.sprite.sHeight) / 2,
+      this.rX + (vX * this.sprite.sWidth) / 2,
+      this.rY + (vY * this.sprite.sHeight) / 2,
       vX * g_bulletSpeed,
       vY * g_bulletSpeed,
       -bulletAngle
@@ -195,13 +194,18 @@ Player.prototype.changeSprite = function (du) {
     this.sprite.animation = "CROUCH";
     return;
   }
+
+ 
 };
 
 Player.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
-
+  this.rX = g_canvas.width / 4 + worldMap.diffX;
+  this.rY = g_canvas.height / 2 + worldMap.diffY;
+  this.collider.cx = this.rX;
+  this.collider.cy = this.rY;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, g_canvas.width / 4 + worldMap.diffX, g_canvas.height / 2 + worldMap.diffY, 0, this.velX < 0)
+  this.sprite.drawCentredAt(ctx,this.rX , this.rY, 0, this.velX < 0)
 }
 
 Player.prototype.record = function (tag) {
