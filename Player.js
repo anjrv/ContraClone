@@ -127,8 +127,12 @@ Player.prototype.computeSubStep = function (du) {
   return acceleration;
 };
 
+
+
 Player.prototype.maybeShoot = function () {
   if (keys[this.KEY_SHOOT]) {
+    let b_offsetX = this.realSize/8;
+    let b_offsetY = this.realSize/8;
     let vX = (this.shootV) ? 0 : this.dirX * g_bulletSpeed;
     let vY;
     switch (this.dirY) {
@@ -149,11 +153,11 @@ Player.prototype.maybeShoot = function () {
         break;
     }
     vY *= g_bulletSpeed;
-    let dX = (this.shootV) ? this.cx : this.cx + (this.realSize/2 * this.dirX);
-    let dY = (this.shootV) ? this.cy + (this.realSize/2 * this.dirY) : this.cy + this.dirY;
-    if (this.shootDU)       { dY -= this.realSize/2; }
-    else if (this.shootDD)  { dY += this.realSize/2; }
-    else if (this.shootV && vY === -1 * g_bulletSpeed) {dY = this.cy - (this.realSize/2); }
+    let dX = (this.shootV) ? this.cx : this.cx + ((this.realSize/2 - b_offsetX) * this.dirX);
+    let dY = (this.shootV) ? this.cy + ((this.realSize/2 - b_offsetY) * this.dirY) : this.cy + this.dirY;
+    if (this.shootDU)       { dY -= this.realSize/2 - b_offsetY*2; }
+    else if (this.shootDD)  { dY += this.realSize/2.5 - b_offsetY*2; }
+    else if (this.shootV && vY === -1 * g_bulletSpeed) {dY = this.cy - (this.realSize/2 - b_offsetY); }
     entityManager.firePlayerBullet(dX,dY,vX,vY,this.dirX,this.dirY, vY/g_bulletSpeed, this.shootV, this.shootH, this.shootDU, this.shootDD);
   }
 }
