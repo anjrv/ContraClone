@@ -1,26 +1,3 @@
-// Starting positions in the spritesheet
-var p_ssbX = 0;
-var p_ssbY = 0;
-
-// Sprite size
-var p_size = 46;
-
-// Number of sprites in row of spritesheet
-var p_sn = 6;
-
-// How big the sprite should be scaled
-var p_scale = 2;
-
-var p_realSize = p_scale * p_size;
-
-// Size of the spriteSheet
-var p_ssHeight = 2240;
-
-// Calculate where the sprite should appear
-// NOTE! It was made unnecessary after worldmap update
-var p_ground = (p_ssHeight/2);
-
-var p_ground2 = 0;
 
 function Player(descr) {
   this.speed = 1;
