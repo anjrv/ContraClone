@@ -57,6 +57,10 @@ const entityManager = {
     this._player.push(new Player({}));
   },
 
+  getPlayer: function () {
+    return this._player[0];
+  },
+
   firePlayerBullet: function (
     cx,
     cy,
