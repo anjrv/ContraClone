@@ -52,49 +52,87 @@ Character.prototype.computeGravity = function () {
 };
 
 Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
-  // u = original velocity
-  const oldVelX = this.velX;
-  const oldVelY = this.velY;
+  if (du === 0) du = 1;
 
   // v = u + at
   this.velX += accelX * du;
   this.velY += accelY * du;
-
-  // v_ave = (u + v) / 2
-  const aveVelX = (oldVelX + this.velX) / 2;
-  const aveVelY = (oldVelY + this.velY) / 2;
-
-  // Decide whether to use the average or not (average is best!)
-  const intervalVelX = g_useAveVel ? aveVelX : this.velX;
-  let intervalVelY = g_useAveVel ? aveVelY : this.velY;
-
-  // s = s + v_ave * t
-  const nextX = this.cx + intervalVelX * du;
-  const nextY = this.cy + intervalVelY * du;
-
-  // Collision with the floor
-  // TODO: allow variable heights of the floor
-
-  const minY = this.sprite.sHeight / 2;
-  const maxY = g_canvas.height - minY;
-
-  if (this.velY < 0) this.onGround = false;
-  if (nextY > maxY && !this.onGround && this.velY >= 0) {
-    this.onGround = true;
-  }
-  if (this.onGround) this.velY = 0;
-  // s = s + v_ave * t
-  if (player) {
-    this.onGround = worldMap.updateCamera(du * intervalVelX, du * intervalVelY);
-  } else {
-    this.cx += du * intervalVelX;
-    this.cy = Math.min(maxY, du * intervalVelY + this.cy);
-  }
 };
 
-// TODO: change this into a rectangle hitbox
-Character.prototype.getRadius = function () {
-  return (this.sprite.width / 2) * 0.9;
+Character.prototype.collideWithMap = function (du) {
+
+  // Ground logic Part 1
+  if (this.onGround) this.velY = 0;
+
+  // Make grid coordinates for player
+  let grid = worldMap.getGrid(this.cx,this.cy,this)
+
+  // Look at player's closest collision areas
+  let around = worldMap.isAround(this);
+  
+  // Push out of tile if collision
+  if (!around.T || !around.B || !around.L || !around.R) {
+    this.pushOut(around, grid);
+  }
+
+  // Assign x coordinate
+  if ((around.L && keys[this.KEY_LEFT] || around.R && keys[this.KEY_RIGHT])) {
+    this.cx += du * this.velX; 
+  }
+  else {
+    this.velX = 0;
+  }
+  
+  // Assign y coordinate
+  this.cy += du * this.velY;
+  
+  // Ground logic Part 2
+  if (worldMap.isDrop(this)) {
+    this.onGround = false;
+    this.verticalCollision = false;
+  }
+}
+
+Character.prototype.pushOut = function (around, grid) {
+  let x = Math.sign(this.velX);
+  let y = Math.sign(this.velY);
+  let tSize = worldMap._tileSize;
+  
+  if (!around.R) {
+    if (x === -1) { 
+      this.cx = (grid[3]+1) * tSize - p_realSize/1.75;
+      this.velX = 0;
+    }
+  }
+
+  if (!around.L) {
+    if (x === 1) {
+      this.cx = (grid[1]+2) * tSize;
+      this.velX = 0;
+    }
+  }
+  
+  if (!around.T) {
+    if (y === -1) { 
+      // To be able to jump up along walls, not perfect logic yet
+      if ((around.B && around.L) || (around.B && around.R)) {
+        this.cy = (grid[0]) * tSize + p_realSize/4; 
+        this.velY = 0;
+      }
+    }
+  }
+
+  if (!around.B) {
+    if (y === 1) {
+      // To be able to jump up along walls, not perfect logic yet
+      // The tradeoff is that it causes corner glitch
+      if ((around.T && around.L) || (around.T && around.R)) {
+        this.cy = (grid[2]+1) * tSize - p_realSize/4;
+        this.onGround = true;
+        this.velY = 0;
+      }
+    }
+  }
 };
 
 Character.prototype.reset = function () {

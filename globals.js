@@ -14,6 +14,9 @@ Evil, ugly (but "necessary") globals, which everyone can use.
 const g_canvas = document.getElementById('myCanvas');
 const g_ctx = g_canvas.getContext('2d');
 const g_bulletSpeed = 15;
+const g_worldOffsetX = g_canvas.width/4;
+const g_worldOffsetY = g_canvas.height/2;
+const g_playerEntryPos = 12;
 
 // Starting positions in the spritesheet
 var p_ssbX = 0;

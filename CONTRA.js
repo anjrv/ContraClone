@@ -91,10 +91,13 @@ function processDiagnostics() {
 // GAME-SPECIFIC RENDERING
 
 function renderSimulation(ctx) {
+  ctx.save();
+  ctx.translate(worldMap._offsetX + g_worldOffsetX, worldMap._offsetY + g_worldOffsetY);
   worldMap.render(ctx);
   entityManager.render(ctx);
 
   if (g_renderSpatialDebug) spatialManager.render(ctx);
+  ctx.restore();
 }
 
 // =============
