@@ -65,23 +65,43 @@ const worldMap = {
 
   isDrop: function (entity) {
     let grid = this.getGrid(entity.cx,entity.cy,entity);
-    return (this._layers[0][grid[2]+2][grid[1]+1] === 'E' && this._layers[0][grid[2]+2][grid[3]] === 'E');
+    try {
+      return (this._layers[0][grid[2]+2][grid[1]+1] === 'E' && this._layers[0][grid[2]+2][grid[3]] === 'E');
+    }
+    catch (e) {
+      return true;
+    }
   },
 
 
   isLeft: function (entity) {
     let grid = this.getGrid(entity.cx,entity.cy,entity)
-    return (this._layers[0][grid[2]+1][grid[1]+1] === 'E');
+    try {
+      return (this._layers[0][grid[2]+1][grid[1]+1] === 'E');
+    }
+    catch (e) {
+      return true;
+    }
   },
 
   isRight: function (entity) {
     let grid = this.getGrid(entity.cx,entity.cy,entity);
-    return (this._layers[0][grid[2]+1][grid[1]+2] === 'E');
+    try {
+      return (this._layers[0][grid[2]+1][grid[1]+2] === 'E');
+    }
+    catch (e) {
+      return true;
+    }
   },
 
   isAbove: function (entity) {
     let grid = this.getGrid(entity.cx,entity.cy,entity);
-    return (this._layers[0][grid[2]][grid[1]+1] === 'E' && this._layers[0][grid[2]][grid[3]] === 'E');
+    try {
+      return (this._layers[0][grid[2]][grid[1]+1] === 'E' && this._layers[0][grid[2]][grid[3]] === 'E');
+    }
+    catch (e) {
+      return true;
+    }
   },
 
   isAround: function (entity) {
