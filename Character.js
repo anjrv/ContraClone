@@ -180,7 +180,7 @@ Character.prototype.debugRender = function (ctx) {
 
   let oldStyle = ctx.fillStyle;
   ctx.fillStyle = 'red';
-  util.fillBoxCentered(ctx, this.collider.cx, this.collider.cy, this.collider.width, this.collider.height, '#fff8')
+  util.fillBoxCentered(ctx, this.collider.cx, this.collider.cy+this.collider.offsetY, this.collider.width, this.collider.height, '#fff8')
   util.fillCircle(ctx, this.cx, this.cy, 5);
   ctx.fillStyle = oldStyle;
 }
