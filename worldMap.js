@@ -55,16 +55,22 @@ const worldMap = {
     ctx.restore();
   },
 
-  getGrid: function (x, y, entity) {
+  // returns the grid cordinates of the entity
+  getGridCoords: function (entity) {
+    let cx = entity.cx, 
+        cy = entity.cy;
+
     let size = entity.realHalfSize/2;
-    return [Math.floor((y-size)/(this._tileSize)),
-            Math.floor((x-size*4)/(this._tileSize)),
-            Math.floor((y+size)/(this._tileSize)),
-            Math.floor((x)/(this._tileSize))];
+    return [Math.floor((cy-size)/(this._tileSize)),
+            Math.floor((cx-size*4)/(this._tileSize)),
+            Math.floor((cy+size)/(this._tileSize)),
+            Math.floor((cx)/(this._tileSize))];
   },
 
+  // true if nothing is BELOW entity
+  // false if something is BELOW entity
   isDrop: function (entity) {
-    let grid = this.getGrid(entity.cx,entity.cy,entity);
+    let grid = this.getGridCoords(entity);
     try {
       return (this._layers[0][grid[2]+2][grid[1]+1] === 'E' && this._layers[0][grid[2]+2][grid[3]] === 'E');
     }
@@ -73,9 +79,10 @@ const worldMap = {
     }
   },
 
-
+  // true if nothing is LEFT of entity
+  // false if something is LEFT of entity
   isLeft: function (entity) {
-    let grid = this.getGrid(entity.cx,entity.cy,entity)
+    let grid = this.getGridCoords(entity)
     try {
       return (this._layers[0][grid[2]+1][grid[1]+1] === 'E');
     }
@@ -84,8 +91,10 @@ const worldMap = {
     }
   },
 
+  // true if nothing is RIGHT of entity 
+  // false if something is RIGHT of entity
   isRight: function (entity) {
-    let grid = this.getGrid(entity.cx,entity.cy,entity);
+    let grid = this.getGridCoords(entity);
     try {
       return (this._layers[0][grid[2]+1][grid[1]+2] === 'E');
     }
@@ -94,8 +103,10 @@ const worldMap = {
     }
   },
 
+  // true if nothing is ABOVE entity
+  // false if something is ABOVE entity
   isAbove: function (entity) {
-    let grid = this.getGrid(entity.cx,entity.cy,entity);
+    let grid = this.getGridCoords(entity);
     try {
       return (this._layers[0][grid[2]][grid[1]+1] === 'E' && this._layers[0][grid[2]][grid[3]] === 'E');
     }
@@ -104,6 +115,7 @@ const worldMap = {
     }
   },
 
+  // For each cardinal direction, returns if something is in that direction
   isAround: function (entity) {
     return { 
       T: this.isAbove(entity),

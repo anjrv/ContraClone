@@ -65,7 +65,7 @@ Character.prototype.collideWithMap = function (du) {
   if (this.onGround) this.velY = 0;
 
   // Make grid coordinates for player
-  let grid = worldMap.getGrid(this.cx,this.cy,this)
+  let grid = worldMap.getGridCoords(this)
 
   // Look at player's closest collision areas
   let around = worldMap.isAround(this);
