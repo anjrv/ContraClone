@@ -22,6 +22,10 @@ function Character(descr) {
   this._isWarping = false;
 }
 
+Character.prototype.setUpDiagnostics = function () {
+  this._grid = null;
+}
+
 Character.prototype = new Entity();
 
 Character.prototype.rememberResets = function () {
@@ -65,8 +69,8 @@ Character.prototype.collideWithMap = function (du) {
   if (this.onGround) this.velY = 0;
 
   // Make grid coordinates for player
-  let grid = worldMap.getGridCoords(this)
-
+  let grid = worldMap.getGridCoords(this);
+  this._grid = grid;
   // Look at player's closest collision areas
   let around = worldMap.isAround(this);
   
@@ -99,15 +103,15 @@ Character.prototype.pushOut = function (around, grid) {
   let tSize = worldMap._tileSize;
   
   if (!around.R) {
-    if (x === -1) { 
-      this.cx = (grid[3]+1) * tSize - p_realSize/1.75;
+    if (x === 1) { 
+      this.cx = grid[3] * tSize //+ p_realSize/1.75;
       this.velX = 0;
     }
   }
 
   if (!around.L) {
-    if (x === 1) {
-      this.cx = (grid[1]+2) * tSize;
+    if (x === -1) {
+      this.cx = grid[1] * tSize;
       this.velX = 0;
     }
   }
@@ -115,10 +119,10 @@ Character.prototype.pushOut = function (around, grid) {
   if (!around.T) {
     if (y === -1) { 
       // To be able to jump up along walls, not perfect logic yet
-      if ((around.B && around.L) || (around.B && around.R)) {
-        this.cy = (grid[0]) * tSize + p_realSize/4; 
+      //if ((around.B && around.L) || (around.B && around.R)) {
+        this.cy = (grid[2]) * tSize //- p_realSize/4; 
         this.velY = 0;
-      }
+      //}
     }
   }
 
@@ -126,11 +130,12 @@ Character.prototype.pushOut = function (around, grid) {
     if (y === 1) {
       // To be able to jump up along walls, not perfect logic yet
       // The tradeoff is that it causes corner glitch
-      if ((around.T && around.L) || (around.T && around.R)) {
-        this.cy = (grid[2]+1) * tSize - p_realSize/4;
+
+      // if ((around.T && around.L) || (around.T && around.R)) {
+        this.cy = grid[2] * tSize - p_realSize/4;
         this.onGround = true;
         this.velY = 0;
-      }
+      // }
     }
   }
 };
@@ -151,4 +156,31 @@ Character.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
   this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this.velX < 0);
+
+  this.debugRender(ctx);
 };
+
+Character.prototype.debugRender = function (ctx) {
+  if (!this._grid) return;
+  // top left box
+  util.fillBoxCentered(ctx, this._grid[1]*worldMap._tileSize, 
+    this._grid[0]*worldMap._tileSize, 
+    worldMap._tileSize, worldMap._tileSize, '#00fa');
+  // top right box
+  util.fillBoxCentered(ctx, this._grid[3]*worldMap._tileSize, 
+    this._grid[0]*worldMap._tileSize, 
+    worldMap._tileSize, worldMap._tileSize, '#f00a');
+  // bot left
+  util.fillBoxCentered(ctx, this._grid[1]*worldMap._tileSize, 
+    this._grid[2]*worldMap._tileSize, 
+    worldMap._tileSize, worldMap._tileSize, '#0f05');
+  util.fillBoxCentered(ctx, this._grid[3]*worldMap._tileSize, 
+    this._grid[2]*worldMap._tileSize, 
+    worldMap._tileSize, worldMap._tileSize, '#0ff5');
+
+  let oldStyle = ctx.fillStyle;
+  ctx.fillStyle = 'red';
+  util.fillBoxCentered(ctx, this.collider.cx, this.collider.cy, this.collider.width, this.collider.height, '#fff8')
+  util.fillCircle(ctx, this.cx, this.cy, 5);
+  ctx.fillStyle = oldStyle;
+}

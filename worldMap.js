@@ -37,7 +37,7 @@ const worldMap = {
   },
   
   render: function(ctx) {
-    ctx.save();
+    //ctx.save();
     // ctx.font = "10px Arial";
     for (let i = 0; i < this._layers[0].length; i++) {
       for (let j = 0; j < this._layers[0][i].length; j++) {
@@ -52,19 +52,46 @@ const worldMap = {
         // ctx.fillText(`${x}, ${y}`, x, y);
       }
     }
-    ctx.restore();
+    //ctx.restore();
+    this.debugRender(ctx);
+  },
+
+  debugRender: function (ctx) {
+    ctx.lineWidth = 5;
+    if (this._drop1)
+      util.strokeBoxCentered(ctx, 
+        this._drop1[1]*this._tileSize, 
+        this._drop1[0]*this._tileSize, 
+        this._tileSize, 
+        this._tileSize, this._drop1[2]?'green':'red');
+    if (this._drop2) 
+        util.strokeBoxCentered(ctx, 
+          this._drop2[1]*this._tileSize, 
+          this._drop2[0]*this._tileSize , 
+          this._tileSize, 
+          this._tileSize, this._drop2[2]?'green':'red');
+      
+     ctx.lineWidth = 1;
   },
 
   // returns the grid cordinates of the entity
   getGridCoords: function (entity) {
-    let cx = entity.cx, 
-        cy = entity.cy;
+    let cx = entity.collider.cx, 
+        cy = entity.collider.cy;
 
-    let size = entity.realHalfSize/2;
-    return [Math.floor((cy-size)/(this._tileSize)),
-            Math.floor((cx-size*4)/(this._tileSize)),
-            Math.floor((cy+size)/(this._tileSize)),
-            Math.floor((cx)/(this._tileSize))];
+    let w = entity.collider.width/2,
+        h = entity.collider.height/2;
+    
+    let yoffset = entity.collider.offsetY;
+    // because we draw the box at the center at the cordinates,
+    // we have to translate to that center
+    let dx = this._tileSize / 2,
+        dy = this._tileSize / 2 - yoffset;
+
+    return [Math.floor((cy-h + dy)/(this._tileSize)),
+            Math.floor((cx-w + dx)/(this._tileSize)),
+            Math.floor((cy+h + dy)/(this._tileSize)),
+            Math.floor((cx+w + dx)/(this._tileSize))];
   },
 
   // true if nothing is BELOW entity
@@ -72,7 +99,10 @@ const worldMap = {
   isDrop: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]+2][grid[1]+1] === 'E' && this._layers[0][grid[2]+2][grid[3]] === 'E');
+      let r = (this._layers[0][grid[2]+1][grid[1]] === 'E' && this._layers[0][grid[2]+1][grid[3]] === 'E');
+      this._drop1 = [[grid[2]+1], grid[1], this._layers[0][grid[2]+1][grid[1]] === 'E']
+      this._drop2 = [[grid[2]+1], grid[3], this._layers[0][grid[2]+1][grid[3]] === 'E']
+      return r
     }
     catch (e) {
       return true;
@@ -84,7 +114,7 @@ const worldMap = {
   isLeft: function (entity) {
     let grid = this.getGridCoords(entity)
     try {
-      return (this._layers[0][grid[2]+1][grid[1]+1] === 'E');
+      return (this._layers[0][grid[2]][grid[1]-1] === 'E');
     }
     catch (e) {
       return true;
@@ -96,7 +126,7 @@ const worldMap = {
   isRight: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]+1][grid[1]+2] === 'E');
+      return (this._layers[0][grid[2]][grid[1]+1] === 'E');
     }
     catch (e) {
       return true;
@@ -108,7 +138,7 @@ const worldMap = {
   isAbove: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]][grid[1]+1] === 'E' && this._layers[0][grid[2]][grid[3]] === 'E');
+      return (this._layers[0][grid[2]-1][grid[1]] === 'E' && this._layers[0][grid[2]-1][grid[3]] === 'E');
     }
     catch (e) {
       return true;
@@ -124,5 +154,4 @@ const worldMap = {
       R: this.isRight(entity)
     };
   }
-
 }
