@@ -20,10 +20,8 @@ function Character(descr) {
 
   // Set normal drawing scale, and warp state off
   this._isWarping = false;
-}
 
-Character.prototype.setUpDiagnostics = function () {
-  this._grid = null;
+  this._debug_showCollisionCells = false;
 }
 
 Character.prototype = new Entity();
@@ -58,10 +56,79 @@ Character.prototype.computeGravity = function () {
 Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
   if (du === 0) du = 1;
 
+  let oldVelX = this.velX;
+  let oldVelY = this.velY;
+
   // v = u + at
   this.velX += accelX * du;
   this.velY += accelY * du;
+  
+  let averageVelX = (this.velX + oldVelX) / 2;
+  let averageVelY = (this.velY + oldVelY) / 2;
+
+  this.cx += averageVelX * du;
+  this.cy += averageVelY * du;
+
+  this.collider.cx = this.cx;
+  this.collider.cy = this.cy;
 };
+
+Character.prototype.collideWithMap2 = function (du) {
+  //console.log(worldMap.getIndeciesFromCoords(this.cx, this.cy));
+  //if (this.onGround) this.velY = 0;
+  let gridCells = worldMap.getCollisionCells(this);
+  this._debug_collisionCells = gridCells;
+
+  let collisionCells = gridCells.filter((cell) => { return cell.content !== 'E' })
+
+  for (let i = 0; i < collisionCells.length; i++) {
+    this.pushOut2(collisionCells[i]);
+  }
+}
+
+Character.prototype.pushOut2 = function (cell) {
+  if (cell.content === 'E') return;
+
+  let tileSize = worldMap._tileSize;
+
+  let charIsAbove = this.cy < cell.cy;
+
+  let charRow = Math.floor((this.collider.cy - tileSize/2) / tileSize);
+  let charRow_lower = Math.floor((this.collider.cy + tileSize/2) / tileSize);
+
+  let charCol = Math.floor ((this.cx + tileSize/2 )/ tileSize);
+
+  // Character colliding with cell left of them
+  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX < 0) {
+    this.velX = 0;
+    this.cx = cell.cx
+      + tileSize / 2
+      + this.collider.width / 2 + 1;
+    this.collider.cx = this.cx;
+    return;
+  }
+  // Character colliding with cell right of them
+  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX > 0) {
+    this.velX = 0;
+    this.cx = cell.cx 
+      - tileSize / 2 - 1
+      - this.collider.width / 2;
+    this.collider.cx = this.cx;
+    return;
+  }
+  // Character is falling
+  if (charRow < cell.row - 1 && Math.abs(charCol - cell.col) <= 1 && this.velY > 0) {
+    // you can not fall on something that has something other than air on top of it
+    if (worldMap._layers[0][cell.row - 1][cell.col] !== 'E') return;
+    this.velY = 0;
+    this.cy = cell.cy 
+      - tileSize/2
+      - this.collider.height/2 
+      - this.collider.offsetY;
+    this.onGround = true;
+    this.collider.cy = this.cy;
+  }
+}
 
 Character.prototype.collideWithMap = function (du) {
 
@@ -111,7 +178,7 @@ Character.prototype.pushOut = function (around, grid) {
 
   if (!around.L) {
     if (x === -1) {
-      this.cx = grid[1] * tSize;
+      this.cx = (grid[1]+1) * tSize;
       this.velX = 0;
     }
   }
@@ -132,7 +199,7 @@ Character.prototype.pushOut = function (around, grid) {
       // The tradeoff is that it causes corner glitch
 
       // if ((around.T && around.L) || (around.T && around.R)) {
-        this.cy = grid[2] * tSize - p_realSize/4;
+        this.cy = (grid[2]-1) * tSize - p_realSize/4;
         this.onGround = true;
         this.velY = 0;
       // }
@@ -161,6 +228,27 @@ Character.prototype.render = function (ctx) {
 };
 
 Character.prototype.debugRender = function (ctx) {
+  if (this._debug_showCollisionCells) this._debug_RenderCollsionsCells(ctx);
+
+}
+
+Character.prototype._debug_RenderCollsionsCells = function (ctx) {
+  if (!this._debug_collisionCells) return;
+
+  let tileSize = worldMap._tileSize;
+
+  for (let i = 0; i < this._debug_collisionCells.length; i++) {
+    let cell = this._debug_collisionCells[i];
+    util.fillBoxCentered(ctx, 
+      cell.col*tileSize, 
+      cell.row*tileSize,
+      tileSize, tileSize,
+      cell.content === 'E' ? '#fff5' : '#0f05',
+      );
+  }
+}
+
+Character.prototype.debugRender2 = function (ctx) {
   if (!this._grid) return;
   // top left box
   util.fillBoxCentered(ctx, this._grid[1]*worldMap._tileSize, 

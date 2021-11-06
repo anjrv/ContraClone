@@ -52,9 +52,14 @@ Player.prototype.update = function (du) {
   if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
   this.computeSubStep(du);
-  this.collideWithMap(du);
+  //this.collideWithMap(du);
+  this.collideWithMap2(du);
   this.changeSprite(du);
   this.maybeShoot();
+
+  
+  this.collider.cx = this.cx;
+  this.collider.cy = this.cy;
   spatialManager.register(this);
 };
 
