@@ -21,7 +21,7 @@ function Character(descr) {
   // Set normal drawing scale, and warp state off
   this._isWarping = false;
 
-  this._debug_showCollisionCells = false;
+  this._debug_showCollisionCells = true;
 }
 
 Character.prototype = new Entity();
@@ -114,7 +114,7 @@ Character.prototype.pushOut2 = function (cell) {
 
   // Character is jumping up
   if (charRow > cell.row && Math.abs(cell.col - charCol) <=0 && this.velY < 0) {
-    if (worldMap._layers[0][cell.row+1][cell.col] !== ' ') return;
+    if (worldMap.getTileType(cell.row+1, cell.col) !== worldMap.EMPTY_TILE) return;
     this.velY = 0;
     this.cy = cell.cy 
       + this.collider.height/2

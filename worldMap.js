@@ -69,9 +69,9 @@ const worldMap = {
     return {col, row};
   },
 
-  getTileType: function (col, row) {
+  getTileType: function (row, col) {
     try {
-      return this._layers[0][col][row];
+      return this._layers[0][row][col];
     }
     catch (e) {
       return this.EMPTY_TILE;
