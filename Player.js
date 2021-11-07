@@ -181,14 +181,18 @@ Player.prototype.changeSprite = function (du) {
 
   if (keys[this.KEY_DOWN]) {
     this.angle = -Math.PI / 2;
-    if (this.onGround) this.sprite.animation = "LOOK_DOWN";
-    return;
+    if (this.onGround) {
+      this.sprite.animation = "LOOK_DOWN";
+      return;
+    }
   }
 
   if (keys[this.KEY_UP]) {
     this.angle = Math.PI / 2;
-    if (this.onGround) this.sprite.animation = "LOOK_UP";
-    return;
+    if (this.onGround) {
+      this.sprite.animation = "LOOK_UP";
+      return;
+    }
   }
 
   if (!this.onGround) {
