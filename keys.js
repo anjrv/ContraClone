@@ -6,8 +6,21 @@ const keys = [];
 
 function handleKeydown(evt) {
   keys[evt.keyCode] = true;
+  console.log("Key pressed :D")
+  console.log(g_intro)
+  if (g_intro) {
+    g_intro = false;
+    //m_startGame.play();
+    m_Intro.stop();
+    setTimeout(function () {startGame();}, 1500);
+  }
 }
 
+function startGame() {
+  entityManager.init();
+  worldMap.init(level1);
+  main.init(); 
+}
 function handleKeyup(evt) {
   keys[evt.keyCode] = false;
 }

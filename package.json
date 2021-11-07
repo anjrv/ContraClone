@@ -1,0 +1,22 @@
+{
+  "name": "contraclone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anjrv/ContraClone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anjrv/ContraClone/issues"
+  },
+  "homepage": "https://github.com/anjrv/ContraClone#readme",
+  "dependencies": {
+    "howler": "^2.2.3"
+  }
+}

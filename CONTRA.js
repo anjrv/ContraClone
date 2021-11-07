@@ -126,6 +126,9 @@ function requestPreloads() {
     flashSun      :   './Sprites/weaponflash-sheet-colour-5-alpha.png',
     enemies       :   './Sprites/enemies-sheet-alpha.png',
     ground        :   './Sprites/test_ground.png',
+    spaceScene    :   './Sprites/spacescene.jpg',
+    ship          :   "https://notendur.hi.is/~pk/308G/images/ship_2.png",
+    spaceman      :   './Sprites/spaceman.png'
   }
   imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -169,9 +172,7 @@ function preloadDone() {
     G: [0],
     F: [1],
   }
-  entityManager.init();
-  worldMap.init(level1);
-  main.init();
+  g_start(g_ctx)
 }
 
 // Kick it off
