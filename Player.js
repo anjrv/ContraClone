@@ -199,7 +199,7 @@ Player.prototype.changeSprite = function (du) {
 Player.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx,this.cx , this.cy, 0, this.velX < 0)
+  this.sprite.drawCentredAt(ctx,this.cx , this.cy, 0, this.direction < 0)
   this.debugRender(ctx);
 }
 
