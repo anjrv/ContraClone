@@ -122,7 +122,7 @@ Character.prototype.pushOut2 = function (cell) {
   // Character is falling
   if (charRow < cell.row - 1 && Math.abs(charCol - cell.col) <= 1 && this.velY > 0) {
     // you can not fall on something that has something other than air on top of it
-    if (worldMap._layers[0][cell.row - 1][cell.col] !== ' ') return;
+    if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
     this.velY = 0;
     this.cy = cell.cy 
       - tileSize/2

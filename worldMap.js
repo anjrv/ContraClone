@@ -2,6 +2,8 @@
 /*jslint nomen: true, white: true, plusplus: true*/
 
 const worldMap = {
+  EMPTY_TILE: ' ',
+
   init: function (mapData) {
     // Map variables
     this._cols = mapData.cols;
@@ -65,6 +67,15 @@ const worldMap = {
     let col = Math.floor((x + this._tileSize/2) / this._tileSize);
     let row = Math.floor((y + this._tileSize/2) / this._tileSize);
     return {col, row};
+  },
+
+  getTileType: function (col, row) {
+    try {
+      return this._layers[0][col][row];
+    }
+    catch (e) {
+      return this.EMPTY_TILE;
+    }
   },
 
   debugRender: function (ctx) {
@@ -136,10 +147,14 @@ const worldMap = {
     while ( top <= bot) {
       left = storeLeft;
       while(left <= right) {
+        let content;
+        // make sure we don't index out of the array
+        try { content = this._layers[0][top][left]; }
+        catch (e) { content = ' '; }
         coordinates.push({
           col: left, 
           row: top, 
-          content: this._layers[0][top][left],
+          content,
           cx: left * this._tileSize,
           cy: top * this._tileSize,
         });
