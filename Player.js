@@ -162,7 +162,7 @@ Player.prototype.changeSprite = function (du) {
 
   this.angle = 0;
 
-  if (Math.abs(this.velX) < 1) {
+  if (Math.abs(this.velX) < 1 && this.onGround) {
     this.sprite.animation = "IDLE";
   }
 
@@ -181,13 +181,13 @@ Player.prototype.changeSprite = function (du) {
 
   if (keys[this.KEY_DOWN]) {
     this.angle = -Math.PI / 2;
-    this.sprite.animation = "LOOK_DOWN";
+    if (this.onGround) this.sprite.animation = "LOOK_DOWN";
     return;
   }
 
   if (keys[this.KEY_UP]) {
     this.angle = Math.PI / 2;
-    this.sprite.animation = "LOOK_UP";
+    if (this.onGround) this.sprite.animation = "LOOK_UP";
     return;
   }
 
@@ -201,6 +201,7 @@ Player.prototype.changeSprite = function (du) {
   }
 
 };
+
 
 Player.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
