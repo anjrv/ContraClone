@@ -91,36 +91,15 @@ Character.prototype.pushOut2 = function (cell) {
 
   let tileSize = worldMap._tileSize;
 
-  let charRow = Math.floor((this.collider.cy - tileSize/2) / tileSize);
-  let charRow_lower = Math.floor((this.collider.cy + tileSize/2) / tileSize);
+  let charRow = worldMap.getIndeciesFromCoords(0,this.collider.cy+this.collider.offsetY).row;// Math.floor((this.collider.cy - tileSize/2) / tileSize);
+  let charRow_lower = charRow - 1;// Math.floor((this.collider.cy + tileSize/2) / tileSize);
   let charRowCopy = charRow;
 
   let charCol = Math.floor ((this.cx + tileSize/2 )/ tileSize);
-  
-  if (this.velY < 0) charRow = null;
-  // Character colliding with cell left of them
-  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX < -0.5) {
-    this.velX = 0;
-    this.cx = cell.cx
-      + tileSize / 2
-      + this.collider.width / 2 + 1;
-    this.collider.cx = this.cx;
-    return;
-  }
-
-  // Character colliding with cell right of them
-  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX > 0.5) {
-    this.velX = 0;
-    this.cx = cell.cx 
-      - tileSize / 2 - 1
-      - this.collider.width / 2;
-    this.collider.cx = this.cx;
-    return;
-  }
 
   charRow = charRowCopy;
   // Character is falling
-  if (charRow < cell.row - 1 && Math.abs(charCol - cell.col) <= 1 && this.velY > 0) {
+  if (charRow < cell.row && Math.abs(charCol - cell.col) <= 0 && this.velY > 0) {
     // you can not fall on something that has something other than air on top of it
     if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
     this.velY = 0;
@@ -130,18 +109,42 @@ Character.prototype.pushOut2 = function (cell) {
       - this.collider.offsetY;
     this.onGround = true;
     this.collider.cy = this.cy;
+    //return;
   }
 
   // Character is jumping up
-  if (charRow > cell.row - 1 && Math.abs(cell.col - charCol) === 0 && this.velY < 0) {
+  if (charRow > cell.row && Math.abs(cell.col - charCol) <=0 && this.velY < 0) {
     if (worldMap._layers[0][cell.row+1][cell.col] !== ' ') return;
     this.velY = 0;
     this.cy = cell.cy 
       + this.collider.height/2
       + this.collider.offsetY;
     this.collider.cy = this.cy;
-    return true;
+    //return true;
   }
+  
+  //if (this.velY < 0) charRow = null;
+  // Character colliding with cell left of them
+  if ((cell.row === charRow || cell.row === charRow_lower) && charCol > cell.col && this.velX < 0) {
+    this.velX = 0;
+    this.cx = cell.cx
+      + tileSize / 2
+      + this.collider.width / 2 + 1;
+    this.collider.cx = this.cx;
+    //return;
+  }
+
+  // Character colliding with cell right of them
+  if ((cell.row === charRow || cell.row === charRow_lower) && charCol < cell.col && this.velX > 0) {
+    this.velX = 0;
+    this.cx = cell.cx 
+      - tileSize / 2 - 1
+      - this.collider.width / 2;
+    this.collider.cx = this.cx;
+    //return;
+  }
+
+  
 }
 
 Character.prototype.collideWithMap = function (du) {
