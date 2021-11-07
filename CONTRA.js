@@ -142,7 +142,8 @@ function preloadDone() {
     RUN_FORWARD: [2,3,4,5],
     RUN_FORWARD_UP: [38,39,40,41],
     RUN_FORWARD_DOWN: [260,261,262,263],
-    CROUCH: [1]
+    CROUCH: [7],
+    JUMP: [1]
   };
   g_sprites.impactWhite  = new Sprite(g_images.impactWhite)
   g_sprites.impactAcid   = new Sprite(g_images.impactAcid)

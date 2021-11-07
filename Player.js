@@ -191,9 +191,13 @@ Player.prototype.changeSprite = function (du) {
     return;
   }
 
-  if (keys[this.KEY_CROUCH] || !this.onGround) {
-    this.sprite.animation = "CROUCH";
+  if (!this.onGround) {
+    this.sprite.animation = "JUMP";
     return;
+  }
+
+  if (keys[this.KEY_CROUCH]) {
+    this.sprite.animation = "CROUCH";
   }
 
 };
