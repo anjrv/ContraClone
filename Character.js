@@ -96,9 +96,8 @@ Character.prototype.pushOut2 = function (cell) {
 
   let charCol = Math.floor ((this.cx + tileSize/2 )/ tileSize);
 
-
-   // Character is jumping up
-   if (charRow < cell.row + 1 && Math.abs(cell.col - charCol) <= 1 && this.velY < 0) {
+  // Character is jumping up
+  if (charRow < cell.row + 1 && Math.abs(cell.col - charCol) <= 1 && this.velY < 0) {
     if (worldMap._layers[0][cell.row+1][cell.col] !== 'E') return;
     this.velY = 0;
     this.cy = cell.cy 
@@ -107,7 +106,7 @@ Character.prototype.pushOut2 = function (cell) {
     this.collider.cy = this.cy;
     return true;
   }
-
+  
   // Character colliding with cell left of them
   if ((cell.row === charRow || cell.row === charRow_lower) && this.velX < -0.5) {
     this.velX = 0;
@@ -115,7 +114,7 @@ Character.prototype.pushOut2 = function (cell) {
       + tileSize / 2
       + this.collider.width / 2 + 1;
     this.collider.cx = this.cx;
-    return true;
+    return;
   }
 
   // Character colliding with cell right of them
@@ -125,7 +124,7 @@ Character.prototype.pushOut2 = function (cell) {
       - tileSize / 2 - 1
       - this.collider.width / 2;
     this.collider.cx = this.cx;
-    return true;
+    return;
   }
 
   // Character is falling
@@ -140,7 +139,6 @@ Character.prototype.pushOut2 = function (cell) {
     this.onGround = true;
     this.collider.cy = this.cy;
   }
-  
 }
 
 Character.prototype.collideWithMap = function (du) {
