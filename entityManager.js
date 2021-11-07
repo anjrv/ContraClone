@@ -23,11 +23,10 @@ with suitable 'data' and 'methods'.
 const entityManager = {
   // "PRIVATE" DATA
 
-  // _rocks: [],
   _bullets: [],
-  // _ships: [],
 
-  // _bShowRocks: true,
+  _enemies: [],
+
   _player: [],
 
   // "PRIVATE" METHODS
@@ -49,8 +48,7 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    // this._categories = [this._rocks, this._bullets, this._ships];
-    this._categories = [this._player, this._bullets];
+    this._categories = [this._player, this._bullets, this._enemies];
   },
 
   init: function () {
@@ -74,8 +72,22 @@ const entityManager = {
       velX: velX,
       velY: velY,
       rotation: rotation
-    })
+    });
     this._bullets.push(bullet);
+  },
+
+  spawnEnemy: function (type, cx, cy, velX = 0, velY = 0) {
+    switch (type) {
+      case '1':
+        const patrol = new Patrol({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY
+        });
+        this._enemies.push(patrol);
+        break;
+    }
   },
 
   update: function (du) {

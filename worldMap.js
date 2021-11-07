@@ -33,6 +33,42 @@ const worldMap = {
     this._debug_showCollisionBoxes = true;
   },
 
+  spawnNearbyUnits: function () {
+    const addedShift = 5;
+
+    const left = Math.max(
+      Math.floor(
+        (-this._offsetX - g_canvas.width / 6) / this._tileSize - addedShift,
+      ),
+      0,
+    );
+    const right = Math.min(
+      left + g_canvas.width / this._tileSize + addedShift * 2,
+      this._layers[0][0].length,
+    );
+    const up = Math.max(
+      Math.floor(
+        (-this._offsetY - g_canvas.height / 6) / this._tileSize - addedShift,
+      ),
+      0,
+    );
+    const down = Math.min(
+      up + g_canvas.height / this._tileSize + addedShift * 2,
+      this._layers[0].length,
+    );
+
+    for (let i = up; i < down; i++) {
+      for (let j = left; j < right; j++) {
+        if (this._layers[0][i][j] === '1') {
+          const x = j * this._tileSize;
+          const y = i * this._tileSize;
+          entityManager.spawnEnemy('1', x, y);
+          this._layers[0][i][j] = ' ';
+        }
+      }
+    }
+  },
+
   update: function(du) {
     const player = entityManager.getPlayer();
     this.diffX = player.cx + this._offsetX;
@@ -40,9 +76,11 @@ const worldMap = {
     if (Math.abs(this.diffX) > g_canvas.width / 6) {
       this._offsetX = -(player.cx - Math.sign(this.diffX) * g_canvas.width / 6);
     }
-    if (Math.abs(this.diffY) > g_canvas.width / 10) {
-      this._offsetY = -(player.cy - Math.sign(this.diffY) * g_canvas.width / 10);
+    if (Math.abs(this.diffY) > g_canvas.height / 6) {
+      this._offsetY = -(player.cy - Math.sign(this.diffY) * g_canvas.height/ 6);
     }
+
+    this.spawnNearbyUnits();
   },
   
   render: function(ctx) {
