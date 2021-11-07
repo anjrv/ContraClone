@@ -49,7 +49,7 @@ const worldMap = {
       for (let j = 0; j < this._layers[0][i].length; j++) {
         const x = j * this._tileSize;
         const y = i * this._tileSize;
-        if (this._layers[0][i][j] === 'E' || this._layers[0][i][j] === '0') continue;
+        if (this._layers[0][i][j] === ' ' || this._layers[0][i][j] === '0') continue;
         this._sprite.animation = this._layers[0][i][j];
         this._sprite.updateFrame(0);
         this._sprite.drawCentredAt(ctx, x, y, 0);
@@ -175,9 +175,9 @@ const worldMap = {
   isDrop: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      let r = (this._layers[0][grid[2]][grid[1]] === 'E' && this._layers[0][grid[2]][grid[3]] === 'E');
-      // this._drop1 = [[grid[2]], grid[1], this._layers[0][grid[2]+1][grid[1]] === 'E']
-      // this._drop2 = [[grid[2]], grid[3], this._layers[0][grid[2]+1][grid[3]] === 'E']
+      let r = (this._layers[0][grid[2]][grid[1]] === ' ' && this._layers[0][grid[2]][grid[3]] === ' ');
+      // this._drop1 = [[grid[2]], grid[1], this._layers[0][grid[2]+1][grid[1]] === ' ']
+      // this._drop2 = [[grid[2]], grid[3], this._layers[0][grid[2]+1][grid[3]] === ' ']
       return r
     }
     catch (e) {
@@ -190,7 +190,7 @@ const worldMap = {
   isLeft: function (entity) {
     let grid = this.getGridCoords(entity)
     try {
-      return (this._layers[0][grid[2]][grid[1]] === 'E' && this._layers[0][grid[0]][grid[1]] === 'E');
+      return (this._layers[0][grid[2]][grid[1]] === ' ' && this._layers[0][grid[0]][grid[1]] === ' ');
     }
     catch (e) {
       return true;
@@ -202,7 +202,7 @@ const worldMap = {
   isRight: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]][grid[1]+1] === 'E');
+      return (this._layers[0][grid[2]][grid[1]+1] === ' ');
     }
     catch (e) {
       return true;
@@ -214,7 +214,7 @@ const worldMap = {
   isAbove: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]-1][grid[1]] === 'E' && this._layers[0][grid[2]-1][grid[3]] === 'E');
+      return (this._layers[0][grid[2]-1][grid[1]] === ' ' && this._layers[0][grid[2]-1][grid[3]] === ' ');
     }
     catch (e) {
       return true;
