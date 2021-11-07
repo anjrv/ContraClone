@@ -97,7 +97,6 @@ Character.prototype.pushOut2 = function (cell) {
 
   let charCol = Math.floor ((this.cx + tileSize/2 )/ tileSize);
 
-  charRow = charRowCopy;
   // Character is falling
   if (charRow < cell.row && Math.abs(charCol - cell.col) <= 0 && this.velY > 0) {
     // you can not fall on something that has something other than air on top of it
@@ -108,6 +107,7 @@ Character.prototype.pushOut2 = function (cell) {
       - this.collider.height/2 
       - this.collider.offsetY;
     this.onGround = true;
+    this.rotation = 0;
     this.collider.cy = this.cy;
     //return;
   }

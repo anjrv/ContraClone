@@ -13,6 +13,7 @@ function Player(descr) {
   this.realHalfSize = this.realSize/2;
   this.floor = p_ground2;
   this.direction = 1;
+  this.rotation = 0;
 
   // Collisions
   this.collider = new Collider({
@@ -60,6 +61,8 @@ Player.prototype.update = function (du) {
   
   this.collider.cx = this.cx;
   this.collider.cy = this.cy;
+
+  if (!this.onGround) this.rotation += 0.4 * du * this.direction;
   spatialManager.register(this);
 };
 
@@ -163,7 +166,7 @@ Player.prototype.changeSprite = function (du) {
     this.sprite.animation = "IDLE";
   }
 
-  if (keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) {
+  if ((keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) && this.onGround) {
     this.sprite.animation = "RUN_FORWARD";
     if (keys[this.KEY_UP]) {
       this.angle = Math.PI / 4;
@@ -188,18 +191,17 @@ Player.prototype.changeSprite = function (du) {
     return;
   }
 
-  if (keys[this.KEY_CROUCH]) {
+  if (keys[this.KEY_CROUCH] || !this.onGround) {
     this.sprite.animation = "CROUCH";
     return;
   }
 
- 
 };
 
 Player.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx,this.cx , this.cy, 0, this.direction < 0)
+  this.sprite.drawCentredAt(ctx,this.cx , this.cy, this.rotation, this.direction < 0)
   this.debugRender(ctx);
 }
 
