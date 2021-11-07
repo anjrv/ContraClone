@@ -109,7 +109,7 @@ Character.prototype.pushOut2 = function (cell) {
   }
 
   // Character colliding with cell left of them
-  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX < -1) {
+  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX < -0.5) {
     this.velX = 0;
     this.cx = cell.cx
       + tileSize / 2
@@ -119,7 +119,7 @@ Character.prototype.pushOut2 = function (cell) {
   }
 
   // Character colliding with cell right of them
-  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX > 1) {
+  if ((cell.row === charRow || cell.row === charRow_lower) && this.velX > 0.5) {
     this.velX = 0;
     this.cx = cell.cx 
       - tileSize / 2 - 1
