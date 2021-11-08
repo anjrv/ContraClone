@@ -53,8 +53,9 @@ RecordingPlayer.prototype.setKeys = function () {
   for (let i = 0; i < keys_this_frame.length; i++) {
     let key = keys_this_frame[i].innerHTML;
     key = key.replace(/\u200B/g, '');
-    keys[keyCode(key)] = true;
-    this.keys.push(keyCode(key));
+    let keyCode = Number.parseInt(key);
+    keys[keyCode] = true;
+    this.keys.push(keyCode);
   }
 }
 

@@ -83,12 +83,10 @@ main.saveTimeframe = function () {
   let dt = document.createElement('dt');
   dt.innerHTML = this._frameTimeDelta_ms;
   timeframe.appendChild(dt);
-  
   for (var ID in keys) {
-    if(ID === ' '.charCodeAt) console.log(keys[ID]);
-    if (!keys[ID]) continue;
+    if (!keys[ID] || ID == '8'.charCodeAt(0)) continue;
     let key = document.createElement('key');
-    key.innerHTML = String.fromCharCode(ID);
+    key.innerHTML = ID;
     timeframe.appendChild(key);
   }
 
