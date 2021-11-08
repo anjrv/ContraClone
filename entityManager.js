@@ -127,6 +127,7 @@ const entityManager = {
   wipeEntities: function () {
     this._player = [];
     this._bullets = [];
+    this._enemies = [];
     for (let c = 0; c < this._categories.length; c++) {
       this._categories[c] = [];
     }
@@ -155,7 +156,7 @@ const entityManager = {
     for (let i = 0; i < entitiesList.length; i++) {
       let e = entitiesList[i];
       let type = e.attributes.type.nodeValue;
-      
+
       if (type === Bullet.name) {
         let descr = Bullet.parseRecord(e);
         this._bullets.push(new Bullet(descr));
@@ -164,9 +165,12 @@ const entityManager = {
         let descr = Player.parseRecord(e);
         this._player.push(new Player(descr));
       }
-      
+      else if (type === Patrol.name) {
+        let descr = Patrol.parseRecord(e);
+        this._enemies.push(new Patrol(descr));
+      }
     }
-    this._categories = [this._player, this._bullets];
+    this._categories = [this._player, this._bullets, this._enemies];
   }
 };
 

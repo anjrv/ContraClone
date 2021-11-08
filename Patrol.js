@@ -12,8 +12,8 @@ function Patrol(descr) {
   });
 
   // Direction 1 is right, -1 is left.
-  this.dirX = 1;
-  this.movSpeed = 1;
+  this.dirX = this.dirX || 1;
+  this.movSpeed = this.movSpeed || 1;
 }
 
 Patrol.prototype = Object.create(Character.prototype);
@@ -58,4 +58,19 @@ Patrol.prototype.computeSubStep = function (du) {
 Patrol.prototype.render = function (ctx) {
   util.fillBoxCentered(ctx, this.cx, this.cy, p_realSize / 2, p_realSize / 2 ,'teal');
   this.debugRender(ctx);
+}
+
+Patrol.prototype.record = function (tag) {
+  tag.setAttribute('type', this.constructor.name);
+  tag.setAttribute('cx', this.cx);
+  tag.setAttribute('cy', this.cy);
+  tag.setAttribute('dirx', this.dirX);
+  return tag;
+}
+
+Patrol.parseRecord = function (record) {
+  let cx = Number.parseFloat(record.attributes.cx.nodeValue);
+  let cy = Number.parseFloat(record.attributes.cy.nodeValue);
+  let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
+  return { cx, cy, dirX };
 }

@@ -9,7 +9,7 @@ function RecordingPlayer() {
   let xml_object = parser.parseFromString(recording, 'text/xml');
   this.timestamps = xml_object.getElementsByTagName('timeframe');
   this.entities = xml_object.getElementsByTagName('entities')[0];
-  this.worldMap = xml_object.getElementsByTagName('worldmap')[0];
+  //this.worldMap = xml_object.getElementsByTagName('worldmap')[0];
 }
 
 // Request that the player moves to the next frame
@@ -23,8 +23,8 @@ RecordingPlayer.prototype.nextFrame = function () {
 RecordingPlayer.prototype.getNextFrameDelta_ms = function() {
   if (this.frame_count === 0) {
     spatialManager.wipeCollisionObjects();
-    worldMap.restoreCameraRecord(this.worldMap);
     entityManager.restoreEntities(this.entities);
+    //worldMap.init(level1); // this will be a problem with the enemy spawning
   }
   // When the recording is over we turn off the recording and reset the framecount to 0
   if (this.frame_count >= this.timestamps.length) {
