@@ -42,19 +42,23 @@ function render(ctx) {
 
   if (g_record) {
     let oldStyle = ctx.fillStyle;
+    ctx.beginPath();
     ctx.fillStyle = 'red';
     util.fillCircle(ctx, 25,25,15);
     ctx.fillStyle = oldStyle;
+    ctx.closePath();
   }
 
   if (g_play_recording) {
     let oldStyle = ctx.fillStyle;
     ctx.fillStyle = 'white';
+    ctx.beginPath();
     ctx.moveTo(10,10);
     ctx.lineTo(10, 60);
     ctx.lineTo(45, 35);
     ctx.lineTo(10, 10);
     ctx.fill();
+    ctx.closePath();
     ctx.fillStyle = oldStyle;
   }
 
