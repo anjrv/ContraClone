@@ -40,6 +40,24 @@ function render(ctx) {
   //
   if (g_doRender) renderSimulation(ctx);
 
+  if (g_record) {
+    let oldStyle = ctx.fillStyle;
+    ctx.fillStyle = 'red';
+    util.fillCircle(ctx, 25,25,15);
+    ctx.fillStyle = oldStyle;
+  }
+
+  if (g_play_recording) {
+    let oldStyle = ctx.fillStyle;
+    ctx.fillStyle = 'white';
+    ctx.moveTo(10,10);
+    ctx.lineTo(10, 60);
+    ctx.lineTo(45, 35);
+    ctx.lineTo(10, 10);
+    ctx.fill();
+    ctx.fillStyle = oldStyle;
+  }
+
   // This flip-flip mechanism illustrates the pattern of alternation
   // between frames, which provides a crude illustration of whether
   // we are running "in sync" with the display refresh rate.
