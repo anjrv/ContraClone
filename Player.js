@@ -29,6 +29,7 @@ function Player(descr) {
   this.dirX = 1;
   this.scale = p_scale;
   this.jumping = false;
+  this.crouching = false;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -42,7 +43,7 @@ Player.prototype.KEY_DOWN = "S".charCodeAt(0);
 Player.prototype.KEY_JUMP = " ".charCodeAt(0);
 Player.prototype.KEY_SHOOT = "J".charCodeAt(0);
 Player.prototype.KEY_FLYUP = "L".charCodeAt(0);
-Player.prototype.KEY_CROUCH = 16;
+Player.prototype.KEY_CROUCH = 16; // SHIFT
 
 // Variables that bullets can use.
 var p_velX;
@@ -52,6 +53,16 @@ Player.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+
+  if (this.crouching) {
+    this.collider.height = this.sizeScale * 0.55;
+    this.collider.offsetY = this.sizeScale * 0.2;
+    this.crouching = false;
+  }
+  else {
+    this.collider.height = this.sizeScale * 0.75;
+    this.collider.offsetY = this.sizeScale * 0.125;
+  }
 
   this.computeSubStep(du);
   this.collideWithMap(du);
@@ -206,7 +217,8 @@ Player.prototype.changeSprite = function (du) {
   }
 
   if (keys[this.KEY_CROUCH]) {
-    this.sprite.animation = "CROUCH";
+    this.sprite.animation = "CROUCH"; 
+    this.crouching = true;
   }
 
 };
