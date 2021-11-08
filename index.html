@@ -26,6 +26,35 @@
       Sorry, but your browser does not support the HTML5 canvas tag.
     </canvas>
 
+    <div 
+      id = 'devtools'
+      style =
+        '
+        background-color: azure;
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 30vh;
+        padding: 16px;
+        border-radius: 4px;
+        '
+    >
+      <h1>Developer tools</h1>
+      <div>
+        <label for="showCharCollsionWithWorld">Character Collision</label>
+        <input id="showCharCollsionWithWorld" type="checkbox"/>
+      </div>
+      <div>
+        <label for="someDebug">Some debug</label>
+        <input id="someDebug" type="checkbox"/>
+      </div>
+      <button onclick="
+        let collisionWithWorld = document.getElementById('showCharCollsionWithWorld');
+        g_char_debug_showCollisions = collisionWithWorld.checked;
+        document.getElementById('devtools').style.display = 'none';
+      ">Apply</button>
+    </div>
+
     <script src="./node_modules/howler/dist/howler.js"></script>
     <script src="Audio.js"></script>
     <script src="globals.js"></script>

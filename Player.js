@@ -54,12 +54,10 @@ Player.prototype.update = function (du) {
   if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
   this.computeSubStep(du);
-  //this.collideWithMap(du);
-  this.collideWithMap2(du);
+  this.collideWithMap(du);
   this.changeSprite(du);
   this.maybeShoot();
 
-  
   this.collider.cx = this.cx;
   this.collider.cy = this.cy;
 
@@ -213,14 +211,6 @@ Player.prototype.changeSprite = function (du) {
 
 };
 
-
-Player.prototype.render = function (ctx) {
-  this.sprite.scale = this.scale;
-  this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx,this.cx , this.cy, this.rotation, this.direction < 0)
-  this.debugRender(ctx);
-}
-
 Player.prototype.record = function (tag) {
   tag.setAttribute("type", this.constructor.name);
   tag.setAttribute("posx", this.cx);
@@ -231,6 +221,8 @@ Player.prototype.record = function (tag) {
   tag.setAttribute("dirx", this.dirX);
   return tag;
 };
+
+// render method inherited from Character
 
 Player.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.posx.nodeValue);

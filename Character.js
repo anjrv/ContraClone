@@ -1,5 +1,5 @@
 // ==========
-// SHIP STUFF
+// Character STUFF
 // ==========
 
 "use strict";
@@ -11,6 +11,8 @@
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
 
+let g_char_debug_showCollisions = false;
+
 // A generic contructor which accepts an arbitrary descriptor object
 function Character(descr) {
   // Common inherited setup logic from Entity
@@ -20,8 +22,6 @@ function Character(descr) {
 
   // Set normal drawing scale, and warp state off
   this._isWarping = false;
-
-  this._debug_showCollisionCells = true;
 }
 
 Character.prototype = new Entity();
@@ -49,11 +49,14 @@ Character.prototype.update = function (du) {
 
 const NOMINAL_GRAVITY = 0.98;
 
+// Returns the gravitational acceleration if gravity is turned on
 Character.prototype.computeGravity = function () {
   return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
-Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
+// updates the Character based on the acceleration and update interval
+// -- uses average velocity to make game play frame indepentant -- 
+Character.prototype.applyAccel = function (accelX, accelY, du) {
   if (du === 0) du = 1;
 
   let oldVelX = this.velX;
@@ -73,34 +76,39 @@ Character.prototype.applyAccel = function (accelX, accelY, du, player = false) {
   this.collider.cy = this.cy;
 };
 
-Character.prototype.collideWithMap2 = function (du) {
-  //console.log(worldMap.getIndeciesFromCoords(this.cx, this.cy));
-  //if (this.onGround) this.velY = 0;
+// Asks worldMap which collisionCells character is in. Filters out Empty tiles and 
+// pushes the character out each cell that is left
+Character.prototype.collideWithMap = function (du) {
   let gridCells = worldMap.getCollisionCells(this);
   this._debug_collisionCells = gridCells;
 
-  let collisionCells = gridCells.filter((cell) => { return cell.content !== '  ' })
+  let collisionCells = gridCells.filter((cell) => { return cell.content !== worldMap.EMPTY_TILE })
 
   for (let i = 0; i < collisionCells.length; i++) {
-    if (this.pushOut2(collisionCells[i]) === true) break;
+    this.pushOut(collisionCells[i]);
   }
 }
 
-Character.prototype.pushOut2 = function (cell) {
+Character.prototype.pushOut = function (cell) {
   if (cell.content === '  ') return;
 
-  let tileSize = worldMap._tileSize;
+  let tileSize = worldMap._tileSize; // unfortunatly need to access private variable of worldMap, read only though
 
-  let charRow = worldMap.getIndeciesFromCoords(0,this.collider.cy+this.collider.offsetY).row;// Math.floor((this.collider.cy - tileSize/2) / tileSize);
-  let charRow_lower = charRow - 1;// Math.floor((this.collider.cy + tileSize/2) / tileSize);
-  let charRowCopy = charRow;
+  let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx,this.collider.cy+this.collider.offsetY);
+  
+  let charRow = charCoords.row;
+  let charRow_lower = charRow - 1;
 
-  let charCol = Math.floor ((this.cx + tileSize/2 )/ tileSize);
+  let charCol = charCoords.col;
 
   // Character is falling
-  if (charRow < cell.row && Math.abs(charCol - cell.col) <= 0 && this.velY > 0) {
-    // you can not fall on something that has something other than air on top of it
+  if (charRow < cell.row // can only fall on blocks that are lower than them
+    && Math.abs(charCol - cell.col) <= 1 // can only fall on blocs that are in the same or adjacent colums
+    && this.velY > 0 // can only stop on block if their velocity is down
+    ) {
+    // can not fall on something that has something other than air on top of it
     if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
+
     this.velY = 0;
     this.cy = cell.cy 
       - tileSize/2
@@ -109,45 +117,94 @@ Character.prototype.pushOut2 = function (cell) {
     this.onGround = true;
     this.rotation = 0;
     this.collider.cy = this.cy;
-    //return;
   }
 
   // Character is jumping up
-  if (charRow > cell.row && Math.abs(cell.col - charCol) <=0 && this.velY < 0) {
+  if (charRow > cell.row // can only jump into blocks above them
+    && cell.col === charCol // can only jump into blocks in the same column
+    && this.velY < 0 // can only jump into blocks if their velocity is up
+    ) {
+    // can not jump into something that has something other than air below it
     if (worldMap.getTileType(cell.row+1, cell.col) !== worldMap.EMPTY_TILE) return;
     this.velY = 0;
     this.cy = cell.cy 
       + this.collider.height/2
       + this.collider.offsetY;
     this.collider.cy = this.cy;
-    //return true;
   }
   
-  //if (this.velY < 0) charRow = null;
   // Character colliding with cell left of them
-  if ((cell.row === charRow || cell.row === charRow_lower) && charCol > cell.col && this.velX < 0) {
+  if ((cell.row === charRow || cell.row === charRow_lower) // can only collide with block in the same row
+  && charCol > cell.col // can only collide with blocks to the left of them
+  && this.velX < 0 // can only collide on left if velocity is to the left 
+  ) {
     this.velX = 0;
+    // move character to the cell to the right of the colliding block
     this.cx = cell.cx
       + tileSize / 2
-      + this.collider.width / 2 + 1;
+      + this.collider.width / 2;
     this.collider.cx = this.cx;
-    //return;
   }
 
   // Character colliding with cell right of them
   if ((cell.row === charRow || cell.row === charRow_lower) && charCol < cell.col && this.velX > 0) {
     this.velX = 0;
+    // move character to the cell to the left of the colliding block
     this.cx = cell.cx 
-      - tileSize / 2 - 1
+      - tileSize / 2
       - this.collider.width / 2;
     this.collider.cx = this.cx;
-    //return;
-  }
-
-  
+  }  
 }
 
-Character.prototype.collideWithMap = function (du) {
+// Resets the character to their reset position and rotation
+Character.prototype.reset = function () {
+  this.setPos(this.reset_cx, this.reset_cy);
+  this.rotation = this.reset_rotation;
+
+  this.halt();
+};
+
+// Stops the character
+Character.prototype.halt = function () {
+  this.velX = 0;
+  this.velY = 0;
+};
+
+// Renders the character to the given context
+Character.prototype.render = function (ctx) {
+  this.sprite.scale = this.scale;
+  this.sprite.updateFrame(this.frame || 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.velX < 0);
+  this.debugRender(ctx);
+};
+
+// Debug renders
+Character.prototype.debugRender = function (ctx) {
+  if (g_char_debug_showCollisions) this._debug_RenderCollsionsCells(ctx);
+
+}
+
+// Renders the cells which the character is colliding with
+// Empty tiles are white and other tiles are green
+Character.prototype._debug_RenderCollsionsCells = function (ctx) {
+  if (!this._debug_collisionCells) return;
+
+  let tileSize = worldMap._tileSize;
+
+  for (let i = 0; i < this._debug_collisionCells.length; i++) {
+    let cell = this._debug_collisionCells[i];
+    util.fillBoxCentered(ctx, 
+      cell.col*tileSize, 
+      cell.row*tileSize,
+      tileSize, tileSize,
+      cell.content === worldMap.EMPTY_TILE ? '#fff5' : '#0f05',
+      );
+  }
+}
+
+// depricated collision function
+Character.prototype.collideWithMap_depr = function (du) {
 
   // Ground logic Part 1
   if (this.onGround) this.velY = 0;
@@ -181,7 +238,8 @@ Character.prototype.collideWithMap = function (du) {
   }
 }
 
-Character.prototype.pushOut = function (around, grid) {
+// depricated pushout function
+Character.prototype.pushOut_depr = function (around, grid) {
   let x = Math.sign(this.velX);
   let y = Math.sign(this.velY);
   let tSize = worldMap._tileSize;
@@ -223,69 +281,3 @@ Character.prototype.pushOut = function (around, grid) {
     }
   }
 };
-
-Character.prototype.reset = function () {
-  this.setPos(this.reset_cx, this.reset_cy);
-  this.rotation = this.reset_rotation;
-
-  this.halt();
-};
-
-Character.prototype.halt = function () {
-  this.velX = 0;
-  this.velY = 0;
-};
-
-Character.prototype.render = function (ctx) {
-  this.sprite.scale = this.scale;
-  this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, 0, this.velX < 0);
-
-  this.debugRender(ctx);
-};
-
-Character.prototype.debugRender = function (ctx) {
-  if (this._debug_showCollisionCells) this._debug_RenderCollsionsCells(ctx);
-
-}
-
-Character.prototype._debug_RenderCollsionsCells = function (ctx) {
-  if (!this._debug_collisionCells) return;
-
-  let tileSize = worldMap._tileSize;
-
-  for (let i = 0; i < this._debug_collisionCells.length; i++) {
-    let cell = this._debug_collisionCells[i];
-    util.fillBoxCentered(ctx, 
-      cell.col*tileSize, 
-      cell.row*tileSize,
-      tileSize, tileSize,
-      cell.content === '  ' ? '#fff5' : '#0f05',
-      );
-  }
-}
-
-Character.prototype.debugRender2 = function (ctx) {
-  if (!this._grid) return;
-  // top left box
-  util.fillBoxCentered(ctx, this._grid[1]*worldMap._tileSize, 
-    this._grid[0]*worldMap._tileSize, 
-    worldMap._tileSize, worldMap._tileSize, '#00fa');
-  // top right box
-  util.fillBoxCentered(ctx, this._grid[3]*worldMap._tileSize, 
-    this._grid[0]*worldMap._tileSize, 
-    worldMap._tileSize, worldMap._tileSize, '#f00a');
-  // bot left
-  util.fillBoxCentered(ctx, this._grid[1]*worldMap._tileSize, 
-    this._grid[2]*worldMap._tileSize, 
-    worldMap._tileSize, worldMap._tileSize, '#0f05');
-  util.fillBoxCentered(ctx, this._grid[3]*worldMap._tileSize, 
-    this._grid[2]*worldMap._tileSize, 
-    worldMap._tileSize, worldMap._tileSize, '#0ff5');
-
-  let oldStyle = ctx.fillStyle;
-  ctx.fillStyle = 'red';
-  util.fillBoxCentered(ctx, this.collider.cx, this.collider.cy+this.collider.offsetY, this.collider.width, this.collider.height, '#fff8')
-  util.fillCircle(ctx, this.cx, this.cy, 5);
-  ctx.fillStyle = oldStyle;
-}
