@@ -2,29 +2,19 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>SPACE DUNE CONTRA?
-    </title>
-    <style>
-      body, * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      
-      body {
-        display: flex;
-        justify-content: center;
-      }
-    </style>
+    <title>SPACE DUNE CONTRA?</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <canvas
-      id="myCanvas"
-      width="1366"
-      height="768"
-    >
-      Sorry, but your browser does not support the HTML5 canvas tag.
-    </canvas>
+    <div class="container">
+      <canvas class="game" id="myCanvas" width="1366" height="768">
+        Sorry, but your browser does not support the HTML5 canvas tag.
+      </canvas>
+
+      <div class="stars"></div>
+      <div class="twinkling"></div>
+      <div class="clouds"></div>
+    </div>
 
     <div 
       id = 'devtools'

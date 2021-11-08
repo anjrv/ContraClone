@@ -1,0 +1,83 @@
+@import 'susy';
+@import 'compass/reset';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 1366px;
+  height: 768px;
+  background: black;
+}
+
+.stars,
+.twinkling,
+.clouds {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 1366px;
+  height: 768px;
+}
+
+.game {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+}
+
+.stars {
+  z-index: 1;
+  background: #000 url('./Effects/stars.png') repeat top
+    center;
+}
+
+.twinkling {
+  z-index: 2;
+  background: transparent url('./Effects/twinkling.png')
+    repeat top center;
+  animation: move-twink-back 200s linear infinite;
+}
+
+.clouds {
+  z-index: 3;
+  background: transparent url('./Effects/clouds.png') repeat
+    top center;
+  animation: move-clouds-back 200s linear infinite;
+}
+
+@keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+@keyframes move-clouds-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 10000px 0;
+  }
+}

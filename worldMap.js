@@ -84,7 +84,7 @@ const worldMap = {
   },
   
   render: function(ctx) {
-    this.drawBackgrounds(ctx);
+    // this.drawBackgrounds(ctx);
     ctx.font = "10px Arial";
     for (let i = 0; i < this._layers[0].length; i++) {
       for (let j = 0; j < this._layers[0][i].length; j++) {
