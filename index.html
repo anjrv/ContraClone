@@ -21,12 +21,13 @@
       style =
         '
         background-color: azure;
+        border-radius: 4px;
         display: none;
         flex-direction: column;
         position: absolute;
-        top: 30vh;
         padding: 16px;
-        border-radius: 4px;
+        top: 30vh;
+        z-index: 100;
         '
     >
       <h1>Developer tools</h1>
@@ -35,12 +36,14 @@
         <input id="showCharCollsionWithWorld" type="checkbox"/>
       </div>
       <div>
-        <label for="someDebug">Some debug</label>
-        <input id="someDebug" type="checkbox"/>
+        <label for="collisionRender">Render Collision Volumes</label>
+        <input id="collisionRender" type="checkbox"/>
       </div>
       <button onclick="
         let collisionWithWorld = document.getElementById('showCharCollsionWithWorld');
         g_char_debug_showCollisions = collisionWithWorld.checked;
+        let collisionRender = document.getElementById('collisionRender');
+        g_renderSpatialDebug = collisionRender.checked;
         document.getElementById('devtools').style.display = 'none';
       ">Apply</button>
     </div>
