@@ -10,9 +10,9 @@ function handleKeydown(evt) {
   console.log(g_intro)
   if (g_intro) {
     g_intro = false;
-    //m_startGame.play();
+    m_startGame.play();
     m_Intro.stop();
-    setTimeout(function () {startGame();}, 1500);
+    setTimeout(function () {startGame();}, 1200);
   }
 }
 

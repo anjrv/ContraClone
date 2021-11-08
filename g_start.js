@@ -21,7 +21,7 @@ function introLoop(ctx) {
         spaceScene(ctx)
 
         setTimeout(function() { zoomLetters(g_canvas.width/2,g_canvas.height*1.3,1700,ctx); }, 13500);
-        setTimeout(function() { startOption(ctx); }, 19000);
+        setTimeout(function() { startOption(ctx); }, 18500);
         return;
     }
     setTimeout(function() { introLoop(ctx); }, 20);
@@ -78,7 +78,7 @@ function zoomLetters(x,y,s,ctx) {
             startOption(ctx); console.log("SKIP!")
             return;
         }
-        setTimeout(function() { zoomLetters(x,y-3.409090909,s-7.454545455,ctx); }, 25);
+        setTimeout(function() { zoomLetters(x,y-3.409090909,s-7.454545455,ctx); }, 20);
     }
 }
 

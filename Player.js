@@ -48,6 +48,7 @@ Player.prototype.KEY_CROUCH = 16;
 var p_velX;
 var p_velY;
 Player.prototype.update = function (du) {
+  g_shootCounter -= du;
   spatialManager.unregister(this);
 
   if (this._isDeadNow) return entityManager.KILL_ME_NOW;
@@ -129,22 +130,26 @@ Player.prototype.computeSubStep = function (du) {
 
 Player.prototype.maybeShoot = function () {
   if (keys[this.KEY_SHOOT]) {
-    // Calculate the direction of the bullet.
-    let vX = (this.velX === 0) ? 
-      this.direction * Math.cos(this.angle) : 
-      Math.sign(this.velX) * Math.cos(this.angle);
-    let vY = -Math.sin(this.angle);
-    let dX = this.velX;
-    if (this.velX === 0) dX = this.direction;
-    let bulletAngle =
-      Math.sign(dX) > 0 ? this.angle : -this.angle + Math.PI;
-    entityManager.firePlayerBullet(
-      this.cx + (vX * this.sprite.sWidth) / 2,
-      this.cy + (vY * this.sprite.sHeight) / 2,
-      vX * g_bulletSpeed,
-      vY * g_bulletSpeed,
-      -bulletAngle
-    );
+    if (g_shootCounter < 0) {
+      g_shootCounter = 10;
+      // Calculate the direction of the bullet.
+      let vX = (this.velX === 0) ? 
+        this.direction * Math.cos(this.angle) : 
+        Math.sign(this.velX) * Math.cos(this.angle);
+      let vY = -Math.sin(this.angle);
+      let dX = this.velX;
+      if (this.velX === 0) dX = this.direction;
+      let bulletAngle =
+        Math.sign(dX) > 0 ? this.angle : -this.angle + Math.PI;
+      m_laser.play();
+      entityManager.firePlayerBullet(
+        this.cx + (vX * this.sprite.sWidth) / 2,
+        this.cy + (vY * this.sprite.sHeight) / 2,
+        vX * g_bulletSpeed,
+        vY * g_bulletSpeed,
+        -bulletAngle
+      );
+    }
   }
 };
 
@@ -166,15 +171,15 @@ Player.prototype.changeSprite = function (du) {
     this.sprite.animation = "IDLE";
   }
 
-  if ((keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) && this.onGround) {
-    this.sprite.animation = "RUN_FORWARD";
+  if (keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) {
+    if (this.onGround) this.sprite.animation = "RUN_FORWARD";
     if (keys[this.KEY_UP]) {
       this.angle = Math.PI / 4;
-      this.sprite.animation += "_UP";
+      if (this.onGround) this.sprite.animation += "_UP";
     }
     if (keys[this.KEY_DOWN]) {
       this.angle = -Math.PI / 4;
-      this.sprite.animation += "_DOWN";
+      if (this.onGround) this.sprite.animation += "_DOWN";
     }
     return;
   }

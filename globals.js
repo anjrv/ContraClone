@@ -47,6 +47,8 @@ var p_ground = (p_ssHeight/2);
 
 var p_ground2 = 0;
 
+var g_shootCounter = -1;
+
 
 // The "nominal interval" is the one that all of our time-based units are
 // calibrated to e.g. a velocity unit is "pixels per nominal interval"
