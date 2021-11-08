@@ -127,7 +127,7 @@ function requestPreloads() {
     enemies       :   './Sprites/enemies-sheet-alpha.png',
     tilesheet     :   './Sprites/tilesheet.png',
     spaceScene    :   './Sprites/spacescene.jpg',
-    ship          :   'https://notendur.hi.is/~pk/308G/images/ship_2.png',
+    ship          :   './Sprites/ship_2.png',
     spaceman      :   './Sprites/spaceman.png',
     bg_layer1     :   './Backgrounds/bg_layer1.png',
     bg_layer2     :   './Backgrounds/bg_layer2.png',
