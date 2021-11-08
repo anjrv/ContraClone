@@ -33,7 +33,7 @@ Patrol.prototype.update = function (du) {
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2)) {
     this.computeSubStep(du);
   } else {
-    this.attack(util.angle(playerLoc.cx, playerLoc.cy, this.cx, this.cy));
+    this.attack(playerLoc);
   }
 
   this.collider.cx = this.cx;
@@ -42,12 +42,13 @@ Patrol.prototype.update = function (du) {
   spatialManager.register(this);
 };
 
-Patrol.prototype.attack = function (angle) {
+Patrol.prototype.attack = function (playerLoc) {
   if (this.shotCooldown > 0) return;
-  this.shotCooldown += 100;
+  this.shotCooldown = 100;
 
-  let vX = -Math.cos(angle);
-  let vY = -Math.sin(angle);
+  const angle = util.angle(this.cx, this.cy, playerLoc.cx, playerLoc.cy)
+  let vX = Math.cos(angle);
+  let vY = Math.sin(angle);
 
   entityManager.fireEnemyBullet(
     this.cx,
