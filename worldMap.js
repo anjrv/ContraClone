@@ -2,7 +2,7 @@
 /*jslint nomen: true, white: true, plusplus: true*/
 
 const worldMap = {
-  EMPTY_TILE: ' ',
+  EMPTY_TILE: '  ',
 
   init: function (mapData) {
     // Map variables
@@ -10,7 +10,7 @@ const worldMap = {
     this._rows = mapData.rows;
     this._tileSize = mapData.tilesize;
     this._layers = mapData.layers;
-    this._sprite = g_sprites.ground;
+    this._sprite = g_sprites.tilesheet;
     this._sprite.scale = this._tileSize / this._sprite.sWidth;
     this._length = mapData.cols*mapData.rows;
     
@@ -63,7 +63,7 @@ const worldMap = {
           const x = j * this._tileSize;
           const y = i * this._tileSize;
           entityManager.spawnEnemy('1', x, y);
-          this._layers[0][i][j] = ' ';
+          this._layers[0][i][j] = '  ';
         }
       }
     }
@@ -84,12 +84,13 @@ const worldMap = {
   },
   
   render: function(ctx) {
+    this.drawBackgrounds(ctx);
     ctx.font = "10px Arial";
     for (let i = 0; i < this._layers[0].length; i++) {
       for (let j = 0; j < this._layers[0][i].length; j++) {
         const x = j * this._tileSize;
         const y = i * this._tileSize;
-        if (this._layers[0][i][j] === ' ' || this._layers[0][i][j] === '0') continue;
+        if (this._layers[0][i][j] === '  ' || this._layers[0][i][j] === '0') continue;
         this._sprite.animation = this._layers[0][i][j];
         this._sprite.updateFrame(0);
         this._sprite.drawCentredAt(ctx, x, y, 0);
@@ -99,6 +100,12 @@ const worldMap = {
       }
     }
     this.debugRender(ctx);
+  },
+
+  drawBackgrounds: function(ctx) {
+    g_sprites.bg_layer1.drawWrappedCentredAt(ctx, g_canvas.width, g_canvas.height, 0);
+    g_sprites.bg_layer2.drawWrappedCentredAt(ctx, g_canvas.width/2, g_canvas.height/2, 0);
+    g_sprites.bg_layer3.drawWrappedCentredAt(ctx, g_canvas.width/4, g_canvas.height/4, 0);
   },
 
   getIndeciesFromCoords: function (x, y) {
@@ -188,7 +195,7 @@ const worldMap = {
         let content;
         // make sure we don't index out of the array
         try { content = this._layers[0][top][left]; }
-        catch (e) { content = ' '; }
+        catch (e) { content = '  '; }
         coordinates.push({
           col: left, 
           row: top, 
@@ -228,9 +235,9 @@ const worldMap = {
   isDrop: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      let r = (this._layers[0][grid[2]][grid[1]] === ' ' && this._layers[0][grid[2]][grid[3]] === ' ');
-      // this._drop1 = [[grid[2]], grid[1], this._layers[0][grid[2]+1][grid[1]] === ' ']
-      // this._drop2 = [[grid[2]], grid[3], this._layers[0][grid[2]+1][grid[3]] === ' ']
+      let r = (this._layers[0][grid[2]][grid[1]] === '  ' && this._layers[0][grid[2]][grid[3]] === '  ');
+      // this._drop1 = [[grid[2]], grid[1], this._layers[0][grid[2]+1][grid[1]] === '  ']
+      // this._drop2 = [[grid[2]], grid[3], this._layers[0][grid[2]+1][grid[3]] === '  ']
       return r
     }
     catch (e) {
@@ -243,7 +250,7 @@ const worldMap = {
   isLeft: function (entity) {
     let grid = this.getGridCoords(entity)
     try {
-      return (this._layers[0][grid[2]][grid[1]] === ' ' && this._layers[0][grid[0]][grid[1]] === ' ');
+      return (this._layers[0][grid[2]][grid[1]] === '  ' && this._layers[0][grid[0]][grid[1]] === '  ');
     }
     catch (e) {
       return true;
@@ -255,7 +262,7 @@ const worldMap = {
   isRight: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]][grid[1]+1] === ' ');
+      return (this._layers[0][grid[2]][grid[1]+1] === '  ');
     }
     catch (e) {
       return true;
@@ -267,7 +274,7 @@ const worldMap = {
   isAbove: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return (this._layers[0][grid[2]-1][grid[1]] === ' ' && this._layers[0][grid[2]-1][grid[3]] === ' ');
+      return (this._layers[0][grid[2]-1][grid[1]] === '  ' && this._layers[0][grid[2]-1][grid[3]] === '  ');
     }
     catch (e) {
       return true;

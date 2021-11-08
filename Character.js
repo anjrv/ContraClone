@@ -79,7 +79,7 @@ Character.prototype.collideWithMap2 = function (du) {
   let gridCells = worldMap.getCollisionCells(this);
   this._debug_collisionCells = gridCells;
 
-  let collisionCells = gridCells.filter((cell) => { return cell.content !== ' ' })
+  let collisionCells = gridCells.filter((cell) => { return cell.content !== '  ' })
 
   for (let i = 0; i < collisionCells.length; i++) {
     if (this.pushOut2(collisionCells[i]) === true) break;
@@ -87,7 +87,7 @@ Character.prototype.collideWithMap2 = function (du) {
 }
 
 Character.prototype.pushOut2 = function (cell) {
-  if (cell.content === ' ') return;
+  if (cell.content === '  ') return;
 
   let tileSize = worldMap._tileSize;
 
@@ -260,7 +260,7 @@ Character.prototype._debug_RenderCollsionsCells = function (ctx) {
       cell.col*tileSize, 
       cell.row*tileSize,
       tileSize, tileSize,
-      cell.content === ' ' ? '#fff5' : '#0f05',
+      cell.content === '  ' ? '#fff5' : '#0f05',
       );
   }
 }

@@ -171,8 +171,10 @@ Player.prototype.changeSprite = function (du) {
     this.sprite.animation = "IDLE";
   }
 
+  let airborne = null;
   if (keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) {
-    if (this.onGround) this.sprite.animation = "RUN_FORWARD";
+    airborne = !this.onGround;
+    if (this.onGround) this.sprite.animation = "RUN_FORWARD"; 
     if (keys[this.KEY_UP]) {
       this.angle = Math.PI / 4;
       if (this.onGround) this.sprite.animation += "_UP";
@@ -181,10 +183,10 @@ Player.prototype.changeSprite = function (du) {
       this.angle = -Math.PI / 4;
       if (this.onGround) this.sprite.animation += "_DOWN";
     }
-    return;
+    if (this.onGround) return;
   }
 
-  if (keys[this.KEY_DOWN]) {
+  if (keys[this.KEY_DOWN] && !airborne) {
     this.angle = -Math.PI / 2;
     if (this.onGround) {
       this.sprite.animation = "LOOK_DOWN";
@@ -192,7 +194,7 @@ Player.prototype.changeSprite = function (du) {
     }
   }
 
-  if (keys[this.KEY_UP]) {
+  if (keys[this.KEY_UP] && !airborne) {
     this.angle = Math.PI / 2;
     if (this.onGround) {
       this.sprite.animation = "LOOK_UP";

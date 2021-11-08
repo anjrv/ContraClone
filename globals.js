@@ -22,13 +22,14 @@ var g_pressStartFont = new FontFace('PressStart2P', 'url(fonts/PressStart2P-Regu
 var g_ZenFont = new FontFace('ZenDots', 'url(fonts/ZenDots-Regular.ttf)');
 var g_skip = false;
 var g_intro = false;
+var g_playing = false;
 
 // Starting positions in the spritesheet
 var p_ssbX = 0;
 var p_ssbY = 0;
 
 // Sprite size
-var p_size = 46;
+var p_size = 50;
 
 // Number of sprites in row of spritesheet
 var p_sn = 6;
@@ -49,6 +50,7 @@ var p_ground2 = 0;
 
 var g_shootCounter = -1;
 
+var g_sprites = {};
 
 // The "nominal interval" is the one that all of our time-based units are
 // calibrated to e.g. a velocity unit is "pixels per nominal interval"

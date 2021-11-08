@@ -41,7 +41,7 @@ Patrol.prototype.computeSubStep = function (du) {
     const left = worldMap.getTileType(currLoc.row, currLoc.col - 1);
     const leftDown = worldMap.getTileType(currLoc.row + 1, currLoc.col - 1);
 
-    if (!(left === ' ' && leftDown !== ' ')) this.dirX *= -1;
+    if (!(left === '  ' && leftDown !== '  ')) this.dirX *= -1;
   }
 
   // We're goin right
@@ -49,7 +49,7 @@ Patrol.prototype.computeSubStep = function (du) {
     const right = worldMap.getTileType(currLoc.row, currLoc.col + 1);
     const rightDown = worldMap.getTileType(currLoc.row + 1, currLoc.col + 1);
 
-    if (!(right === ' ' && rightDown !== ' ')) this.dirX *= -1;
+    if (!(right === '  ' && rightDown !== '  ')) this.dirX *= -1;
   }
 
   this.cx += this.dirX * this.movSpeed * du;

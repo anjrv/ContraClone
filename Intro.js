@@ -14,6 +14,7 @@ function g_start(ctx) {
 }
 
 function introLoop(ctx) {
+    if (g_playing) return;
     ctx.drawImage(g_images.spaceScene, 0, 0)
     if (eatKey(KEY_LEFT) || eatKey(KEY_RIGHT) || eatKey(KEY_UP) || eatKey(KEY_DOWN) || eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
         m_Intro.play();
@@ -31,6 +32,7 @@ var notStarted = true;
 var endScene = false;
 
 function spaceScene(ctx) {
+    if (g_playing) return;
     let path = 1;
     let baseWidth = 70;
     let baseHeight = 70;
@@ -38,6 +40,7 @@ function spaceScene(ctx) {
 }
 
 function drawSubScene(ctx, x, y, r, path, baseWidth, baseHeight) {
+    if (g_playing) return;
     let curve = 0.002
     let rotate = 0.015;
     if (path < -0.2) { curve = 0.1; rotate = 0.1 / curve; baseWidth -= 0.5; baseHeight -= 0.5; }
@@ -50,13 +53,14 @@ function drawSubScene(ctx, x, y, r, path, baseWidth, baseHeight) {
     ctx.drawImage(g_images.ship, -20, -20, baseWidth, baseHeight)
     ctx.restore()
     if (eatKey(KEY_LEFT) || eatKey(KEY_RIGHT) || eatKey(KEY_UP) || eatKey(KEY_DOWN) || eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
-        startOption(ctx); console.log("SKIP!")
+        startOption(ctx);
         return;
     }
     setTimeout(function() { drawSubScene(ctx, x+1.5, y-0.5*path, r + rotate, path - curve, baseWidth, baseHeight); }, 15);
 }
 
 function zoomLetters(x,y,s,ctx) {
+    if (g_playing) return;
     if (g_skip) return;
     endScene = true;
     if (s > 60) {
@@ -75,7 +79,7 @@ function zoomLetters(x,y,s,ctx) {
             console.log("Something a' matter");
         });
         if (eatKey(KEY_LEFT) || eatKey(KEY_RIGHT) || eatKey(KEY_UP) || eatKey(KEY_DOWN) || eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
-            startOption(ctx); console.log("SKIP!")
+            startOption(ctx); 
             return;
         }
         setTimeout(function() { zoomLetters(x,y-3.409090909,s-7.454545455,ctx); }, 20);
@@ -84,6 +88,7 @@ function zoomLetters(x,y,s,ctx) {
 
 
 function startOption(ctx) {
+    if (g_playing) return;
     if (g_skip) return;
     g_skip = true;
     g_intro = true;
@@ -105,6 +110,7 @@ var grey = false;
 var white = true;
 
 function oscillateColors(ctx) {
+    if (g_playing) return;
     let x = g_canvas.width/2
     let y = 251.80909092899515 
     let s = 67.45454535499714
