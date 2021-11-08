@@ -211,6 +211,8 @@ Player.prototype.changeSprite = function (du) {
 
 };
 
+//Render is inherited from Character
+
 Player.prototype.record = function (tag) {
   tag.setAttribute("type", this.constructor.name);
   tag.setAttribute("posx", this.cx);
@@ -221,8 +223,6 @@ Player.prototype.record = function (tag) {
   tag.setAttribute("dirx", this.dirX);
   return tag;
 };
-
-// render method inherited from Character
 
 Player.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.posx.nodeValue);

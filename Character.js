@@ -175,7 +175,7 @@ Character.prototype.halt = function () {
 Character.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.velX < 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
   this.debugRender(ctx);
 };
 
