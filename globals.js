@@ -39,6 +39,8 @@ var p_scale = 2;
 
 var p_realSize = p_scale * p_size;
 
+const g_aggroRange = p_realSize * 5;
+
 // Size of the spriteSheet
 var p_ssHeight = 2240;
 

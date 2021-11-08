@@ -3,34 +3,59 @@ function Patrol(descr) {
 
   // Collisions
   this.collider = new Collider({
-    type: "Box",
+    type: 'Box',
     cx: this.cx,
     cy: this.cy,
     width: p_realSize / 2,
     height: p_realSize / 2,
-    offsetY: 0
+    offsetY: 0,
   });
 
   // Direction 1 is right, -1 is left.
-  this.dirX = this.dirX || 1;
-  this.movSpeed = this.movSpeed || 1;
+  this.dirX = 1;
+  this.movSpeed = 1;
+  this.shotCooldown = -1;
 }
 
 Patrol.prototype = Object.create(Character.prototype);
 Patrol.prototype.constructor = Patrol;
 
 Patrol.prototype.update = function (du) {
+  const playerLoc = this.shouldUpdate();
+  if (!playerLoc) return;
+
+  this.shotCooldown -= du;
 
   spatialManager.unregister(this);
 
   if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
-  this.computeSubStep(du);
-  
+  if (playerLoc.sqDist > Math.pow(g_aggroRange, 2)) {
+    this.computeSubStep(du);
+  } else {
+    this.attack(util.angle(playerLoc.cx, playerLoc.cy, this.cx, this.cy));
+  }
+
   this.collider.cx = this.cx;
   this.collider.cy = this.cy;
 
   spatialManager.register(this);
+};
+
+Patrol.prototype.attack = function (angle) {
+  if (this.shotCooldown > 0) return;
+  this.shotCooldown += 100;
+
+  let vX = -Math.cos(angle);
+  let vY = -Math.sin(angle);
+
+  entityManager.fireEnemyBullet(
+    this.cx,
+    this.cy,
+    vX * g_bulletSpeed,
+    vY * g_bulletSpeed,
+    0
+  );
 };
 
 Patrol.prototype.computeSubStep = function (du) {
@@ -56,9 +81,16 @@ Patrol.prototype.computeSubStep = function (du) {
 };
 
 Patrol.prototype.render = function (ctx) {
-  util.fillBoxCentered(ctx, this.cx, this.cy, p_realSize / 2, p_realSize / 2 ,'teal');
+  util.fillBoxCentered(
+    ctx,
+    this.cx,
+    this.cy,
+    p_realSize / 2,
+    p_realSize / 2,
+    'teal',
+  );
   this.debugRender(ctx);
-}
+};
 
 Patrol.prototype.record = function (tag) {
   tag.setAttribute('type', this.constructor.name);
@@ -66,11 +98,11 @@ Patrol.prototype.record = function (tag) {
   tag.setAttribute('cy', this.cy);
   tag.setAttribute('dirx', this.dirX);
   return tag;
-}
+};
 
 Patrol.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.cx.nodeValue);
   let cy = Number.parseFloat(record.attributes.cy.nodeValue);
   let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
   return { cx, cy, dirX };
-}
+};

@@ -171,6 +171,17 @@ Character.prototype.halt = function () {
   this.velY = 0;
 };
 
+Character.prototype.shouldUpdate = function () {
+  const playerLoc = entityManager.getPlayer();
+  const playerLocSq = Math.pow(playerLoc.cx - this.cx, 2) + Math.pow(playerLoc.cy - this.cy, 2);
+
+  if (playerLocSq > Math.pow(g_canvas.height + g_canvas.width, 2)) {
+    return null;
+  }
+
+  return { cx: playerLoc.cx, cy: playerLoc.cy, sqDist: playerLocSq };
+}
+
 // Renders the character to the given context
 Character.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;

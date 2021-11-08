@@ -121,5 +121,12 @@ const util = {
 
   lerp: function (start, end, amt) {
     return start + (end - start) * amt;
+  },
+
+  angle: function(cx, cy, ex, ey) {
+    const dy = ey - cy;
+    const dx = ex - cx;
+    
+    return Math.atan2(dy, dx);
   }
 };

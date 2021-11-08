@@ -12,7 +12,7 @@ with suitable 'data' and 'methods'.
 
 */
 
-"use strict";
+'use strict';
 
 // Tell jslint not to complain about my use of underscore prefixes (nomen),
 // my flattening of some indentation (white), or my use of incr/decr ops
@@ -24,9 +24,8 @@ const entityManager = {
   // "PRIVATE" DATA
 
   _bullets: [],
-
   _enemies: [],
-
+  _enemy_bullets: [],
   _player: [],
 
   // "PRIVATE" METHODS
@@ -48,7 +47,12 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    this._categories = [this._player, this._bullets, this._enemies];
+    this._categories = [
+      this._player,
+      this._bullets,
+      this._enemies,
+      this._enemy_bullets,
+    ];
   },
 
   init: function () {
@@ -59,19 +63,13 @@ const entityManager = {
     return this._player[0];
   },
 
-  firePlayerBullet: function (
-    cx,
-    cy,
-    velX,
-    velY,
-    rotation
-  ) {
+  firePlayerBullet: function (cx, cy, velX, velY, rotation) {
     const bullet = new Bullet({
       cx: cx,
       cy: cy,
       velX: velX,
       velY: velY,
-      rotation: rotation
+      rotation: rotation,
     });
     this._bullets.push(bullet);
   },
@@ -83,11 +81,23 @@ const entityManager = {
           cx: cx,
           cy: cy,
           velX: velX,
-          velY: velY
+          velY: velY,
         });
         this._enemies.push(patrol);
         break;
     }
+  },
+
+  fireEnemyBullet: function (cx, cy, velX, velY, rotation) {
+    const bullet = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+    });
+
+    this._enemy_bullets.push(bullet);
   },
 
   update: function (du) {
@@ -152,7 +162,7 @@ const entityManager = {
   restoreEntities: function (entities) {
     this.wipeEntities();
 
-    let entitiesList = entities.getElementsByTagName("entity");
+    let entitiesList = entities.getElementsByTagName('entity');
     for (let i = 0; i < entitiesList.length; i++) {
       let e = entitiesList[i];
       let type = e.attributes.type.nodeValue;
@@ -160,18 +170,16 @@ const entityManager = {
       if (type === Bullet.name) {
         let descr = Bullet.parseRecord(e);
         this._bullets.push(new Bullet(descr));
-      }
-      else if (type === Player.name) {
+      } else if (type === Player.name) {
         let descr = Player.parseRecord(e);
         this._player.push(new Player(descr));
-      }
-      else if (type === Patrol.name) {
+      } else if (type === Patrol.name) {
         let descr = Patrol.parseRecord(e);
         this._enemies.push(new Patrol(descr));
       }
     }
     this._categories = [this._player, this._bullets, this._enemies];
-  }
+  },
 };
 
 // Some deferred setup which needs the object to have been created first
