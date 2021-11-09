@@ -71,13 +71,13 @@ Bullet.prototype.update = function (du) {
   // Handle collisions
   //
   const hitEntity = this.findHitEntity();
-  // if (hitEntity) {
-  //   const canTakeHit = hitEntity.takeBulletHit;
-  //   if (canTakeHit) canTakeHit.call(hitEntity);
-  //   return entityManager.KILL_ME_NOW;
-  // }
 
-  // TODO: YOUR STUFF HERE! --- (Re-)Register
+  if (hitEntity && hitEntity.shotId !== this.owner) {
+    const canTakeHit = hitEntity.takeBulletHit;
+    if (canTakeHit) canTakeHit.call(hitEntity);
+    return entityManager.KILL_ME_NOW;
+  }
+
   spatialManager.register(this);
 };
 

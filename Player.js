@@ -14,6 +14,7 @@ function Player(descr) {
   this.floor = p_ground2;
   this.direction = 1;
   this.rotation = 0;
+  this.shotId = 0;
 
   // Collisions
   this.collider = new Collider({
@@ -160,6 +161,10 @@ Player.prototype.maybeShoot = function () {
       );
     }
   }
+};
+
+Player.prototype.takeBulletHit = function () {
+  // TODO: Some sound, some hp loss
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed

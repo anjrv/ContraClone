@@ -22,6 +22,7 @@ function Character(descr) {
 
   // Set normal drawing scale, and warp state off
   this._isWarping = false;
+  this.shotId = 1;
 }
 
 Character.prototype = new Entity();

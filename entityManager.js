@@ -25,7 +25,6 @@ const entityManager = {
 
   _bullets: [],
   _enemies: [],
-  _enemy_bullets: [],
   _player: [],
 
   // "PRIVATE" METHODS
@@ -47,12 +46,7 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    this._categories = [
-      this._player,
-      this._bullets,
-      this._enemies,
-      this._enemy_bullets,
-    ];
+    this._categories = [this._bullets, this._player, this._enemies];
   },
 
   init: function () {
@@ -61,17 +55,6 @@ const entityManager = {
 
   getPlayer: function () {
     return this._player[0];
-  },
-
-  firePlayerBullet: function (cx, cy, velX, velY, rotation) {
-    const bullet = new Bullet({
-      cx: cx,
-      cy: cy,
-      velX: velX,
-      velY: velY,
-      rotation: rotation,
-    });
-    this._bullets.push(bullet);
   },
 
   spawnEnemy: function (type, cx, cy, velX = 0, velY = 0) {
@@ -88,6 +71,18 @@ const entityManager = {
     }
   },
 
+  firePlayerBullet: function (cx, cy, velX, velY, rotation) {
+    const bullet = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+    });
+    this._bullets.push(bullet);
+  },
+
   fireEnemyBullet: function (cx, cy, velX, velY, rotation) {
     const bullet = new Bullet({
       cx: cx,
@@ -95,9 +90,10 @@ const entityManager = {
       velX: velX,
       velY: velY,
       rotation: rotation,
+      owner: 1,
     });
 
-    this._enemy_bullets.push(bullet);
+    this._bullets.push(bullet);
   },
 
   update: function (du) {

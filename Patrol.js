@@ -15,6 +15,7 @@ function Patrol(descr) {
   this.dirX = 1;
   this.movSpeed = 1;
   this.shotCooldown = -1;
+  this.shotId = 1;
 }
 
 Patrol.prototype = Object.create(Character.prototype);
@@ -55,8 +56,12 @@ Patrol.prototype.attack = function (playerLoc) {
     this.cy,
     vX * g_bulletSpeed,
     vY * g_bulletSpeed,
-    0
+    angle 
   );
+};
+
+Patrol.prototype.takeBulletHit = function () {
+  // TODO: Some sound, some hp loss
 };
 
 Patrol.prototype.computeSubStep = function (du) {
