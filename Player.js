@@ -10,7 +10,7 @@ function Player(descr) {
   this.size = 46;
   this.sizeScale = 2 * this.size;
   this.realSize = g_sprites.player.sWidth * this.scale;
-  this.realHalfSize = this.realSize/2;
+  this.realHalfSize = this.realSize / 2;
   this.floor = p_ground2;
   this.direction = 1;
   this.rotation = 0;
@@ -18,7 +18,7 @@ function Player(descr) {
 
   // Collisions
   this.collider = new Collider({
-    type: "Box",
+    type: 'Box',
     cx: 0,
     cy: 0,
     width: this.sizeScale * 0.4,
@@ -36,14 +36,14 @@ function Player(descr) {
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.KEY_LEFT = "A".charCodeAt(0);
-Player.prototype.KEY_RIGHT = "D".charCodeAt(0);
-Player.prototype.KEY_UP = "W".charCodeAt(0);
-Player.prototype.KEY_DOWN = "S".charCodeAt(0);
+Player.prototype.KEY_LEFT = 'A'.charCodeAt(0);
+Player.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
+Player.prototype.KEY_UP = 'W'.charCodeAt(0);
+Player.prototype.KEY_DOWN = 'S'.charCodeAt(0);
 
-Player.prototype.KEY_JUMP = " ".charCodeAt(0);
-Player.prototype.KEY_SHOOT = "J".charCodeAt(0);
-Player.prototype.KEY_FLYUP = "L".charCodeAt(0);
+Player.prototype.KEY_JUMP = ' '.charCodeAt(0);
+Player.prototype.KEY_SHOOT = 'J'.charCodeAt(0);
+Player.prototype.KEY_FLYUP = 'L'.charCodeAt(0);
 Player.prototype.KEY_CROUCH = 16; // SHIFT
 
 // Variables that bullets can use.
@@ -59,8 +59,7 @@ Player.prototype.update = function (du) {
     this.collider.height = this.sizeScale * 0.55;
     this.collider.offsetY = this.sizeScale * 0.2;
     this.crouching = false;
-  }
-  else {
+  } else {
     this.collider.height = this.sizeScale * 0.75;
     this.collider.offsetY = this.sizeScale * 0.125;
   }
@@ -92,7 +91,7 @@ Player.prototype.computeSubStep = function (du) {
       util.lerp(
         1.0,
         MAX_TURNAROUND_FORCE,
-        (this.velX + MAX_VEL) / (2 * MAX_VEL)
+        (this.velX + MAX_VEL) / (2 * MAX_VEL),
       );
   } else if (keys[this.KEY_RIGHT]) {
     this.direction = 1;
@@ -101,14 +100,14 @@ Player.prototype.computeSubStep = function (du) {
       util.lerp(
         MAX_TURNAROUND_FORCE,
         1.0,
-        (this.velX + MAX_VEL) / (2 * MAX_VEL)
+        (this.velX + MAX_VEL) / (2 * MAX_VEL),
       );
   } else if (this.onGround) {
     acceleration -= NOMINAL_FRICTION * this.velX;
   }
 
-  
   let gravityAcc = this.computeGravity();
+  gravityAcc = Math.min(worldMap.getTileSize() * 0.8, gravityAcc);
 
   if (!keys[this.KEY_JUMP] && this.jumping) {
     this.velY *= 0.5;
@@ -143,21 +142,21 @@ Player.prototype.maybeShoot = function () {
     if (g_shootCounter < 0) {
       g_shootCounter = 10;
       // Calculate the direction of the bullet.
-      let vX = (this.velX === 0) ? 
-        this.direction * Math.cos(this.angle) : 
-        Math.sign(this.velX) * Math.cos(this.angle);
+      let vX =
+        this.velX === 0
+          ? this.direction * Math.cos(this.angle)
+          : Math.sign(this.velX) * Math.cos(this.angle);
       let vY = -Math.sin(this.angle);
       let dX = this.velX;
       if (this.velX === 0) dX = this.direction;
-      let bulletAngle =
-        Math.sign(dX) > 0 ? this.angle : -this.angle + Math.PI;
+      let bulletAngle = Math.sign(dX) > 0 ? this.angle : -this.angle + Math.PI;
       m_laser.play();
       entityManager.firePlayerBullet(
         this.cx + (vX * this.sprite.sWidth) / 2,
         this.cy + (vY * this.sprite.sHeight) / 2,
         vX * g_bulletSpeed,
         vY * g_bulletSpeed,
-        -bulletAngle
+        -bulletAngle,
       );
     }
   }
@@ -182,20 +181,20 @@ Player.prototype.changeSprite = function (du) {
   this.angle = 0;
 
   if (Math.abs(this.velX) < 1 && this.onGround) {
-    this.sprite.animation = "IDLE";
+    this.sprite.animation = 'IDLE';
   }
 
   let airborne = null;
   if (keys[this.KEY_RIGHT] || keys[this.KEY_LEFT]) {
     airborne = !this.onGround;
-    if (this.onGround) this.sprite.animation = "RUN_FORWARD"; 
+    if (this.onGround) this.sprite.animation = 'RUN_FORWARD';
     if (keys[this.KEY_UP]) {
       this.angle = Math.PI / 4;
-      if (this.onGround) this.sprite.animation += "_UP";
+      if (this.onGround) this.sprite.animation += '_UP';
     }
     if (keys[this.KEY_DOWN]) {
       this.angle = -Math.PI / 4;
-      if (this.onGround) this.sprite.animation += "_DOWN";
+      if (this.onGround) this.sprite.animation += '_DOWN';
     }
     if (this.onGround) return;
   }
@@ -203,7 +202,7 @@ Player.prototype.changeSprite = function (du) {
   if (keys[this.KEY_DOWN] && !airborne) {
     this.angle = -Math.PI / 2;
     if (this.onGround) {
-      this.sprite.animation = "LOOK_DOWN";
+      this.sprite.animation = 'LOOK_DOWN';
       return;
     }
   }
@@ -211,33 +210,32 @@ Player.prototype.changeSprite = function (du) {
   if (keys[this.KEY_UP] && !airborne) {
     this.angle = Math.PI / 2;
     if (this.onGround) {
-      this.sprite.animation = "LOOK_UP";
+      this.sprite.animation = 'LOOK_UP';
       return;
     }
   }
 
   if (!this.onGround) {
-    this.sprite.animation = "JUMP";
+    this.sprite.animation = 'JUMP';
     return;
   }
 
   if (keys[this.KEY_CROUCH]) {
-    this.sprite.animation = "CROUCH"; 
+    this.sprite.animation = 'CROUCH';
     this.crouching = true;
   }
-
 };
 
 //Render is inherited from Character
 
 Player.prototype.record = function (tag) {
-  tag.setAttribute("type", this.constructor.name);
-  tag.setAttribute("posx", this.cx);
-  tag.setAttribute("posy", this.cy);
-  tag.setAttribute("velx", this.velX);
-  tag.setAttribute("vely", this.velY);
-  tag.setAttribute("jumps", this.jumps);
-  tag.setAttribute("dirx", this.dirX);
+  tag.setAttribute('type', this.constructor.name);
+  tag.setAttribute('posx', this.cx);
+  tag.setAttribute('posy', this.cy);
+  tag.setAttribute('velx', this.velX);
+  tag.setAttribute('vely', this.velY);
+  tag.setAttribute('jumps', this.jumps);
+  tag.setAttribute('dirx', this.dirX);
   return tag;
 };
 

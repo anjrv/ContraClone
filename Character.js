@@ -91,7 +91,7 @@ Character.prototype.collideWithMap = function (du) {
 }
 
 Character.prototype.pushOut = function (cell) {
-  if (cell.content === '  ') return;
+  if (cell.content === worldMap.EMPTY_TILE) return;
 
   let tileSize = worldMap._tileSize; // unfortunatly need to access private variable of worldMap, read only though
 
