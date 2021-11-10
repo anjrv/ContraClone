@@ -19,6 +19,7 @@ function Player(descr) {
   this.direction = 1;
   this.rotation = 0;
   this.shotId = 0;
+  this.isPlayer = true;
 
   // Collisions
   this.collider = new Collider({
@@ -201,6 +202,7 @@ Player.prototype.takeBulletHit = function () {
 
   // Player takes hit
   //this.lives--;
+  this.rotation = 0;
   this.invincibleCooldown = 200;
   this.respawning = true;
 
@@ -222,7 +224,7 @@ Player.prototype.changeSprite = function (du) {
       return;
     }
   if (this.respawning) {
-    this.sprite.animation = "CROUCH";
+    this.sprite.animation = 'CROUCH';
     this.respawning = this.invincibleCooldown > 150;
     return;
   }

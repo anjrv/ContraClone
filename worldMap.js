@@ -103,13 +103,13 @@ const worldMap = {
       for (let j = 0; j < this._layers[0][i].length; j++) {
         const x = j * this._tileSize;
         const y = i * this._tileSize;
-        if (this._layers[0][i][j] === '  ' || this._layers[0][i][j] === '0')
+        if (this._layers[0][i][j] === '  ' || this._layers[0][i][j] === '0' || this._layers[0][i][j] === '1')
           continue;
         this._sprite.animation = this._layers[0][i][j];
         this._sprite.updateFrame(0);
         this._sprite.drawCentredAt(ctx, x, y, 0);
         // TODO
-        // Add this line and commented out font line above to a diagnostics toggle.
+        // Add this line and font line above to a diagnostics toggle.
         ctx.fillText(`${i} ${j}`, x, y);
       }
     }
