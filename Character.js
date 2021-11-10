@@ -116,6 +116,7 @@ Character.prototype.pushOut = function (cell) {
       - this.collider.height/2 
       - this.collider.offsetY;
     this.onGround = true;
+    if (this.isPlayer) this.sprite.animation = 'IDLE';
     this.rotation = 0;
     this.collider.cy = this.cy;
   }
