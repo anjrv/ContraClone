@@ -22,6 +22,7 @@ function Patrol(descr) {
   this.movSpeed = 1;
   this.shotCooldown = -1;
   this.shotId = 1;
+  this.hp = 2;
 }
 
 Patrol.prototype = Object.create(Character.prototype);
@@ -35,12 +36,15 @@ Patrol.prototype.update = function (du) {
 
   spatialManager.unregister(this);
 
-  if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+  if (this._isDeadNow) {
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    return entityManager.KILL_ME_NOW;
+  }
 
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2)) {
     this.computeSubStep(du);
   } else {
-    this.attack(playerLoc);
+    this.attack(playerLoc, du);
   }
 
   this.collider.cx = this.cx;
@@ -49,8 +53,15 @@ Patrol.prototype.update = function (du) {
   spatialManager.register(this);
 };
 
-Patrol.prototype.attack = function (playerLoc) {
-  this.sprite.animation = 'SHOOT';
+Patrol.prototype.attack = function (playerLoc, du) {
+  this.sprite.animation = (this.hit) ? 'HIT_SHOOT' : 'SHOOT';
+
+  this.changeCounter -= du;
+  if (this.changeCounter < 0) {
+    this.changeCounter = this.changeBase;
+    this.hit = false;
+  }
+  
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 100;
 
@@ -58,6 +69,7 @@ Patrol.prototype.attack = function (playerLoc) {
   let vX = Math.cos(angle);
   let vY = Math.sin(angle);
   this.direction = (vX < 0) ? 1 : -1;
+
 
   entityManager.fireEnemyBullet(
     this.cx,
@@ -69,17 +81,20 @@ Patrol.prototype.attack = function (playerLoc) {
 };
 
 Patrol.prototype.takeBulletHit = function () {
-  // TODO: Some sound, some hp loss
+  this.hp -= 1;
+  this.hit = true;
+  if (this.hp <= 0) this._isDeadNow = true;
 };
 
 Patrol.prototype.computeSubStep = function (du) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
-  this.sprite.animation = 'MOVE_FORWARD';
+  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
-    this.frame += 1;
+    this.frame++;
     this.changeCounter = this.changeBase;
+    this.hit = false;
   }
 
   // We're goin left
@@ -101,6 +116,7 @@ Patrol.prototype.computeSubStep = function (du) {
   }
 
   this.cx += this.dirX * this.movSpeed * du;
+
 };
 
 Patrol.prototype.render = function (ctx) {

@@ -26,6 +26,8 @@ const entityManager = {
   _bullets: [],
   _enemies: [],
   _player: [],
+  _deaths: [],
+  _explosions: [],
 
   // "PRIVATE" METHODS
 
@@ -46,7 +48,7 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    this._categories = [this._bullets, this._player, this._enemies];
+    this._categories = [this._bullets, this._player, this._enemies, this._deaths, this._explosions];
   },
 
   init: function () {
@@ -94,6 +96,29 @@ const entityManager = {
     });
 
     this._bullets.push(bullet);
+  },
+
+  makeEnemyKillAnimation: function (cx, cy, sprite, height) {
+    const death = new Death({
+      cx: cx,
+      cy: cy,
+      sprite: sprite,
+      height: height,
+    });
+
+    this._deaths.push(death);
+  },
+
+  createExplosion: function (cx, cy, size) {
+    m_explosion.play();
+    const explosion = new Explosion({
+      cx: cx,
+      cy: cy,
+      sprite: g_sprites.explosion,
+      size: size,
+    });
+
+    this._explosions.push(explosion);
   },
 
   update: function (du) {
