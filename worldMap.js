@@ -1,6 +1,8 @@
 'use strict';
 /*jslint nomen: true, white: true, plusplus: true*/
 
+let g_showWorldCoordinates = false;
+
 const worldMap = {
   EMPTY_TILE: '  ',
 
@@ -98,7 +100,6 @@ const worldMap = {
 
   render: function (ctx) {
     // this.drawBackgrounds(ctx);
-    ctx.font = '10px Arial';
     for (let i = 0; i < this._layers[0].length; i++) {
       for (let j = 0; j < this._layers[0][i].length; j++) {
         const x = j * this._tileSize;
@@ -108,9 +109,6 @@ const worldMap = {
         this._sprite.animation = this._layers[0][i][j];
         this._sprite.updateFrame(0);
         this._sprite.drawCentredAt(ctx, x, y, 0);
-        // TODO
-        // Add this line and font line above to a diagnostics toggle.
-        ctx.fillText(`${i} ${j}`, x, y);
       }
     }
     this.debugRender(ctx);
@@ -152,8 +150,23 @@ const worldMap = {
   },
 
   debugRender: function (ctx) {
-    if (this._debug_showGridLines) this._debug_RenderGridLines(ctx);
-    if (this._debug_showCollisionBoxes) this._debug_RenderCollisionBoxes(ctx);
+    if (this._debug_showCollisionBoxes) this._debug_RenderCollisionBoxes(ctx); // not really used
+    if (g_showWorldCoordinates) this._debug_RenderWorldIndecies(ctx);
+  },
+
+  _debug_RenderWorldIndecies: function(ctx) {
+    let oldFont = ctx.font;
+    let oldAlignment = ctx.textAlign;
+    ctx.font = '10px Arial';
+    for (let i = 0; i < this._layers[0].length; i++) {
+      for (let j = 0; j < this._layers[0][i].length; j++) {
+        const x = j * this._tileSize;
+        const y = i * this._tileSize;
+        ctx.fillText(`${i}-${j}`, x, y);
+      }
+    }
+    ctx.font = oldFont;
+    ctx.textAlign = oldAlignment;
   },
 
   _debug_RenderGridLines: function (ctx) {
