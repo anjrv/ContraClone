@@ -1,6 +1,14 @@
 function Patrol(descr) {
   Character.call(this, descr);
-  this.sprite = g_sprites.patrol;
+  this.sprite = new Sprite(g_images.enemies, 16, 1, 26, 26)
+  this.sprite.animations = {
+    IDLE: [0],
+    MOVE: [0,1,2,3,4,5,6,7],
+    SHOOT: [0],
+    DEATH: [6,14],
+    HIT_MOVE: [8,9,10,11,12,13,14,15],
+    HIT_SHOOT: [8],
+  };
   this.scale = 2;
   this.frame = 0;
   this.changeCounter = 5;
@@ -37,8 +45,10 @@ Patrol.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
+    console.log(g_sprites.patrol)
     entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
     return entityManager.KILL_ME_NOW;
+   
   }
 
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2)) {
@@ -61,7 +71,7 @@ Patrol.prototype.attack = function (playerLoc, du) {
     this.changeCounter = this.changeBase;
     this.hit = false;
   }
-  
+
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 100;
 
