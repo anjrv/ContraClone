@@ -15,13 +15,16 @@ function Patrol(descr) {
   this.changeBase = this.changeCounter;
   this.sprite.animation = 'IDLE';
 
+  const SPRITE_SIZE = 26 * this.scale;
+  this.cy += (worldMap.getTileSize() - SPRITE_SIZE) / 2;
+
   // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: this.cx,
     cy: this.cy,
-    width: 26 * this.scale,
-    height: 26 * this.scale,
+    width: SPRITE_SIZE,
+    height: SPRITE_SIZE,
     offsetY: 0,
   });
 
