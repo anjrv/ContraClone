@@ -173,6 +173,12 @@ function preloadDone() {
   g_sprites.flashPlasma  = new Sprite(g_images.flashPlasma)
   g_sprites.flashSun     = new Sprite(g_images.flashSun)
   g_sprites.enemies      = new Sprite(g_images.enemies)
+  g_sprites.patrol       = new Sprite(g_images.enemies, 8, 1, 26, 26)
+  g_sprites.patrol.animations = {
+    IDLE: [0],
+    MOVE_FORWARD: [0,1,2,3,4,5,6,7],
+    SHOOT: [0],
+  }
   g_sprites.tilesheet    = new Sprite(g_images.tilesheet, 27, 44, 16, 16)
   g_sprites.tilesheet.animations = {
     AA: [0],   AB: [1],   AC: [2],   AD: [3],   AE: [4],   AF: [5],   AG: [6],   AH: [7],   AI: [8],   AJ: [9],   AK: [10],  AL: [11],  AM: [12],  AN: [13],  AO: [14],  AP: [15],  AQ: [16],  AR: [17],  AS: [18],  AT: [19],  AU: [20],  AV: [21],  AW: [22],  AX: [23],  AY: [24],  AZ: [25],  AÐ: [26],

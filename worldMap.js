@@ -109,7 +109,7 @@ const worldMap = {
         this._sprite.updateFrame(0);
         this._sprite.drawCentredAt(ctx, x, y, 0);
         // TODO
-        // Add this line and commented out font line above to a diagnostics toggle.
+        // Add this line and font line above to a diagnostics toggle.
         ctx.fillText(`${i} ${j}`, x, y);
       }
     }

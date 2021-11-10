@@ -1,13 +1,19 @@
 function Patrol(descr) {
   Character.call(this, descr);
+  this.sprite = g_sprites.patrol;
+  this.scale = 2;
+  this.frame = 0;
+  this.changeCounter = 5;
+  this.changeBase = this.changeCounter;
+  this.sprite.animation = 'IDLE';
 
   // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: this.cx,
     cy: this.cy,
-    width: p_realSize / 2,
-    height: p_realSize / 2,
+    width: 26 * this.scale,
+    height: 26 * this.scale,
     offsetY: 0,
   });
 
@@ -44,12 +50,14 @@ Patrol.prototype.update = function (du) {
 };
 
 Patrol.prototype.attack = function (playerLoc) {
+  this.sprite.animation = 'SHOOT';
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 100;
 
   const angle = util.angle(this.cx, this.cy, playerLoc.cx, playerLoc.cy)
   let vX = Math.cos(angle);
   let vY = Math.sin(angle);
+  this.direction = (vX < 0) ? 1 : -1;
 
   entityManager.fireEnemyBullet(
     this.cx,
@@ -67,12 +75,20 @@ Patrol.prototype.takeBulletHit = function () {
 Patrol.prototype.computeSubStep = function (du) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
+  this.sprite.animation = 'MOVE_FORWARD';
+  this.changeCounter -= du;
+  if (this.changeCounter < 0) {
+    this.frame += 1;
+    this.changeCounter = this.changeBase;
+  }
+
   // We're goin left
   if (this.dirX < 0) {
     const left = worldMap.getTileType(currLoc.row, currLoc.col - 1);
     const leftDown = worldMap.getTileType(currLoc.row + 1, currLoc.col - 1);
 
     if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE)) this.dirX *= -1;
+    this.direction = 1;
   }
 
   // We're goin right
@@ -81,20 +97,17 @@ Patrol.prototype.computeSubStep = function (du) {
     const rightDown = worldMap.getTileType(currLoc.row + 1, currLoc.col + 1);
 
     if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE)) this.dirX *= -1;
+    this.direction = -1;
   }
 
   this.cx += this.dirX * this.movSpeed * du;
 };
 
 Patrol.prototype.render = function (ctx) {
-  util.fillBoxCentered(
-    ctx,
-    this.cx,
-    this.cy,
-    p_realSize / 2,
-    p_realSize / 2,
-    'teal',
-  );
+  if (!this.sprite.animation) return;
+  this.sprite.scale = this.scale;
+  this.sprite.updateFrame(this.frame || 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
   this.debugRender(ctx);
 };
 
