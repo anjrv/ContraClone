@@ -90,7 +90,6 @@ const entityManager = {
   firePlayerBulletFire: function (cx, cy, velX, velY, rotation, type) {
     const bullet = new Bullet({
       cx: cx,
-      cx: cx,
       cy: cy,
       velX: velX,
       velY: velY,
@@ -101,21 +100,21 @@ const entityManager = {
     })
     this._bullets.push(bullet)
   },
+  // TODO
+  // Fix the angles and velocity of triple shots
 
   firePlayerBulletTriple: function (cx, cy, velX, velY, rotation, type) {
     const bullet1 = new Bullet({
       cx: cx,
-      cx: cx,
       cy: cy,
-      velX: velX - 5,
-      velY: velY - 5,
-      rotation: rotation - 50,
+      velX: velX - Math.sign(velX) * 3,
+      velY: (velY === 0) ? velY - 3 : (velX < 0.1 && velX > -0.1) ? velY - (Math.sign(velY+1)) * 3 : velY + Math.sign(velY+1) * 3,
+      rotation: rotation,
       owner: 0,
       anim: 'LASER',
       type: type,
     })
     const bullet2 = new Bullet({
-      cx: cx,
       cx: cx,
       cy: cy,
       velX: velX,
@@ -127,11 +126,10 @@ const entityManager = {
     })
     const bullet3 = new Bullet({
       cx: cx,
-      cx: cx,
       cy: cy,
-      velX: velX + 5,
-      velY: velY + 5,
-      rotation: rotation + 50,
+      velX: velX - Math.sign(velX-1) * 3,
+      velY: (velY === 0) ? velY + 3 : (velX < 0.1 && velX > -0.1) ? velY - (Math.sign(velY-1)) * 3 : velY + Math.sign(velY-1) * 3,
+      rotation: rotation,
       owner: 0,
       anim: 'LASER',
       type: type,
