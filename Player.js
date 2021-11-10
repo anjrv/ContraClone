@@ -75,10 +75,6 @@ Player.prototype.update = function (du) {
   this.changeSprite(du);
   this.maybeShoot();
 
-  this.collider.cx = this.cx;
-  this.collider.cy = this.cy;
-
-  if (!this.onGround) this.rotation += 0.4 * du * this.direction;
   spatialManager.register(this);
 };
 
@@ -91,14 +87,30 @@ Player.MAX_TURNAROUND_FORCE = 10.0;
 Player.prototype.computeSubStep = function (du) {
   let gravityAcc = this.computeGravity();
   gravityAcc = Math.min(worldMap.getTileSize() * 0.8, gravityAcc);
-  let acceleration = 0;
 
   if (this.respawning) {
     // Player is respawning, they are only affected by gravity
     this.applyAccel(-Player.NOMINAL_FRICTION * this.velX, gravityAcc, du);
     return;
   }
+  
+  let horizAcc = this.computeHorizontalAccel();
 
+  gravityAcc = this.handleJump(gravityAcc, du);
+
+  // Some flying capabiltiy
+  if (keys[this.KEY_FLYUP]) {
+    this.cy -= 10;
+    gravityAcc = 0;
+    this.velY *= 0.5; // this makes flying easier but destroys collision with worldMap
+  }
+
+  this.applyAccel(horizAcc, gravityAcc, du);
+};
+
+// Computes the horizontal acceleration of the Player based on the user input
+Player.prototype.computeHorizontalAccel = function () {
+  let acceleration = 0;
   if (keys[this.KEY_LEFT]) {
     this.direction = -1;
     acceleration -=
@@ -120,34 +132,38 @@ Player.prototype.computeSubStep = function (du) {
   } else if (this.onGround) {
     acceleration -= Player.NOMINAL_FRICTION * this.velX;
   }
+  return acceleration;
+}
 
+// Handles logic for Player jump
+Player.prototype.handleJump = function (acc, du) {
+  // Make controllable jumps by scaling down velY when Player is jumping but 
+  // the jump key has been released
   if (!keys[this.KEY_JUMP] && this.jumping) {
     this.velY *= 0.5;
     this.jumping = false;
   }
-
+  // Reset jumps when Player is on the ground
   if (this.onGround) {
     this.jumps = 0;
   }
 
+  // Player jumps
   if (keys[this.KEY_JUMP] && !this.jumping && this.jumps < Player.MAX_JUMPS) {
     this.verticalCollision = false;
     this.onGround = false;
-    gravityAcc = -20.0;
+    acc = -20.0;
     this.jumps++;
     this.jumping = true;
   }
+  
+  // make a sick flip in the air
+  if (!this.onGround) this.rotation += 0.3 * du * this.direction;
 
-  if (keys[this.KEY_FLYUP]) {
-    this.cy -= 10;
-  }
+  return acc;
+}
 
-  this.applyAccel(acceleration, gravityAcc, du);
-
-  this.collider.cx = this.cx;
-  this.collider.cy = this.cy;
-};
-
+// Shoots if the Player can shoot
 Player.prototype.maybeShoot = function () {
   // If player is respawning they can't shoot
   if (this.respawning) return; 
@@ -185,7 +201,7 @@ Player.prototype.takeBulletHit = function () {
 
   // Player takes hit
   //this.lives--;
-  this.invincibleCooldown = 100;
+  this.invincibleCooldown = 200;
   this.respawning = true;
 
   // If Player looses all his lives, either respawn at beginning or let entityManager handle it
@@ -207,7 +223,7 @@ Player.prototype.changeSprite = function (du) {
     }
   if (this.respawning) {
     this.sprite.animation = "CROUCH";
-    this.respawning = this.invincibleCooldown > 50;
+    this.respawning = this.invincibleCooldown > 150;
     return;
   }
 
@@ -276,6 +292,7 @@ Player.prototype.render = function (ctx) {
   this.debugRender(ctx);
 }
 
+// Records variables that Player can use to restore itself
 Player.prototype.record = function (tag) {
   tag.setAttribute('type', this.constructor.name);
   tag.setAttribute('posx', this.cx);
@@ -287,6 +304,7 @@ Player.prototype.record = function (tag) {
   return tag;
 };
 
+// Creates a descr object passed into constructor
 Player.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.posx.nodeValue);
   let cy = Number.parseFloat(record.attributes.posy.nodeValue);
