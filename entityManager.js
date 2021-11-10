@@ -81,6 +81,7 @@ const entityManager = {
       velY: velY,
       rotation: rotation,
       owner: 0,
+      anim: 'LASER',
     });
     this._bullets.push(bullet);
   },
@@ -93,6 +94,7 @@ const entityManager = {
       velY: velY,
       rotation: rotation,
       owner: 1,
+      anim: 'PLASMA',
     });
 
     this._bullets.push(bullet);

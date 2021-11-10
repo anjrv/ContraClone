@@ -93,7 +93,7 @@ Bullet.prototype.render = function (ctx) {
   if (this.lifeSpan < fadeThresh) {
     ctx.globalAlpha = this.lifeSpan / fadeThresh;
   }
-  this.sprite.animation = "FIRE";
+  this.sprite.animation = this.anim;
   this.sprite.updateFrame(0);
   this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 
