@@ -202,6 +202,7 @@ Player.prototype.takeBulletHit = function () {
 
   // Player takes hit
   //this.lives--;
+  this.rotation = 0;
   this.invincibleCooldown = 200;
   this.respawning = true;
 
