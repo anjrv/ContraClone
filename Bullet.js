@@ -72,7 +72,7 @@ Bullet.prototype.update = function (du) {
   //
   const hitEntity = this.findHitEntity();
 
-  if (hitEntity && hitEntity.shotId !== this.owner) {
+  if (hitEntity && hitEntity.shotId !== this.owner && hitEntity.constructor.name !== 'Bullet') {
     const canTakeHit = hitEntity.takeBulletHit;
     if (canTakeHit) canTakeHit.call(hitEntity);
     return entityManager.KILL_ME_NOW;
@@ -85,12 +85,7 @@ Bullet.prototype.getRadius = function () {
   return 4;
 };
 
-Bullet.prototype.takeBulletHit = function () {
-  this.kill();
-
-  // Make a noise when I am zapped by another bullet
-  // this.zappedSound.play();
-};
+Bullet.prototype.takeBulletHit = false;
 
 Bullet.prototype.render = function (ctx) {
   const fadeThresh = Bullet.prototype.lifeSpan / 3;
