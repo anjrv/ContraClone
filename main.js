@@ -151,11 +151,12 @@ main._debugRender = function (ctx) {
 
   if (!this._doTimerShow) return;
 
-  let y = 350;
-  ctx.fillText('FT ' + this._frameTime_ms, 50, y + 10);
-  ctx.fillText('FD ' + this._frameTimeDelta_ms, 50, y + 20);
-  ctx.fillText('UU ' + g_prevUpdateDu, 50, y + 30);
-  ctx.fillText('FrameSync ON', 50, y + 40);
+  let y = 600;
+  ctx.textAlign = 'left';
+  ctx.fillText('FT ' + this._frameTime_ms, 200, y + 10);
+  ctx.fillText('FD ' + this._frameTimeDelta_ms, 200, y + 50);
+  ctx.fillText('UU ' + g_prevUpdateDu, 200, y + 100);
+  ctx.fillText('FrameSync ON', 200, y + 150);
 };
 
 main.init = function () {
