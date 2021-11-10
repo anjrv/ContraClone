@@ -20,6 +20,9 @@ function Player(descr) {
   this.rotation = 0;
   this.shotId = 0;
   this.isPlayer = true;
+  this.noPowerup = false;
+  this.firePowerup = false;
+  this.triplePowerup = true;
 
   // Collisions
   this.collider = new Collider({
@@ -171,7 +174,8 @@ Player.prototype.maybeShoot = function () {
 
   if (keys[this.KEY_SHOOT]) {
     if (this.shootCountdown < 0) {
-      this.shootCountdown = 10;
+      this.shootCountdown = (this.firePowerup) ? 1 : 10;
+   
       // Calculate the direction of the bullet.
       let vX =
         this.velX === 0
@@ -184,13 +188,34 @@ Player.prototype.maybeShoot = function () {
       m_laser.play();
 
       // let entityManager add a Bullet entity
-      entityManager.firePlayerBullet(
-        this.cx + (vX * this.sprite.sWidth),
-        this.cy + (vY * this.sprite.sHeight),
-        vX * g_bulletSpeed,
-        vY * g_bulletSpeed,
-        -bulletAngle,
-      );
+      if (this.noPowerup) {
+        entityManager.firePlayerBullet(
+          this.cx + (vX * this.sprite.sWidth),
+          this.cy + (vY * this.sprite.sHeight),
+          vX * g_bulletSpeed,
+          vY * g_bulletSpeed,
+          -bulletAngle,
+          'NORMALBULLET'
+        );
+      } else if (this.firePowerup) {
+        entityManager.firePlayerBulletFire(
+          this.cx + (vX * this.sprite.sWidth),
+          this.cy + (vY * this.sprite.sHeight),
+          vX * g_bulletSpeed,
+          vY * g_bulletSpeed,
+          -bulletAngle,
+          'FIREBULLET'
+        );
+      } else if (this.triplePowerup) {
+        entityManager.firePlayerBulletTriple(
+          this.cx + (vX * this.sprite.sWidth),
+          this.cy + (vY * this.sprite.sHeight),
+          vX * g_bulletSpeed,
+          vY * g_bulletSpeed,
+          -bulletAngle,
+          'TRIPLEBULLET'
+        );
+      }
     }
   }
 };

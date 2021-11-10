@@ -73,7 +73,7 @@ const entityManager = {
     }
   },
 
-  firePlayerBullet: function (cx, cy, velX, velY, rotation) {
+  firePlayerBullet: function (cx, cy, velX, velY, rotation, type) {
     const bullet = new Bullet({
       cx: cx,
       cy: cy,
@@ -82,8 +82,63 @@ const entityManager = {
       rotation: rotation,
       owner: 0,
       anim: 'LASER',
+      type: type,
     });
     this._bullets.push(bullet);
+  },
+
+  firePlayerBulletFire: function (cx, cy, velX, velY, rotation, type) {
+    const bullet = new Bullet({
+      cx: cx,
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+      anim: 'FIRE',
+      type: type,
+    })
+    this._bullets.push(bullet)
+  },
+
+  firePlayerBulletTriple: function (cx, cy, velX, velY, rotation, type) {
+    const bullet1 = new Bullet({
+      cx: cx,
+      cx: cx,
+      cy: cy,
+      velX: velX - 5,
+      velY: velY - 5,
+      rotation: rotation - 50,
+      owner: 0,
+      anim: 'LASER',
+      type: type,
+    })
+    const bullet2 = new Bullet({
+      cx: cx,
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+      anim: 'LASER',
+      type: type,
+    })
+    const bullet3 = new Bullet({
+      cx: cx,
+      cx: cx,
+      cy: cy,
+      velX: velX + 5,
+      velY: velY + 5,
+      rotation: rotation + 50,
+      owner: 0,
+      anim: 'LASER',
+      type: type,
+    })
+    this._bullets.push(bullet1);
+    this._bullets.push(bullet2);
+    this._bullets.push(bullet3);
   },
 
   fireEnemyBullet: function (cx, cy, velX, velY, rotation) {
