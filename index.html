@@ -39,11 +39,17 @@
         <label for="collisionRender">Render Collision Volumes</label>
         <input id="collisionRender" type="checkbox"/>
       </div>
+      <div>
+        <label for="indexWorldCoordinates">Index world coorinates</label>
+        <input id="indexWorldCoordinates" type="checkbox"/>
+      </div>
       <button onclick="
         let collisionWithWorld = document.getElementById('showCharCollsionWithWorld');
         g_char_debug_showCollisions = collisionWithWorld.checked;
         let collisionRender = document.getElementById('collisionRender');
         g_renderSpatialDebug = collisionRender.checked;
+        let worldCoordinates = document.getElementById('indexWorldCoordinates');
+        g_showWorldCoordinates = worldCoordinates.checked;
         document.getElementById('devtools').style.display = 'none';
       ">Apply</button>
     </div>
