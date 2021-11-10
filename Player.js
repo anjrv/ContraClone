@@ -185,8 +185,8 @@ Player.prototype.maybeShoot = function () {
 
       // let entityManager add a Bullet entity
       entityManager.firePlayerBullet(
-        this.cx + (vX * this.sprite.sWidth) / 2,
-        this.cy + (vY * this.sprite.sHeight) / 2,
+        this.cx + (vX * this.sprite.sWidth),
+        this.cy + (vY * this.sprite.sHeight),
         vX * g_bulletSpeed,
         vY * g_bulletSpeed,
         -bulletAngle,
