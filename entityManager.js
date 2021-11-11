@@ -48,7 +48,13 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    this._categories = [this._bullets, this._player, this._enemies, this._deaths, this._explosions];
+    this._categories = [
+      this._bullets,
+      this._player,
+      this._enemies,
+      this._deaths,
+      this._explosions,
+    ];
   },
 
   init: function () {
@@ -76,7 +82,7 @@ const entityManager = {
           cy: cy,
           velX: velX,
           velY: velY,
-        })
+        });
         this._enemies.push(aPatrol);
         break;
       case '3':
@@ -85,8 +91,17 @@ const entityManager = {
           cy: cy,
           velX: velX,
           velY: velY,
-        })
+        });
         this._enemies.push(charger);
+        break;
+      case '4':
+        const pursuer = new Pursuer({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY,
+        });
+        this._enemies.push(pursuer);
         break;
     }
   },
@@ -115,8 +130,8 @@ const entityManager = {
       owner: 0,
       anim: 'FIRE',
       type: type,
-    })
-    this._bullets.push(bullet)
+    });
+    this._bullets.push(bullet);
   },
   // TODO
   // Fix the angles and velocity of triple shots
@@ -126,12 +141,17 @@ const entityManager = {
       cx: cx,
       cy: cy,
       velX: velX - Math.sign(velX) * 3,
-      velY: (velY === 0) ? velY - 3 : (velX < 0.1 && velX > -0.1) ? velY - (Math.sign(velY+1)) * 3 : velY + Math.sign(velY+1) * 3,
+      velY:
+        velY === 0
+          ? velY - 3
+          : velX < 0.1 && velX > -0.1
+          ? velY - Math.sign(velY + 1) * 3
+          : velY + Math.sign(velY + 1) * 3,
       rotation: rotation,
       owner: 0,
       anim: 'LASER',
       type: type,
-    })
+    });
     const bullet2 = new Bullet({
       cx: cx,
       cy: cy,
@@ -141,17 +161,22 @@ const entityManager = {
       owner: 0,
       anim: 'LASER',
       type: type,
-    })
+    });
     const bullet3 = new Bullet({
       cx: cx,
       cy: cy,
-      velX: velX - Math.sign(velX-1) * 3,
-      velY: (velY === 0) ? velY + 3 : (velX < 0.1 && velX > -0.1) ? velY - (Math.sign(velY-1)) * 3 : velY + Math.sign(velY-1) * 3,
+      velX: velX - Math.sign(velX - 1) * 3,
+      velY:
+        velY === 0
+          ? velY + 3
+          : velX < 0.1 && velX > -0.1
+          ? velY - Math.sign(velY - 1) * 3
+          : velY + Math.sign(velY - 1) * 3,
       rotation: rotation,
       owner: 0,
       anim: 'LASER',
       type: type,
-    })
+    });
     this._bullets.push(bullet1);
     this._bullets.push(bullet2);
     this._bullets.push(bullet3);

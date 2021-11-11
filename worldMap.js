@@ -69,7 +69,7 @@ const worldMap = {
     for (let i = up; i < down; i++) {
       for (let j = left; j < right; j++) {
         const val = this._layers[0][i][j];
-        if (val === '1' || val === '2' || val === '3') {
+        if (val === '1' || val === '2' || val === '3' || val === '4') {
           const x = j * this._tileSize;
           const y = i * this._tileSize;
           this._layers[0][i][j] = worldMap.EMPTY_TILE;
@@ -112,7 +112,8 @@ const worldMap = {
           val === '0' ||
           val === '1' ||
           val === '2' ||
-          val === '3'
+          val === '3' ||
+          val === '4'
         )
           continue;
         this._sprite.animation = this._layers[0][i][j];
