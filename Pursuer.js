@@ -165,7 +165,7 @@ Pursuer.prototype.attack = function (du) {
     this.cy,
     g_bulletSpeed * this.dirX,
     0,
-    this.dirX
+    0,
   );
 };
 
