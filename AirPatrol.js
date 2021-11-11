@@ -1,30 +1,29 @@
-function Patrol(descr) {
+function AirPatrol(descr) {
   Character.call(this, descr);
-  this.sprite = new Sprite(g_images.enemies, 16, 1, 26, 26)
+
+  // Just a temp malformed image so the main methods can remain
+  this.sprite = new Sprite(g_images.enemies, 8, 2, 28, 32);
   this.sprite.animations = {
-    IDLE: [0],
-    MOVE: [0,1,2,3,4,5,6,7],
-    SHOOT: [0],
-    DEATH: [6,14],
-    HIT_MOVE: [8,9,10,11,12,13,14,15],
-    HIT_SHOOT: [8],
+    MOVE: [8],
   };
+
   this.scale = 2;
   this.frame = 0;
   this.changeCounter = 5;
   this.changeBase = this.changeCounter;
-  this.sprite.animation = 'IDLE';
+  this.sprite.animation = 'MOVE';
 
-  const SPRITE_SIZE = 26 * this.scale;
-  this.cy += (worldMap.getTileSize() - SPRITE_SIZE) / 2;
+  const SPRITE_WIDTH = 28 * this.scale;
+  const SPRITE_HEIGHT = 32 * this.scale;
+  this.cy += (worldMap.getTileSize() - SPRITE_HEIGHT) / 2;
 
   // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: this.cx,
     cy: this.cy,
-    width: SPRITE_SIZE,
-    height: SPRITE_SIZE,
+    width: SPRITE_WIDTH,
+    height: SPRITE_HEIGHT,
     offsetY: 0,
   });
 
@@ -34,12 +33,14 @@ function Patrol(descr) {
   this.shotCooldown = -1;
   this.shotId = 1;
   this.hp = 2;
+  this.leashLoc = this.cx; // Leash to spawn
+  this.leashLength = 200;
 }
 
-Patrol.prototype = Object.create(Character.prototype);
-Patrol.prototype.constructor = Patrol;
+AirPatrol.prototype = Object.create(Character.prototype);
+AirPatrol.prototype.constructor = AirPatrol;
 
-Patrol.prototype.update = function (du) {
+AirPatrol.prototype.update = function (du) {
   const playerLoc = this.shouldUpdate();
   if (!playerLoc) return;
 
@@ -48,9 +49,14 @@ Patrol.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    // Current sprite is invalid
+    // entityManager.makeEnemyKillAnimation(
+    //   this.cx,
+    //   this.cy,
+    //   this.sprite,
+    //   this.collider.height,
+    // );
     return entityManager.KILL_ME_NOW;
-   
   }
 
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2)) {
@@ -65,81 +71,81 @@ Patrol.prototype.update = function (du) {
   spatialManager.register(this);
 };
 
-Patrol.prototype.attack = function (playerLoc, du) {
-  this.sprite.animation = (this.hit) ? 'HIT_SHOOT' : 'SHOOT';
-
+AirPatrol.prototype.attack = function (playerLoc, du) {
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
     this.changeCounter = this.changeBase;
-    this.hit = false;
   }
 
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 100;
 
-  const angle = util.angle(this.cx, this.cy, playerLoc.cx, playerLoc.cy)
+  const angle = util.angle(this.cx, this.cy, playerLoc.cx, playerLoc.cy);
   let vX = Math.cos(angle);
   let vY = Math.sin(angle);
-  this.direction = (vX < 0) ? 1 : -1;
-
+  this.direction = vX < 0 ? 1 : -1;
 
   entityManager.fireEnemyBullet(
     this.cx,
     this.cy,
     vX * g_bulletSpeed,
     vY * g_bulletSpeed,
-    angle 
+    angle,
   );
 };
 
-Patrol.prototype.takeBulletHit = function () {
+AirPatrol.prototype.takeBulletHit = function () {
   this.hp -= 1;
   this.hit = true;
   if (this.hp <= 0) this._isDeadNow = true;
 };
 
-Patrol.prototype.computeSubStep = function (du) {
+AirPatrol.prototype.computeSubStep = function (du) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
-  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
     this.frame++;
     this.changeCounter = this.changeBase;
-    this.hit = false;
   }
 
-  // We're goin left
+  // Check if we violate leash, turn around if so
+  const nextX = this.cx + this.dirX * this.movSpeed * du;
+  if (Math.abs(this.leashLoc - nextX) > this.leashLength) this.dirX *= -1;
+
+  // Don't walk into walls.. or do?
   if (this.dirX < 0) {
     const left = worldMap.getTileType(currLoc.row, currLoc.col - 1);
-    const leftDown = worldMap.getTileType(currLoc.row + 1, currLoc.col - 1);
 
-    if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE)) this.dirX *= -1;
+    if (!(left === worldMap.EMPTY_TILE)) this.dirX *= -1;
     this.direction = 1;
   }
 
-  // We're goin right
   if (this.dirX > 0) {
     const right = worldMap.getTileType(currLoc.row, currLoc.col + 1);
-    const rightDown = worldMap.getTileType(currLoc.row + 1, currLoc.col + 1);
 
-    if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE)) this.dirX *= -1;
+    if (!(right === worldMap.EMPTY_TILE)) this.dirX *= -1;
     this.direction = -1;
   }
 
   this.cx += this.dirX * this.movSpeed * du;
-
 };
 
-Patrol.prototype.render = function (ctx) {
+AirPatrol.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    this.direction < 0,
+  );
   this.debugRender(ctx);
 };
 
-Patrol.prototype.record = function (tag) {
+AirPatrol.prototype.record = function (tag) {
   tag.setAttribute('type', this.constructor.name);
   tag.setAttribute('cx', this.cx);
   tag.setAttribute('cy', this.cy);
@@ -147,7 +153,7 @@ Patrol.prototype.record = function (tag) {
   return tag;
 };
 
-Patrol.parseRecord = function (record) {
+AirPatrol.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.cx.nodeValue);
   let cy = Number.parseFloat(record.attributes.cy.nodeValue);
   let dirX = Number.parseInt(record.attributes.dirx.nodeValue);

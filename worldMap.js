@@ -68,10 +68,10 @@ const worldMap = {
 
     for (let i = up; i < down; i++) {
       for (let j = left; j < right; j++) {
-        if (this._layers[0][i][j] === '1') {
+        if (this._layers[0][i][j] === '1' || this._layers[0][i][j] === '2') {
           const x = j * this._tileSize;
           const y = i * this._tileSize;
-          entityManager.spawnEnemy('1', x, y);
+          entityManager.spawnEnemy(this._layers[0][i][j], x, y);
           this._layers[0][i][j] = worldMap.EMPTY_TILE;
         }
       }

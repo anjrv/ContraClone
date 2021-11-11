@@ -70,6 +70,15 @@ const entityManager = {
         });
         this._enemies.push(patrol);
         break;
+      case '2':
+        const aPatrol = new AirPatrol({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY,
+        })
+        this._enemies.push(aPatrol);
+        break;
     }
   },
 
