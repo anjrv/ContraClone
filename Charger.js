@@ -22,6 +22,7 @@ function Charger(descr) {
   this.rotation = 0;
   this.isPlayer = false;
   this.onGround = true;
+  this.stuckCheck = 0;
   this.NOMINAL_ACC = 0.2;
   this.MAX_VEL = 12.0;
   this.MAX_TURNAROUND_FORCE = 5.0;
@@ -60,6 +61,8 @@ Charger.prototype.update = function (du) {
   this.prev_cy = this.cy;
   this.computeSubStep(du, playerLoc);
   this.collideWithMap(du);
+
+  if (this.prev_cx === this.cx) this.stuckCheck++;
 
   spatialManager.register(this);
 };
@@ -102,11 +105,22 @@ Charger.prototype.computeHorizontalAccel = function (playerLoc) {
 Charger.prototype.handleJump = function (acc, currLoc, playerLoc) {
   if (!this.onGround) return acc;
 
+  // I'm fucking stuck
+  if (this.stuckCheck > 20) {
+    this.onGround = false;
+    this.stuckCheck = 0;
+    acc = -20.0;
+
+    return acc;
+  }
+
   // Don't care about other stuff if player is close
   // Some weird fuckery to get this to behave somewhat reasonably
   const playerTile = worldMap.getIndeciesFromCoords(playerLoc.cx, playerLoc.cy);
-  const myTile = worldMap.getIndeciesFromCoords(this.cx, this.cy);
-  if (playerTile.row + 1 < myTile.row && Math.abs(playerLoc.cx - this.cx) < 100) {
+  if (
+    playerTile.row + 1 < currLoc.row &&
+    Math.abs(playerLoc.cx - this.cx) < 100
+  ) {
     this.onGround = false;
     acc = -20.0;
 
