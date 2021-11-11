@@ -159,13 +159,16 @@ function preloadDone() {
   g_sprites.impactFire   = new Sprite(g_images.impactFire)
   g_sprites.impactPlasma = new Sprite(g_images.impactPlasma)
   g_sprites.impactSun    = new Sprite(g_images.impactSun)
-  g_sprites.explosion    = new Sprite(g_images.explosion)
+  g_sprites.explosion    = new Sprite(g_images.explosion, 12, 1, 24, 24)
+  g_sprites.explosion.animations = {
+    EXPLODE: [0,1,2,3,4,5,6,7,8,9,10,11],
+  }
   g_sprites.powerups     = new Sprite(g_images.powerups)
   g_sprites.projectiles  = new Sprite(g_images.projectiles, 13, 7, 28, 28)
   g_sprites.projectiles.animations = {
     LASER: [0],
     PLASMA: [13],
-    FIRE: [26],
+    FIRE: [26, 26, 26, 26, 39, 52, 65],
   };
   g_sprites.flashWhite   = new Sprite(g_images.flashWhite)
   g_sprites.flashAcid    = new Sprite(g_images.flashAcid)
@@ -173,11 +176,14 @@ function preloadDone() {
   g_sprites.flashPlasma  = new Sprite(g_images.flashPlasma)
   g_sprites.flashSun     = new Sprite(g_images.flashSun)
   g_sprites.enemies      = new Sprite(g_images.enemies)
-  g_sprites.patrol       = new Sprite(g_images.enemies, 8, 1, 26, 26)
+  g_sprites.patrol       = new Sprite(g_images.enemies, 16, 1, 26, 26)
   g_sprites.patrol.animations = {
     IDLE: [0],
-    MOVE_FORWARD: [0,1,2,3,4,5,6,7],
+    MOVE: [0,1,2,3,4,5,6,7],
     SHOOT: [0],
+    DEATH: [6,14],
+    HIT_MOVE: [8,9,10,11,12,13,14,15],
+    HIT_SHOOT: [8],
   }
   g_sprites.tilesheet    = new Sprite(g_images.tilesheet, 27, 44, 16, 16)
   g_sprites.tilesheet.animations = {

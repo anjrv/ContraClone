@@ -26,6 +26,8 @@ const entityManager = {
   _bullets: [],
   _enemies: [],
   _player: [],
+  _deaths: [],
+  _explosions: [],
 
   // "PRIVATE" METHODS
 
@@ -46,7 +48,7 @@ const entityManager = {
   // i.e. thing which need `this` to be defined.
   //
   deferredSetup: function () {
-    this._categories = [this._bullets, this._player, this._enemies];
+    this._categories = [this._bullets, this._player, this._enemies, this._deaths, this._explosions];
   },
 
   init: function () {
@@ -71,7 +73,7 @@ const entityManager = {
     }
   },
 
-  firePlayerBullet: function (cx, cy, velX, velY, rotation) {
+  firePlayerBullet: function (cx, cy, velX, velY, rotation, type) {
     const bullet = new Bullet({
       cx: cx,
       cy: cy,
@@ -79,8 +81,62 @@ const entityManager = {
       velY: velY,
       rotation: rotation,
       owner: 0,
+      anim: 'LASER',
+      type: type,
     });
     this._bullets.push(bullet);
+  },
+
+  firePlayerBulletFire: function (cx, cy, velX, velY, rotation, type) {
+    const bullet = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+      anim: 'FIRE',
+      type: type,
+    })
+    this._bullets.push(bullet)
+  },
+  // TODO
+  // Fix the angles and velocity of triple shots
+
+  firePlayerBulletTriple: function (cx, cy, velX, velY, rotation, type) {
+    const bullet1 = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX - Math.sign(velX) * 3,
+      velY: (velY === 0) ? velY - 3 : (velX < 0.1 && velX > -0.1) ? velY - (Math.sign(velY+1)) * 3 : velY + Math.sign(velY+1) * 3,
+      rotation: rotation,
+      owner: 0,
+      anim: 'LASER',
+      type: type,
+    })
+    const bullet2 = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+      anim: 'LASER',
+      type: type,
+    })
+    const bullet3 = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX - Math.sign(velX-1) * 3,
+      velY: (velY === 0) ? velY + 3 : (velX < 0.1 && velX > -0.1) ? velY - (Math.sign(velY-1)) * 3 : velY + Math.sign(velY-1) * 3,
+      rotation: rotation,
+      owner: 0,
+      anim: 'LASER',
+      type: type,
+    })
+    this._bullets.push(bullet1);
+    this._bullets.push(bullet2);
+    this._bullets.push(bullet3);
   },
 
   fireEnemyBullet: function (cx, cy, velX, velY, rotation) {
@@ -91,9 +147,33 @@ const entityManager = {
       velY: velY,
       rotation: rotation,
       owner: 1,
+      anim: 'PLASMA',
     });
 
     this._bullets.push(bullet);
+  },
+
+  makeEnemyKillAnimation: function (cx, cy, sprite, height) {
+    const death = new Death({
+      cx: cx,
+      cy: cy,
+      sprite: sprite,
+      height: height,
+    });
+
+    this._deaths.push(death);
+  },
+
+  createExplosion: function (cx, cy, size) {
+    m_explosion.play();
+    const explosion = new Explosion({
+      cx: cx,
+      cy: cy,
+      sprite: g_sprites.explosion,
+      size: size,
+    });
+
+    this._explosions.push(explosion);
   },
 
   update: function (du) {

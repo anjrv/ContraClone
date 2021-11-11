@@ -51,8 +51,16 @@ Bullet.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
+Bullet.prototype.changeCounter = 3;
+Bullet.prototype.changeBase = 3;
+Bullet.prototype.frame = 0;
 
 Bullet.prototype.update = function (du) {
+  if (this.lifeSpan === 3000 / NOMINAL_UPDATE_INTERVAL) {
+    if (this.type === 'FIREBULLET') {
+      this.lifeSpan = 300 / NOMINAL_UPDATE_INTERVAL;
+    }
+  }
   spatialManager.unregister(this);
 
   this.lifeSpan -= du;
@@ -78,6 +86,14 @@ Bullet.prototype.update = function (du) {
     return entityManager.KILL_ME_NOW;
   }
 
+  if (this.type === 'FIREBULLET') {
+    this.changeCounter -= du;
+    if (this.changeCounter < 0) {
+      this.frame++;
+      this.changeCounter = this.changeBase;
+    }
+  }
+
   spatialManager.register(this);
 };
 
@@ -88,13 +104,8 @@ Bullet.prototype.getRadius = function () {
 Bullet.prototype.takeBulletHit = false;
 
 Bullet.prototype.render = function (ctx) {
-  const fadeThresh = Bullet.prototype.lifeSpan / 3;
-
-  if (this.lifeSpan < fadeThresh) {
-    ctx.globalAlpha = this.lifeSpan / fadeThresh;
-  }
-  this.sprite.animation = "FIRE";
-  this.sprite.updateFrame(0);
+  this.sprite.animation = this.anim;
+  this.sprite.updateFrame(this.frame || 0);
   this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 
   ctx.globalAlpha = 1;

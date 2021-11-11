@@ -8,7 +8,12 @@ var m_startGame= new Howl({
     volume: 0.2,
   });
 
-  var m_laser= new Howl({
-    src: ['./sounds/laser.wav'],
-    volume: 0.05,
+var m_laser= new Howl({
+  src: ['./sounds/laser.wav'],
+  volume: 0.05,
+});
+
+var m_explosion= new Howl({
+  src: ['./sounds/explosion.wav'],
+  volume: 0.05,
   });
