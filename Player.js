@@ -71,7 +71,7 @@ Player.prototype.update = function (du) {
     this.collider.offsetY = this.sizeScale * 0.125;
   }
 
-  this.computeSubStep(du);
+  this.computeSubStep(2*du);
   this.collideWithMap(du);
   this.changeSprite(du);
   this.maybeShoot();

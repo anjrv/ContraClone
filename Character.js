@@ -95,20 +95,20 @@ Character.prototype.pushOut = function (cell) {
 
   let tileSize = worldMap._tileSize; // unfortunatly need to access private variable of worldMap, read only though
 
-  let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx,this.collider.cy+this.collider.offsetY);
+  let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx,this.collider.cy); // just use the center bc then rowLower makes more sense
   
   let charRow = charCoords.row;
-  let charRow_lower = charRow - 1;
+  let charRow_lower = charRow + 1;
 
   let charCol = charCoords.col;
 
   // Character is falling
   if (charRow < cell.row // can only fall on blocks that are lower than them
-    && Math.abs(charCol - cell.col) <= 1 // can only fall on blocs that are in the same or adjacent colums
+    && Math.abs(charCol - cell.col) <= 1 // can only fall on blocks that are in the same or adjacent colums
     && this.velY > 0 // can only stop on block if their velocity is down
     ) {
     // can not fall on something that has something other than air on top of it
-    if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
+    //if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
 
     this.velY = 0;
     this.cy = cell.cy 
