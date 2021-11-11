@@ -95,20 +95,24 @@ Character.prototype.pushOut = function (cell) {
 
   let tileSize = worldMap._tileSize; // unfortunatly need to access private variable of worldMap, read only though
 
-  let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx,this.collider.cy); // just use the center bc then rowLower makes more sense
+  let prev_charCoords = worldMap.getIndeciesFromCoords(this.prev_cx, this.prev_cy); // just use the center bc then rowLower makes more sense
+  let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx, this.collider.cy); // just use the center bc then rowLower makes more sense
   
   let charRow = charCoords.row;
   let charRow_lower = charRow + 1;
+  let prev_charRow = prev_charCoords.row;
+  let prev_charRow_lower = prev_charRow + 1;
 
   let charCol = charCoords.col;
+  let prev_charCol = prev_charCoords.col;
 
   // Character is falling
-  if (charRow < cell.row // can only fall on blocks that are lower than them
+  if (prev_charRow_lower < cell.row // can only fall on blocks that are lower than them
     && Math.abs(charCol - cell.col) <= 1 // can only fall on blocks that are in the same or adjacent colums
     && this.velY > 0 // can only stop on block if their velocity is down
     ) {
     // can not fall on something that has something other than air on top of it
-    //if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
+    if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
 
     this.velY = 0;
     this.cy = cell.cy 
@@ -122,7 +126,7 @@ Character.prototype.pushOut = function (cell) {
   }
 
   // Character is jumping up
-  if (charRow > cell.row // can only jump into blocks above them
+  if (prev_charRow > cell.row // can only jump into blocks above them
     && cell.col === charCol // can only jump into blocks in the same column
     && this.velY < 0 // can only jump into blocks if their velocity is up
     ) {
@@ -136,10 +140,11 @@ Character.prototype.pushOut = function (cell) {
   }
   
   // Character colliding with cell left of them
-  if ((cell.row === charRow || cell.row === charRow_lower) // can only collide with block in the same row
-  && charCol > cell.col // can only collide with blocks to the left of them
+  if ((cell.row === prev_charRow || cell.row === prev_charRow_lower) // can only collide with block in the same row
+  && prev_charCol > cell.col //&& charCol <= cell.col// can only collide with a block if you pass it
   && this.velX < 0 // can only collide on left if velocity is to the left 
   ) {
+    if (worldMap.getTileType(cell.row, cell.col + 1) !== worldMap.EMPTY_TILE) return;
     this.velX = 0;
     // move character to the cell to the right of the colliding block
     this.cx = cell.cx
@@ -149,7 +154,11 @@ Character.prototype.pushOut = function (cell) {
   }
 
   // Character colliding with cell right of them
-  if ((cell.row === charRow || cell.row === charRow_lower) && charCol < cell.col && this.velX > 0) {
+  if ((cell.row === prev_charRow || cell.row === prev_charRow_lower) 
+    && prev_charCol < cell.col //&& charCol >= cell.col 
+    && this.velX > 0) {
+    if (worldMap.getTileType(cell.row, cell.col - 1) !== worldMap.EMPTY_TILE) return;
+
     this.velX = 0;
     // move character to the cell to the left of the colliding block
     this.cx = cell.cx 

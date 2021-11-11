@@ -216,6 +216,10 @@ const worldMap = {
   getCollisionCells: function (entity) {
     let cx = entity.collider.cx,
       cy = entity.collider.cy;
+    
+    // previous coordinates, if entity has them stored
+    let prev_cx = entity.prev_cx || cx,
+        prev_cy = entity.prev_cy || cy;
 
     let w = entity.collider.width / 2,
       h = entity.collider.height / 2;
@@ -228,10 +232,13 @@ const worldMap = {
     let topLeft = this.getIndeciesFromCoords(cx - w, cy - h + yoffset);
     let botRight = this.getIndeciesFromCoords(cx + w, cy + h + yoffset);
 
-    let left = topLeft.col;
-    let top = topLeft.row;
-    let right = botRight.col;
-    let bot = botRight.row;
+    let prev_topLeft = this.getIndeciesFromCoords(prev_cx - w, prev_cy - h + yoffset);
+    let prev_botRight = this.getIndeciesFromCoords(prev_cx + w, prev_cy + h + yoffset);
+
+    let left = topLeft.col < prev_topLeft.col ? topLeft.col : prev_topLeft.col;
+    let top = topLeft.row < prev_topLeft.row ? topLeft.row : prev_topLeft.row;
+    let right = botRight.col > prev_botRight.col ? botRight.col : prev_botRight.col;
+    let bot = botRight.row > prev_botRight.row ? botRight.row : prev_botRight.row;
 
     let coordinates = [];
     //iterate from the top coordinate to the bottom coordinate
