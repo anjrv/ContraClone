@@ -165,10 +165,9 @@ Pursuer.prototype.attack = function (du) {
     this.cy,
     g_bulletSpeed * this.dirX,
     0,
-    0,
+    this.dirX > 0 ? 0 : Math.PI,
   );
 };
-
 
 Pursuer.prototype.render = function (ctx) {
   util.fillBoxCentered(
