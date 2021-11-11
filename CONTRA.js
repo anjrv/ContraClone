@@ -126,7 +126,15 @@ function requestPreloads() {
     flashFire     :   './Sprites/weaponflash-sheet-colour-3-alpha.png',
     flashPlasma   :   './Sprites/weaponflash-sheet-colour-4-alpha.png',
     flashSun      :   './Sprites/weaponflash-sheet-colour-5-alpha.png',
-    enemies       :   './Sprites/enemies-sheet-alpha.png',
+    enemies       :   './Sprites/enemies/enemies-sheet-alpha.png',
+    pursuer       :   './Sprites/enemies/pursuer.png',
+    charger       :   './Sprites/enemies/charger.png',
+    skully        :   './Sprites/enemies/skully.png',
+    airpatrol     :   './Sprites/enemies/airpatrol.png',
+    tanker        :   './Sprites/enemies/tanker.png',
+    crawler       :   './Sprites/enemies/crawler.png',
+    walker        :   './Sprites/enemies/walker.png',
+    turret        :   './Sprites/enemies/turret.png',
     tilesheet     :   './Sprites/tilesheet.png',
     spaceScene    :   './Sprites/spacescene.jpg',
     ship          :   './Sprites/ship_2.png',
@@ -184,6 +192,69 @@ function preloadDone() {
     DEATH: [6,14],
     HIT_MOVE: [8,9,10,11,12,13,14,15],
     HIT_SHOOT: [8],
+  }
+  g_sprites.airpatrol    = new Sprite(g_images.airpatrol, 16, 2, 28, 32)
+  g_sprites.airpatrol.animations = {
+    IDLE: [0],
+    MOVE: [0,1,2,3,4,5,6,7],
+    HIT_MOVE: [8,9,10,11,12,13,14,15],
+    DEATH: [0, 8]
+  }
+  g_sprites.charger       = new Sprite(g_images.charger, 5, 2, 20, 23)
+  g_sprites.charger.animations = {
+    IDLE: [0],
+    MOVE: [0,1,2,3],
+    JUMP: [4],
+    HIT_MOVE: [5,6,7,8],
+    HIT_JUMP: [9],
+    DEATH: [4, 9]
+  }
+  g_sprites.crawler       = new Sprite(g_images.crawler, 5, 2, 38, 40)
+  g_sprites.crawler.animations = {
+    IDLE: [0],
+    MOVE: [0,1],
+    SHOOT: [2,3,4],
+    HIT_MOVE: [5,6],
+    HIT_SHOOT: [7,8,9],
+    DEATH: [4,9]
+  }
+  g_sprites.pursuer       = new Sprite(g_images.pursuer, 4, 2, 68, 60)
+  g_sprites.pursuer.animations = {
+    IDLE: [0,1],
+    MOVE: [0,1],
+    SHOOT: [2,3],
+    HIT_MOVE: [4,5],
+    HIT_SHOOT: [6,7],
+    DEATH: [0,4]
+  }
+  g_sprites.skully       = new Sprite(g_images.skully, 4, 2, 16,16)
+  g_sprites.skully.animations = {
+    IDLE: [0,1],
+    MOVE: [2,3],
+    HIT_MOVE: [7,8],
+    DEATH: [2,6]
+  }
+  g_sprites.turret       = new Sprite(g_images.turret, 6, 4, 32,32)
+  g_sprites.turret.animations = {
+    HIDLE: [0],
+    HFIRE: [1,2,3,4],
+    HHITIDLE: [12],
+    HDEATH: [0,12],
+    HDEAD: [5],
+    VIDLE: [6],
+    VFIRE: [7,8,9,10],
+    VHITIDLE: [18],
+    VDEATH: [6,18],
+    VDEAD: [11]
+  }
+  g_sprites.walker       = new Sprite(g_images.walker, 7, 2, 30, 38)
+  g_sprites.walker.animations = {
+    IDLE: [0],
+    MOVE: [0,1,2,3,4,5],
+    SHOOT: [6],
+    HIT_MOVE: [7,8,9,10,11,12],
+    HIT_SHOOT: [13],
+    DEATH: [3,10]
   }
   g_sprites.tilesheet    = new Sprite(g_images.tilesheet, 27, 44, 16, 16)
   g_sprites.tilesheet.animations = {

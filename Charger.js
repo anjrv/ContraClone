@@ -2,17 +2,31 @@ function Charger(descr) {
   Character.call(this, descr);
 
   this.scale = 2;
-  const SPRITE_WIDTH = 20 * this.scale;
-  const SPRITE_HEIGHT = 24 * this.scale;
+  this.SPRITE_WIDTH = 20 * this.scale;
+  this.SPRITE_HEIGHT = 23 * this.scale;
+  this.sprite = new Sprite(g_images.charger, 5, 2, 20, 23)
+  this.sprite.animations = {
+    IDLE: [0],
+    MOVE: [0,1,2,3],
+    JUMP: [4],
+    HIT_MOVE: [5,6,7,8],
+    HIT_JUMP: [9],
+    DEATH: [4, 9]
+  }
+
+  this.frame = 0;
+  this.changeCounter = 5;
+  this.changeBase = this.changeCounter;
+  this.sprite.animation = 'IDLE';
 
   // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: this.cx,
     cy: this.cy,
-    width: SPRITE_WIDTH,
-    height: SPRITE_HEIGHT,
-    offsetY: (worldMap.getTileSize() - SPRITE_HEIGHT) / 2,
+    width: this.SPRITE_WIDTH,
+    height: this.SPRITE_HEIGHT,
+    offsetY: (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2,
   });
 
   // Direction 1 is right, -1 is left.
@@ -38,13 +52,7 @@ Charger.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    // No sprite
-    // entityManager.makeEnemyKillAnimation(
-    //   this.cx,
-    //   this.cy,
-    //   this.sprite,
-    //   this.collider.height,
-    // );
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
     return entityManager.KILL_ME_NOW;
   }
 
@@ -69,6 +77,7 @@ Charger.prototype.update = function (du) {
 
 Charger.prototype.takeBulletHit = function () {
   this.hp -= 1;
+  this.hit = true;
   if (this.hp <= 0) this._isDeadNow = true;
 };
 
@@ -150,6 +159,16 @@ Charger.prototype.handleJump = function (acc, currLoc, playerLoc) {
 Charger.prototype.computeSubStep = function (du, playerLoc) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
+  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+  if (!this.onGround) this.sprite.animation = (this.hit) ? 'HIT_JUMP' : 'JUMP';
+
+  this.changeCounter -= du;
+  if (this.changeCounter < 0) {
+    this.frame++;
+    this.changeCounter = this.changeBase;
+    this.hit = false;
+  }
+
   let gravityAcc = this.computeGravity();
 
   let horizAcc = this.computeHorizontalAccel(playerLoc);
@@ -159,27 +178,11 @@ Charger.prototype.computeSubStep = function (du, playerLoc) {
 };
 
 Charger.prototype.render = function (ctx) {
-  util.fillBoxCentered(
-    ctx,
-    this.cx,
-    this.cy,
-    this.collider.width,
-    this.collider.height,
-    'teal',
-  );
-  this.debugRender(ctx);
-  return;
-
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(
-    ctx,
-    this.cx,
-    this.cy,
-    this.rotation,
-    this.direction < 0,
-  );
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.dirX < 0);
+  //this.debugRender(ctx);
 };
 
 Charger.prototype.record = function (tag) {
