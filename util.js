@@ -85,7 +85,6 @@ const util = {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   },
 
-
   strokeCircle: function (ctx, x, y, r) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
@@ -123,10 +122,20 @@ const util = {
     return start + (end - start) * amt;
   },
 
-  angle: function(cx, cy, ex, ey) {
+  angle: function (cx, cy, ex, ey) {
     const dy = ey - cy;
     const dx = ex - cx;
-    
+
     return Math.atan2(dy, dx);
-  }
+  },
+
+  parseNum: function (value) {
+    try {
+      return parseInt(value, 10);
+    } catch (err) {
+      // Nevermind
+    }
+
+    return -1;
+  },
 };

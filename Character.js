@@ -93,11 +93,11 @@ Character.prototype.collideWithMap = function (du) {
 Character.prototype.pushOut = function (cell) {
   if (cell.content === worldMap.EMPTY_TILE) return;
 
-  let tileSize = worldMap._tileSize; // unfortunatly need to access private variable of worldMap, read only though
+  let tileSize = worldMap.getTileSize();
 
   let prev_charCoords = worldMap.getIndeciesFromCoords(this.prev_cx, this.prev_cy); // just use the center bc then rowLower makes more sense
   let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx, this.collider.cy); // just use the center bc then rowLower makes more sense
-  
+
   let charRow = charCoords.row;
   let charRow_lower = charRow + 1;
   let prev_charRow = prev_charCoords.row;
@@ -107,10 +107,11 @@ Character.prototype.pushOut = function (cell) {
   let prev_charCol = prev_charCoords.col;
 
   // Character is falling
-  if (prev_charRow_lower < cell.row // can only fall on blocks that are lower than them
+  if (prev_charRow_lower <= cell.row
     && Math.abs(charCol - cell.col) <= 1 // can only fall on blocks that are in the same or adjacent colums
     && this.velY > 0 // can only stop on block if their velocity is down
     ) {
+
     // can not fall on something that has something other than air on top of it
     if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
 

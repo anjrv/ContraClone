@@ -52,7 +52,7 @@ const worldMap = {
       0,
     );
     const right = Math.min(
-      left + g_canvas.width / this._tileSize + addedShift * 2,
+      left + g_canvas.width / this._tileSize + addedShift,
       this._layers[0][0].length,
     );
     const up = Math.max(
@@ -62,17 +62,18 @@ const worldMap = {
       0,
     );
     const down = Math.min(
-      up + g_canvas.height / this._tileSize + addedShift * 2,
+      up + g_canvas.height / this._tileSize + addedShift,
       this._layers[0].length,
     );
 
     for (let i = up; i < down; i++) {
       for (let j = left; j < right; j++) {
-        if (this._layers[0][i][j] === '1' || this._layers[0][i][j] === '2') {
+        const val = this._layers[0][i][j];
+        if (val === '1' || val === '2' || val === '3') {
           const x = j * this._tileSize;
           const y = i * this._tileSize;
-          entityManager.spawnEnemy(this._layers[0][i][j], x, y);
           this._layers[0][i][j] = worldMap.EMPTY_TILE;
+          entityManager.spawnEnemy(val, x, y);
         }
       }
     }
@@ -104,7 +105,15 @@ const worldMap = {
       for (let j = 0; j < this._layers[0][i].length; j++) {
         const x = j * this._tileSize;
         const y = i * this._tileSize;
-        if (this._layers[0][i][j] === '  ' || this._layers[0][i][j] === '0' || this._layers[0][i][j] === '1')
+
+        const val = this._layers[0][i][j];
+        if (
+          val === '  ' ||
+          val === '0' ||
+          val === '1' ||
+          val === '2' ||
+          val === '3'
+        )
           continue;
         this._sprite.animation = this._layers[0][i][j];
         this._sprite.updateFrame(0);
@@ -154,7 +163,7 @@ const worldMap = {
     if (g_showWorldCoordinates) this._debug_RenderWorldIndecies(ctx);
   },
 
-  _debug_RenderWorldIndecies: function(ctx) {
+  _debug_RenderWorldIndecies: function (ctx) {
     let oldFont = ctx.font;
     let oldAlignment = ctx.textAlign;
     ctx.font = '10px Arial';
@@ -216,10 +225,10 @@ const worldMap = {
   getCollisionCells: function (entity) {
     let cx = entity.collider.cx,
       cy = entity.collider.cy;
-    
+
     // previous coordinates, if entity has them stored
     let prev_cx = entity.prev_cx || cx,
-        prev_cy = entity.prev_cy || cy;
+      prev_cy = entity.prev_cy || cy;
 
     let w = entity.collider.width / 2,
       h = entity.collider.height / 2;
@@ -232,13 +241,21 @@ const worldMap = {
     let topLeft = this.getIndeciesFromCoords(cx - w, cy - h + yoffset);
     let botRight = this.getIndeciesFromCoords(cx + w, cy + h + yoffset);
 
-    let prev_topLeft = this.getIndeciesFromCoords(prev_cx - w, prev_cy - h + yoffset);
-    let prev_botRight = this.getIndeciesFromCoords(prev_cx + w, prev_cy + h + yoffset);
+    let prev_topLeft = this.getIndeciesFromCoords(
+      prev_cx - w,
+      prev_cy - h + yoffset,
+    );
+    let prev_botRight = this.getIndeciesFromCoords(
+      prev_cx + w,
+      prev_cy + h + yoffset,
+    );
 
     let left = topLeft.col < prev_topLeft.col ? topLeft.col : prev_topLeft.col;
     let top = topLeft.row < prev_topLeft.row ? topLeft.row : prev_topLeft.row;
-    let right = botRight.col > prev_botRight.col ? botRight.col : prev_botRight.col;
-    let bot = botRight.row > prev_botRight.row ? botRight.row : prev_botRight.row;
+    let right =
+      botRight.col > prev_botRight.col ? botRight.col : prev_botRight.col;
+    let bot =
+      botRight.row > prev_botRight.row ? botRight.row : prev_botRight.row;
 
     let coordinates = [];
     //iterate from the top coordinate to the bottom coordinate

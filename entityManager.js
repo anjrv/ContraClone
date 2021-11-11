@@ -79,6 +79,15 @@ const entityManager = {
         })
         this._enemies.push(aPatrol);
         break;
+      case '3':
+        const charger = new Charger({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY,
+        })
+        this._enemies.push(charger);
+        break;
     }
   },
 
