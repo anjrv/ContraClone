@@ -43,6 +43,10 @@
         <label for="indexWorldCoordinates">Index world coorinates</label>
         <input id="indexWorldCoordinates" type="checkbox"/>
       </div>
+      <div>
+        <label for="enableInvincibility">Enable invincibility</label>
+        <input id="enableInvincibility" type="checkbox"/>
+      </div>
       <button onclick="
         let collisionWithWorld = document.getElementById('showCharCollsionWithWorld');
         g_char_debug_showCollisions = collisionWithWorld.checked;
@@ -50,6 +54,8 @@
         g_renderSpatialDebug = collisionRender.checked;
         let worldCoordinates = document.getElementById('indexWorldCoordinates');
         g_showWorldCoordinates = worldCoordinates.checked;
+        let invincibility = document.getElementById('enableInvincibility');
+        g_player_debug_enableInvincibility = invincibility.checked;
         document.getElementById('devtools').style.display = 'none';
       ">Apply</button>
     </div>

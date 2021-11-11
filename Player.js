@@ -1,3 +1,5 @@
+g_player_debug_enableInvincibility = false;
+
 function Player(descr) {
   Character.call(this, descr);
   this.speed = 1;
@@ -224,7 +226,7 @@ Player.prototype.maybeShoot = function () {
 // Logic for taking a bullet hit
 Player.prototype.takeBulletHit = function () {
   // If Player is invincible nothing happens
-  if (this.invincibleCooldown > 0) return;
+  if (this.invincibleCooldown > 0 || g_player_debug_enableInvincibility) return;
 
   // Player takes hit
   //this.lives--;
