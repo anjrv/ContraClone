@@ -29,8 +29,6 @@ Death.prototype.velY = -1;
 Death.prototype.changeCounter = 3;
 Death.prototype.changeBase = 3;
 Death.prototype.frame = 0;
-Death.prototype.white = 14;
-Death.prototype.black = 6;
 
 // Convert times from milliseconds to "nominal" time units.
 Death.prototype.lifeSpan = 300 / NOMINAL_UPDATE_INTERVAL;
@@ -60,7 +58,7 @@ Death.prototype.update = function (du) {
   };
 
 Death.prototype.render = function (ctx) {
-  this.sprite.animation = "DEATH";
+  this.sprite.animation = 'DEATH';
   this.sprite.updateFrame(this.frame || 0);
   this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 

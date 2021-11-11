@@ -1,18 +1,31 @@
 function Pursuer(descr) {
   Character.call(this, descr);
 
-  this.scale = 1;
-  const SPRITE_WIDTH = 68 * this.scale;
-  const SPRITE_HEIGHT = 60 * this.scale;
+  this.sprite      = new Sprite(g_images.pursuer, 4, 2, 68, 60)
+  this.sprite.animations = {
+    IDLE: [0,1],
+    MOVE: [0,1],
+    SHOOT: [2,3],
+    HIT_MOVE: [4,5],
+    HIT_SHOOT: [6,7],
+    DEATH: [0,4]
+  }
+  this.scale = 2;
+  this.frame = 0;
+  this.changeCounter = 5;
+  this.changeBase = this.changeCounter;
+  this.sprite.animation = 'IDLE';
+  this.SPRITE_WIDTH = 68 * this.scale;
+  this.SPRITE_HEIGHT = 60 * this.scale;
 
   // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: this.cx,
     cy: this.cy,
-    width: SPRITE_WIDTH,
-    height: SPRITE_HEIGHT,
-    offsetY: (worldMap.getTileSize() - SPRITE_HEIGHT) / 2,
+    width: this.SPRITE_WIDTH,
+    height: this.SPRITE_HEIGHT,
+    offsetY: (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2,
   });
 
   // Direction 1 is right, -1 is left.
@@ -40,13 +53,7 @@ Pursuer.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    // No sprite
-    // entityManager.makeEnemyKillAnimation(
-    //   this.cx,
-    //   this.cy,
-    //   this.sprite,
-    //   this.collider.height,
-    // );
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
     return entityManager.KILL_ME_NOW;
   }
 
@@ -63,6 +70,7 @@ Pursuer.prototype.update = function (du) {
 
 Pursuer.prototype.takeBulletHit = function () {
   this.hp -= 1;
+  this.hit = true;
   if (this.hp <= 0) this._isDeadNow = true;
 };
 
@@ -153,12 +161,21 @@ Pursuer.prototype.computeSubStep = function (du, playerLoc) {
   const horizAcc = this.computeHorizontalAccel(playerLoc);
   const vertAcc = this.computeVerticalAccel(playerLoc);
 
+  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+  this.changeCounter -= du;
+  if (this.changeCounter < 0) {
+    this.frame++;
+    this.changeCounter = this.changeBase;
+    this.hit = false;
+  }
+
   this.applyAccel(horizAcc, vertAcc, du);
 };
 
 Pursuer.prototype.attack = function (du) {
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 100;
+  this.isShooting = true;
 
   entityManager.fireEnemyBullet(
     this.cx,
@@ -170,27 +187,11 @@ Pursuer.prototype.attack = function (du) {
 };
 
 Pursuer.prototype.render = function (ctx) {
-  util.fillBoxCentered(
-    ctx,
-    this.cx,
-    this.cy,
-    this.collider.width,
-    this.collider.height,
-    'teal',
-  );
-  this.debugRender(ctx);
-  return;
-
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(
-    ctx,
-    this.cx,
-    this.cy,
-    this.rotation,
-    this.direction < 0,
-  );
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
+  this.debugRender(ctx);
 };
 
 Pursuer.prototype.record = function (tag) {

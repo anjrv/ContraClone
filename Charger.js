@@ -11,11 +11,11 @@ function Charger(descr) {
     JUMP: [4],
     HIT_MOVE: [5,6,7,8],
     HIT_JUMP: [9],
-    DEATH: [4, 9]
+    DEATH: [4,9]
   }
 
   this.frame = 0;
-  this.changeCounter = 5;
+  this.changeCounter = 3;
   this.changeBase = this.changeCounter;
   this.sprite.animation = 'IDLE';
 

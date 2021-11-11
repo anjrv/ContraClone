@@ -2,10 +2,13 @@ function AirPatrol(descr) {
   Character.call(this, descr);
 
   // Just a temp malformed image so the main methods can remain
-  this.sprite = new Sprite(g_images.enemies, 8, 2, 28, 32);
+  this.sprite = new Sprite(g_images.airpatrol, 8, 2, 28, 32)
   this.sprite.animations = {
-    MOVE: [8],
-  };
+    IDLE: [0],
+    MOVE: [0,1,2,3,4,5,6,7],
+    HIT_MOVE: [8,9,10,11,12,13,14,15],
+    DEATH: [0, 8]
+  }
 
   this.scale = 2;
   this.frame = 0;
@@ -13,17 +16,17 @@ function AirPatrol(descr) {
   this.changeBase = this.changeCounter;
   this.sprite.animation = 'MOVE';
 
-  const SPRITE_WIDTH = 28 * this.scale;
-  const SPRITE_HEIGHT = 32 * this.scale;
-  this.cy += (worldMap.getTileSize() - SPRITE_HEIGHT) / 2;
+  this.SPRITE_WIDTH = 28 * this.scale;
+  this.SPRITE_HEIGHT = 32 * this.scale;
+  this.cy += (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2;
 
   // Collisions
   this.collider = new Collider({
     type: 'Box',
     cx: this.cx,
     cy: this.cy,
-    width: SPRITE_WIDTH,
-    height: SPRITE_HEIGHT,
+    width: this.SPRITE_WIDTH,
+    height: this.SPRITE_HEIGHT,
     offsetY: 0,
   });
 
@@ -56,6 +59,7 @@ AirPatrol.prototype.update = function (du) {
     //   this.sprite,
     //   this.collider.height,
     // );
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
     return entityManager.KILL_ME_NOW;
   }
 
@@ -72,9 +76,14 @@ AirPatrol.prototype.update = function (du) {
 };
 
 AirPatrol.prototype.attack = function (playerLoc, du) {
+
+  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
+    this.frame++;
     this.changeCounter = this.changeBase;
+    this.hit = false;
   }
 
   if (this.shotCooldown > 0) return;
@@ -103,10 +112,13 @@ AirPatrol.prototype.takeBulletHit = function () {
 AirPatrol.prototype.computeSubStep = function (du) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
+  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
     this.frame++;
     this.changeCounter = this.changeBase;
+    this.hit = false;
   }
 
   // Check if we violate leash, turn around if so
@@ -135,13 +147,7 @@ AirPatrol.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(
-    ctx,
-    this.cx,
-    this.cy,
-    this.rotation,
-    this.direction < 0,
-  );
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
   this.debugRender(ctx);
 };
 

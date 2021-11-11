@@ -193,7 +193,7 @@ function preloadDone() {
     HIT_MOVE: [8,9,10,11,12,13,14,15],
     HIT_SHOOT: [8],
   }
-  g_sprites.airpatrol    = new Sprite(g_images.airpatrol, 16, 2, 28, 32)
+  g_sprites.airpatrol    = new Sprite(g_images.airpatrol, 8, 2, 28, 32)
   g_sprites.airpatrol.animations = {
     IDLE: [0],
     MOVE: [0,1,2,3,4,5,6,7],
