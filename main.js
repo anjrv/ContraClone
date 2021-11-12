@@ -118,6 +118,10 @@ main.gameOver = function () {
   console.log('gameOver: quitting...');
 };
 
+main.restartGame = function() {
+  this._isGameOver = false;
+}
+
 // Simple voluntary quit mechanism
 //
 const KEY_QUIT = 'Q'.charCodeAt(0);
@@ -172,6 +176,17 @@ main.init = function () {
   this._requestNextIteration();
 };
 
+main.goToTitleScreen = function () {
+  main.shutDownManagers();
+  main.gameOver();
+  gameOver.restart();
+};
+
+main.shutDownManagers = function () {
+  entityManager.wipeEntities();
+  spatialManager.wipeCollision();
+}
+ 
 // main.scaleCanvas = function () {
 //   // Scale the canvas so it keeps the same aspect ratio
 //   console.log('resizing');

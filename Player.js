@@ -242,8 +242,7 @@ Player.prototype.takeBulletHit = function () {
   this.respawning = true;
 
   // If Player looses all his lives, either respawn at beginning or let entityManager handle it
-  if (this.lives === 0) this._isDeadNow = true;
-  if (lives < 0) lives = 5
+  if (lives < 0) main.goToTitleScreen();
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed

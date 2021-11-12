@@ -73,5 +73,9 @@ const spatialManager = {
       i++;
       delete this._entities[ID];
     }
+  },
+
+  wipeCollision: function() {
+    this._entities = [];
   }
 };

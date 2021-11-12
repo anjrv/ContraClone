@@ -56,7 +56,8 @@ var noPowerup = true;
 var firePowerup = false;
 var triplePowerup = false;
 var piercePowerup = false;
-var lives = 5;
+var baseLives = 5;
+var lives = baseLives;
 var coins = 0;
 
 // The "nominal interval" is the one that all of our time-based units are

@@ -63,6 +63,7 @@ const entityManager = {
 
   init: function () {
     this._player.push(new Player({}));
+    console.log(this._player)
   },
 
   getPlayer: function () {
@@ -293,6 +294,7 @@ const entityManager = {
   update: function (du) {
     for (let c = 0; c < this._categories.length; ++c) {
       const aCategory = this._categories[c];
+      console.log(aCategory)
       let i = 0;
 
       while (i < aCategory.length) {
@@ -328,6 +330,10 @@ const entityManager = {
     this._player = [];
     this._bullets = [];
     this._enemies = [];
+    this._deaths = [];
+    this._explosions = [];
+    this._powerups = [];
+    this._coins = [];
     for (let c = 0; c < this._categories.length; c++) {
       this._categories[c] = [];
     }
@@ -368,8 +374,11 @@ const entityManager = {
         this._enemies.push(new Patrol(descr));
       }
     }
-    this._categories = [this._player, this._bullets, this._enemies];
+    this._categories = [this._player, this._bullets, this._enemies, this._deaths, this._explosions, this._powerups, this._coins];
   },
+  setStuff: function () {
+    this._categories = [this._player, this._bullets, this._enemies, this._deaths, this._explosions, this._powerups, this._coins];
+  }
 };
 
 // Some deferred setup which needs the object to have been created first

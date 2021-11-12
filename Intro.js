@@ -10,6 +10,8 @@ let KEY_CROUCH = 16;
 
 function g_start(ctx) {    
     g_intro = false;
+    g_playing = false;
+    g_skip = false;
     introLoop(ctx);
 }
 

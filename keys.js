@@ -15,8 +15,10 @@ function handleKeydown(evt) {
 }
 
 function startGame() {
+  entityManager.setStuff();
   entityManager.init();
-  worldMap.init(level2);
+  worldMap.init(currentLevel);
+  main.restartGame();
   main.init(); 
   g_playing = true;
 }
