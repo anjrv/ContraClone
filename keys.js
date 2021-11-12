@@ -10,7 +10,9 @@ function handleKeydown(evt) {
     g_intro = false;
     m_startGame.play();
     m_Intro.stop();
-    setTimeout(function () {startGame();}, 1200);
+    setTimeout(function () {
+      startGame();
+    }, 1200);
   }
 }
 
@@ -19,9 +21,10 @@ function startGame() {
   entityManager.init();
   worldMap.init(currentLevel);
   main.restartGame();
-  main.init(); 
+  main.init();
   g_playing = true;
 }
+
 function handleKeyup(evt) {
   keys[evt.keyCode] = false;
 }

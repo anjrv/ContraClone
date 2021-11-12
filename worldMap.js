@@ -8,10 +8,11 @@ const worldMap = {
 
   init: function (mapData) {
     // Map variables
+    this._mapId = mapData.id;
     this._cols = mapData.cols;
     this._rows = mapData.rows;
     this._tileSize = mapData.tilesize;
-    this._layers = mapData.layers;
+    this._layers = JSON.parse(JSON.stringify(mapData.layers)); // Copy dont refer to
     this._sprite = g_sprites.tilesheet;
     this._sprite.scale = this._tileSize / this._sprite.sWidth;
     this._length = mapData.cols * mapData.rows;
@@ -31,6 +32,10 @@ const worldMap = {
     this.diffY = 0;
 
     this.setupDebug();
+  },
+
+  getInitState: function () {
+    return this._initState;
   },
 
   setupDebug: function () {
@@ -69,7 +74,15 @@ const worldMap = {
     for (let i = up; i < down; i++) {
       for (let j = left; j < right; j++) {
         const val = this._layers[0][i][j];
-        if (val === '1' || val === '2' || val === '3' || val === '4' || val === '5' || val === '6' || val === '7') {
+        if (
+          val === '1' ||
+          val === '2' ||
+          val === '3' ||
+          val === '4' ||
+          val === '5' ||
+          val === '6' ||
+          val === '7'
+        ) {
           const x = j * this._tileSize;
           const y = i * this._tileSize;
           this._layers[0][i][j] = worldMap.EMPTY_TILE;
@@ -164,15 +177,25 @@ const worldMap = {
 
   // returns true if tile doesn't have collision
   passThrough: function (type) {
-    return type === worldMap.EMPTY_TILE
-        || type === 'QO' || type === 'OO'
-        || type === 'QP' || type === 'OP'
-        || type === 'QQ' || type === 'OQ'
-        || type === 'PO' || type === 'NO'
-        || type === 'PP' || type === 'NP'
-        || type === 'PQ' || type === 'NQ'
-        || type === 'oT' || type === 'oU'
-        || type === 'pT' || type === 'pU';
+    return (
+      type === worldMap.EMPTY_TILE ||
+      type === 'QO' ||
+      type === 'OO' ||
+      type === 'QP' ||
+      type === 'OP' ||
+      type === 'QQ' ||
+      type === 'OQ' ||
+      type === 'PO' ||
+      type === 'NO' ||
+      type === 'PP' ||
+      type === 'NP' ||
+      type === 'PQ' ||
+      type === 'NQ' ||
+      type === 'oT' ||
+      type === 'oU' ||
+      type === 'pT' ||
+      type === 'pU'
+    );
   },
 
   debugRender: function (ctx) {

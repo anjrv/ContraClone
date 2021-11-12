@@ -1,6 +1,7 @@
 const cols = 48;
 
 const level1 = {
+  id: 1,
   cols: 134,
   rows: 20,
   tilesize : p_realSize*0.4,
@@ -40,6 +41,7 @@ const level1 = {
 }
 
 const level2 = {
+  id: 2,
   cols: 134,
   rows: 20,
   tilesize : p_realSize*0.4,

@@ -63,7 +63,6 @@ const entityManager = {
 
   init: function () {
     this._player.push(new Player({}));
-    console.log(this._player)
   },
 
   getPlayer: function () {
@@ -294,7 +293,6 @@ const entityManager = {
   update: function (du) {
     for (let c = 0; c < this._categories.length; ++c) {
       const aCategory = this._categories[c];
-      console.log(aCategory)
       let i = 0;
 
       while (i < aCategory.length) {
