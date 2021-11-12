@@ -16,11 +16,11 @@ function Powerup(descr) {
   // Common inherited setup logic from Entity
   Character.call(this, descr);
   this.scale = 2;
-  this.SPRITE_WIDTH = 32 * this.scale;
+  this.SPRITE_WIDTH = 16 * this.scale;
   this.SPRITE_HEIGHT = 16 * this.scale;
 
   //Sprite stuff
-  this.sprite = g_sprites.powerups;
+  this.sprite = g_sprites.coin;
   this.floor = 0;
   this.onGround = false;
   this.collider = new Collider({
@@ -59,8 +59,6 @@ Powerup.prototype.update = function (du) {
         this.sprite.animation = this.power;
         this.sprite.scale = this.scale
     }
-
-    if (this.onGround) this.velX = 0;
 
     this.lifeSpan -= du;
     if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;

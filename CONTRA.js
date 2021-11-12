@@ -146,6 +146,7 @@ function requestPreloads() {
     basepower     :   './Sprites/basepower.png',
     firepowerup   :   './Sprites/firepowerup.png',
     triplepowerup :   './Sprites/triplepowerup.png',
+    piercepowerup :   './Sprites/piercepowerup.png',
     coins         :   './Sprites/coins.png'
   }
   imagesPreload(requiredImages, g_images, preloadDone);
@@ -171,6 +172,7 @@ function preloadDone() {
   g_sprites.basepower    = new Sprite(g_images.basepower)
   g_sprites.firepowerup  = new Sprite(g_images.firepowerup)
   g_sprites.triplepowerup = new Sprite(g_images.triplepowerup)
+  g_sprites.piercepowerup = new Sprite(g_images.piercepowerup)
   g_sprites.coins        = new Sprite(g_images.coins,12,4,16,16)
   g_sprites.coins.animations = {
     GREEN: [12,13,14,15,16,17,18,19,20,21,22,23],
