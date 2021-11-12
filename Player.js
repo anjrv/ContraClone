@@ -85,7 +85,7 @@ Player.prototype.update = function (du) {
 Player.NOMINAL_ACC = 0.3;
 Player.NOMINAL_FRICTION = 0.2;
 Player.MAX_JUMPS = 2;
-Player.MAX_VEL = 10;
+Player.MAX_VEL = 6;
 Player.MAX_TURNAROUND_FORCE = 10.0;
 
 Player.prototype.computeSubStep = function (du) {
@@ -247,7 +247,7 @@ Player.prototype.takeBulletHit = function () {
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed
-var p_changeCounter = 77;
+var p_changeCounter = 50;
 var p_changeBase = p_changeCounter;
 
 // Based on the action that the Player is performing, choose a sprite 

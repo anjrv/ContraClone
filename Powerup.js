@@ -77,6 +77,7 @@ Powerup.prototype.update = function (du) {
       if (this.power === 'RED') firePowerup = true;
       else if (this.power === 'BLUE') triplePowerup = true;
       else if (this.power === 'GREEN') piercePowerup = true;
+      m_powerup.play()
       return entityManager.KILL_ME_NOW;
     }
 

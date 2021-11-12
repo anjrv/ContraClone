@@ -107,6 +107,34 @@ const entityManager = {
         });
         this._enemies.push(pursuer);
         break;
+      case '5':
+        const walker = new Walker({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY
+        });
+        this._enemies.push(walker);
+        break;
+      case '6':
+        const bigwalker = new Walker({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY,
+          big: true,
+        });
+        this._enemies.push(bigwalker);
+        break;
+      case '7':
+        const crawler = new Crawler({
+          cx: cx,
+          cy: cy,
+          velX: velX,
+          velY: velY,
+        });
+        this._enemies.push(crawler);
+        break;
     }
   },
 

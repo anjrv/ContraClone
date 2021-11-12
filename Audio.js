@@ -17,3 +17,13 @@ var m_explosion= new Howl({
   src: ['./sounds/explosion.wav'],
   volume: 0.05,
   });
+
+  var m_collect= new Howl({
+    src: ['./sounds/collect.mp3'],
+    volume: 0.05,
+    });
+  
+  var m_powerup= new Howl({
+    src: ['./sounds/powerup.mp3'],
+    volume: 0.05,
+    });
