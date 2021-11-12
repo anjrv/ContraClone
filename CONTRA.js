@@ -145,7 +145,9 @@ function requestPreloads() {
     lives         :   './Sprites/lives.png',
     basepower     :   './Sprites/basepower.png',
     firepowerup   :   './Sprites/firepowerup.png',
-    triplepowerup :   './Sprites/triplepowerup.png'
+    triplepowerup :   './Sprites/triplepowerup.png',
+    piercepowerup :   './Sprites/piercepowerup.png',
+    coins         :   './Sprites/coins.png'
   }
   imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -170,6 +172,20 @@ function preloadDone() {
   g_sprites.basepower    = new Sprite(g_images.basepower)
   g_sprites.firepowerup  = new Sprite(g_images.firepowerup)
   g_sprites.triplepowerup = new Sprite(g_images.triplepowerup)
+  g_sprites.piercepowerup = new Sprite(g_images.piercepowerup)
+  g_sprites.coins        = new Sprite(g_images.coins,12,4,16,16)
+  g_sprites.coins.animations = {
+    GREEN: [12,13,14,15,16,17,18,19,20,21,22,23],
+    GOLD: [ 24,25,26,27,28,29,30,31,32,33,34,35]
+  }
+  g_sprites.powerups = new Sprite(g_images.coins, 18, 9, 32, 16)
+  g_sprites.powerups.animations = {
+    BLUE:  [72, 73, 74, 75, 76, 77, 78, 79, 80, 81,  82, 83, 84, 85, 86, 87, 88, 89],
+    GREEN: [90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,101,102,103,104,105,106,107],
+    RED:   [108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125],
+    PLASMA:[126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143],
+    GOLD:  [144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161]
+  }
   g_sprites.impactWhite  = new Sprite(g_images.impactWhite)
   g_sprites.impactAcid   = new Sprite(g_images.impactAcid)
   g_sprites.impactFire   = new Sprite(g_images.impactFire)
@@ -179,12 +195,12 @@ function preloadDone() {
   g_sprites.explosion.animations = {
     EXPLODE: [0,1,2,3,4,5,6,7,8,9,10,11],
   }
-  g_sprites.powerups     = new Sprite(g_images.powerups)
   g_sprites.projectiles  = new Sprite(g_images.projectiles, 13, 7, 28, 28)
   g_sprites.projectiles.animations = {
     LASER: [0],
     PLASMA: [13],
     FIRE: [26, 26, 26, 26, 39, 52, 65],
+    PIERCE: [78,79,80,81]
   };
   g_sprites.flashWhite   = new Sprite(g_images.flashWhite)
   g_sprites.flashAcid    = new Sprite(g_images.flashAcid)

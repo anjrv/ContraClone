@@ -26,7 +26,7 @@ function Charger(descr) {
     cy: this.cy,
     width: this.SPRITE_WIDTH,
     height: this.SPRITE_HEIGHT,
-    offsetY: (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2,
+    offsetY: 0,
   });
 
   // Direction 1 is right, -1 is left.
@@ -40,6 +40,9 @@ function Charger(descr) {
   this.NOMINAL_ACC = 0.2;
   this.MAX_VEL = 12.0;
   this.MAX_TURNAROUND_FORCE = 5.0;
+  this.greenCoin = 2;
+  this.goldCoin = 1;
+
 }
 
 Charger.prototype = Object.create(Character.prototype);
@@ -52,7 +55,7 @@ Charger.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
     return entityManager.KILL_ME_NOW;
   }
 
@@ -64,7 +67,6 @@ Charger.prototype.update = function (du) {
     if (canTakeHit) canTakeHit.call(hitEntity);
     // return entityManager.KILL_ME_NOW;
   }
-
   this.prev_cx = this.cx;
   this.prev_cy = this.cy;
   this.computeSubStep(du, playerLoc);

@@ -28,6 +28,8 @@ const entityManager = {
   _player: [],
   _deaths: [],
   _explosions: [],
+  _powerups: [],
+  _coins: [],
 
   // "PRIVATE" METHODS
 
@@ -54,6 +56,8 @@ const entityManager = {
       this._enemies,
       this._deaths,
       this._explosions,
+      this._powerups,
+      this._coins
     ];
   },
 
@@ -104,6 +108,30 @@ const entityManager = {
         this._enemies.push(pursuer);
         break;
     }
+  },
+
+  createPowerup: function (cx,cy,type) {
+    const powerup = new Powerup({
+      cx: cx,
+      cy: cy,
+      velX: util.randomX(),
+      velY: util.randomY(),
+      rotation: 0,
+      power: util.randomPower()
+    });
+    this._powerups.push(powerup);
+  },
+
+  createCoin: function (cx,cy, type) {
+    const coin = new Coin({
+      cx: cx,
+      cy: cy,
+      velX: util.randomX(),
+      velY: util.randomY(),
+      rotation: 0,
+      coinType: type
+    })
+    this._coins.push(coin)
   },
 
   firePlayerBullet: function (cx, cy, velX, velY, rotation, type) {
@@ -182,6 +210,20 @@ const entityManager = {
     this._bullets.push(bullet3);
   },
 
+  firePlayerBulletPierce: function (cx, cy, velX, velY, rotation, type) {
+    const bullet = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+      anim: 'PIERCE',
+      type: type,
+    });
+    this._bullets.push(bullet);
+  },
+
   fireEnemyBullet: function (cx, cy, velX, velY, rotation) {
     const bullet = new Bullet({
       cx: cx,
@@ -196,14 +238,15 @@ const entityManager = {
     this._bullets.push(bullet);
   },
 
-  makeEnemyKillAnimation: function (cx, cy, sprite, height) {
+  makeEnemyKillAnimation: function (cx, cy, sprite, height, greenCoin, goldCoin) {
     const death = new Death({
       cx: cx,
       cy: cy,
       sprite: sprite,
       height: height,
+      greenCoin: greenCoin,
+      goldCoin: goldCoin
     });
-
     this._deaths.push(death);
   },
 

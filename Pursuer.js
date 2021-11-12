@@ -17,6 +17,8 @@ function Pursuer(descr) {
   this.sprite.animation = 'IDLE';
   this.SPRITE_WIDTH = 68 * this.scale;
   this.SPRITE_HEIGHT = 60 * this.scale;
+  this.greenCoin = 1;
+  this.goldCoin = 3;
 
   // Collisions
   this.collider = new Collider({
@@ -53,7 +55,7 @@ Pursuer.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
     return entityManager.KILL_ME_NOW;
   }
 

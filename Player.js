@@ -215,6 +215,15 @@ Player.prototype.maybeShoot = function () {
           -bulletAngle,
           'TRIPLEBULLET'
         );
+      } else if (piercePowerup) {
+        entityManager.firePlayerBulletPierce(
+          this.cx + (vX * this.sprite.sWidth),
+          this.cy + (vY * this.sprite.sHeight),
+          vX * g_bulletSpeed,
+          vY * g_bulletSpeed,
+          -bulletAngle,
+          'PIERCEBULLET'
+        )
       }
     }
   }

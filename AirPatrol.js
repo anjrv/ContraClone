@@ -38,6 +38,9 @@ function AirPatrol(descr) {
   this.hp = 2;
   this.leashLoc = this.cx; // Leash to spawn
   this.leashLength = 200;
+  this.greenCoin = 2;
+  this.goldCoin = 1;
+
 }
 
 AirPatrol.prototype = Object.create(Character.prototype);
@@ -59,7 +62,7 @@ AirPatrol.prototype.update = function (du) {
     //   this.sprite,
     //   this.collider.height,
     // );
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
     return entityManager.KILL_ME_NOW;
   }
 

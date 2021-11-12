@@ -40,6 +40,13 @@ Death.prototype.update = function (du) {
     this.lifeSpan -= du;
     if (this.lifeSpan < 0) {
         entityManager.createExplosion(this.cx,this.cy,this.height);
+        if (Math.random() < 0.1) entityManager.createPowerup(this.cx,this.cy);
+        for (let i = 0; i < this.goldCoin; i++) {
+          entityManager.createCoin(this.cx,this.cy, 'GOLD')
+        }
+        for (let i = 0; i < this.greenCoin; i++) {
+          entityManager.createCoin(this.cx,this.cy, 'GREEN')
+        }
         return entityManager.KILL_ME_NOW;
     }
   

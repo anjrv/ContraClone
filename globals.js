@@ -52,9 +52,10 @@ var p_ground2 = 0;
 
 var g_sprites = {};
 
-var noPowerup = false;
-var firePowerup = true;
+var noPowerup = true;
+var firePowerup = false;
 var triplePowerup = false;
+var piercePowerup = false;
 var lives = 5;
 var coins = 0;
 
