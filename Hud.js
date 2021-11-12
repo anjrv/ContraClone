@@ -62,7 +62,7 @@ const hud = {
     
     drawScore: function(ctx, offsetX, offsetY) {
         ctx.font = '26px PressStart2P';
-        ctx.fillText("0" + "§", g_canvas.width-100 - offsetX, 80 - offsetY);
+        ctx.fillText(coins + "§", g_canvas.width-100 - offsetX, 80 - offsetY);
     },
 }
 

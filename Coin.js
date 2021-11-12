@@ -1,5 +1,5 @@
 // ======
-// Powerup
+// Coin
 // ======
 
 'use strict';
@@ -12,15 +12,15 @@
 */
 
 // A generic contructor which accepts an arbitrary descriptor object
-function Powerup(descr) {
+function Coin(descr) {
   // Common inherited setup logic from Entity
   Character.call(this, descr);
-  this.scale = 2;
+  this.scale = 1;
   this.SPRITE_WIDTH = 16 * this.scale;
   this.SPRITE_HEIGHT = 16 * this.scale;
 
   //Sprite stuff
-  this.sprite = g_sprites.coin;
+  this.sprite = g_sprites.coins;
   this.floor = 0;
   this.onGround = false;
   this.collider = new Collider({
@@ -33,31 +33,31 @@ function Powerup(descr) {
   });
 }
 
-Powerup.prototype = Object.create(Character.prototype);
-Powerup.prototype.constructor = Powerup
+Coin.prototype = Object.create(Character.prototype);
+Coin.prototype.constructor = Coin
 
 
 // Initial, inheritable, default values
-Powerup.prototype.rotation = 0;
-Powerup.prototype.cx = 200;
-Powerup.prototype.cy = 200;
-Powerup.prototype.velX = 1;
-Powerup.prototype.velY = 1;
+Coin.prototype.rotation = 0;
+Coin.prototype.cx = 200;
+Coin.prototype.cy = 200;
+Coin.prototype.velX = 1;
+Coin.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
-Powerup.prototype.lifeSpan = 20000 / NOMINAL_UPDATE_INTERVAL;
-Powerup.prototype.frame = 0;
-Powerup.prototype.changeCounter = 2;
-Powerup.prototype.changeBase = 2;
+Coin.prototype.lifeSpan = 20000 / NOMINAL_UPDATE_INTERVAL;
+Coin.prototype.frame = 0;
+Coin.prototype.changeCounter = 2;
+Coin.prototype.changeBase = 2;
 
-Powerup.prototype.update = function (du) {
+Coin.prototype.update = function (du) {
     const playerLoc = this.shouldUpdate();
     if (!playerLoc) return;
     spatialManager.unregister(this);
 
     if (this.lifeSpan === 20000 / NOMINAL_UPDATE_INTERVAL) {
-        this.sprite.animation = this.power;
-        this.sprite.scale = this.scale
+        this.sprite.animation = this.coinType;
+        this.sprite.scale = (this.coinType === 'GREEN' ? 1 : 2)
     }
 
     this.lifeSpan -= du;
@@ -69,16 +69,11 @@ Powerup.prototype.update = function (du) {
     //
     const hitEntity = this.findHitEntity();
     if (hitEntity.isPlayer) {
-      console.log(this.power)
-      noPowerup = false;
-      firePowerup = false;
-      triplePowerup = false;
-      if (this.power === 'RED') firePowerup = true;
-      else if (this.power === 'BLUE') triplePowerup = true;
-      else if (this.power === 'GREEN') piercePowerup = true;
+      coins += (this.coinType === 'GREEN' ? 10 : 50);
       return entityManager.KILL_ME_NOW;
     }
 
+    if (this.onGround) this.velX = 0;
     this.prev_cx = this.cx;
     this.prev_cy = this.cy;
 
@@ -88,12 +83,12 @@ Powerup.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
-Powerup.prototype.computeSubStep = function (du, playerLoc) {
+Coin.prototype.computeSubStep = function (du, playerLoc) {
     let gravityAcc = this.computeGravity();
     this.applyAccel(0, gravityAcc, du);
 };
 
-Powerup.prototype.render = function (ctx) {
+Coin.prototype.render = function (ctx) {
     this.sprite.updateFrame(this.frame || 0);
     this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 

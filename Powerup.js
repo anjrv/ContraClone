@@ -71,13 +71,7 @@ Powerup.prototype.update = function (du) {
     //
     const hitEntity = this.findHitEntity();
     if (hitEntity.isPlayer) {
-      console.log(this.power)
-      noPowerup = false;
-      firePowerup = false;
-      triplePowerup = false;
-      if (this.power === 'RED') firePowerup = true;
-      else if (this.power === 'BLUE') triplePowerup = true;
-      else if (this.power === 'GREEN') piercePowerup = true;
+      
       return entityManager.KILL_ME_NOW;
     }
 

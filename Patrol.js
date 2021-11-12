@@ -34,6 +34,9 @@ function Patrol(descr) {
   this.shotCooldown = -1;
   this.shotId = 1;
   this.hp = 2;
+  this.greenCoin = 2;
+  this.goldCoin = 0;
+
 }
 
 Patrol.prototype = Object.create(Character.prototype);
@@ -48,7 +51,7 @@ Patrol.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
     return entityManager.KILL_ME_NOW;
    
   }

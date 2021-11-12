@@ -40,6 +40,9 @@ function Charger(descr) {
   this.NOMINAL_ACC = 0.2;
   this.MAX_VEL = 12.0;
   this.MAX_TURNAROUND_FORCE = 5.0;
+  this.greenCoin = 2;
+  this.goldCoin = 1;
+
 }
 
 Charger.prototype = Object.create(Character.prototype);
@@ -52,7 +55,7 @@ Charger.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height);
+    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
     return entityManager.KILL_ME_NOW;
   }
 
