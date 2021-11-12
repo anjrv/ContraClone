@@ -83,16 +83,16 @@ const worldMap = {
     const player = entityManager.getPlayer();
     this.diffX = player.cx + this._offsetX;
     this.diffY = player.cy + this._offsetY;
-    if (Math.abs(this.diffX) > g_canvas.width / 6) {
+    if (Math.abs(this.diffX) > g_canvas.width / 8) {
       this._offsetX = -(
         player.cx -
-        (Math.sign(this.diffX) * g_canvas.width) / 6
+        (Math.sign(this.diffX) * g_canvas.width) / 8
       );
     }
-    if (Math.abs(this.diffY) > g_canvas.height / 6) {
+    if (Math.abs(this.diffY) > g_canvas.height / 4) {
       this._offsetY = -(
         player.cy -
-        (Math.sign(this.diffY) * g_canvas.height) / 6
+        (Math.sign(this.diffY) * g_canvas.height) / 4
       );
     }
 

@@ -97,7 +97,7 @@ function renderSimulation(ctx) {
   ctx.translate(worldMap._offsetX + g_worldOffsetX, worldMap._offsetY + g_worldOffsetY);
   worldMap.render(ctx);
   entityManager.render(ctx);
-
+  hud.drawHud(ctx, worldMap._offsetX + g_worldOffsetX, worldMap._offsetY + g_worldOffsetY);
   if (g_renderSpatialDebug) spatialManager.render(ctx);
   ctx.restore();
 }
@@ -118,7 +118,7 @@ function requestPreloads() {
     impactFire    :   './Sprites/impacts-sheet-colour-3-alpha.png',
     impactPlasma  :   './Sprites/impacts-sheet-colour-4-alpha.png',
     impactSun     :   './Sprites/impacts-sheet-colour-5-alpha.png',
-    explosion     :   './Sprites/jrob774-explosion_2-sheet-alpha.png',
+    explosion     :   './Sprites/explosion.png',
     powerups      :   './Sprites/powerups-sheet-alpha.png',
     projectiles   :   './Sprites/updated_projectiles-sheet-alpha.png',
     flashWhite    :   './Sprites/weaponflash-sheet-colour-1-alpha.png',
@@ -141,7 +141,11 @@ function requestPreloads() {
     spaceman      :   './Sprites/spaceman.png',
     bg_layer1     :   './Backgrounds/bg_layer1.png',
     bg_layer2     :   './Backgrounds/bg_layer2.png',
-    bg_layer3     :   './Backgrounds/bg_layer3.png'
+    bg_layer3     :   './Backgrounds/bg_layer3.png',
+    lives         :   './Sprites/lives.png',
+    basepower     :   './Sprites/basepower.png',
+    firepowerup   :   './Sprites/firepowerup.png',
+    triplepowerup :   './Sprites/triplepowerup.png'
   }
   imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -162,12 +166,16 @@ function preloadDone() {
     CROUCH: [7],
     JUMP: [1]
   };
+  g_sprites.lives        = new Sprite(g_images.lives)
+  g_sprites.basepower    = new Sprite(g_images.basepower)
+  g_sprites.firepowerup  = new Sprite(g_images.firepowerup)
+  g_sprites.triplepowerup = new Sprite(g_images.triplepowerup)
   g_sprites.impactWhite  = new Sprite(g_images.impactWhite)
   g_sprites.impactAcid   = new Sprite(g_images.impactAcid)
   g_sprites.impactFire   = new Sprite(g_images.impactFire)
   g_sprites.impactPlasma = new Sprite(g_images.impactPlasma)
   g_sprites.impactSun    = new Sprite(g_images.impactSun)
-  g_sprites.explosion    = new Sprite(g_images.explosion, 12, 1, 24, 24)
+  g_sprites.explosion    = new Sprite(g_images.explosion, 12, 1, 96, 96)
   g_sprites.explosion.animations = {
     EXPLODE: [0,1,2,3,4,5,6,7,8,9,10,11],
   }

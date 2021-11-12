@@ -14,7 +14,7 @@ Evil, ugly (but "necessary") globals, which everyone can use.
 const g_canvas = document.getElementById('myCanvas');
 const g_ctx = g_canvas.getContext('2d');
 const g_bulletSpeed = 15;
-const g_worldOffsetX = g_canvas.width/4;
+const g_worldOffsetX = g_canvas.width/3;
 const g_worldOffsetY = g_canvas.height/2;
 const g_playerEntryPos = 12;
 
@@ -51,6 +51,12 @@ var p_ground = (p_ssHeight/2);
 var p_ground2 = 0;
 
 var g_sprites = {};
+
+var noPowerup = false;
+var firePowerup = true;
+var triplePowerup = false;
+var lives = 5;
+var coins = 0;
 
 // The "nominal interval" is the one that all of our time-based units are
 // calibrated to e.g. a velocity unit is "pixels per nominal interval"

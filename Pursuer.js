@@ -190,7 +190,7 @@ Pursuer.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.dirX > 0);
   this.debugRender(ctx);
 };
 

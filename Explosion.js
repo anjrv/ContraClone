@@ -34,7 +34,7 @@ Explosion.prototype.changeCounter = 7;
 Explosion.prototype.changeBase = 7;
 Explosion.prototype.frame = 0;
 Explosion.prototype.sprite = g_sprites.explosion;
-Explosion.prototype.rSize = 26;
+Explosion.prototype.rSize = 48;
 
 Explosion.prototype.update = function (du) {
     spatialManager.unregister(this);

@@ -22,9 +22,6 @@ function Player(descr) {
   this.rotation = 0;
   this.shotId = 0;
   this.isPlayer = true;
-  this.noPowerup = false;
-  this.firePowerup = false;
-  this.triplePowerup = true;
 
   // Collisions
   this.collider = new Collider({
@@ -177,7 +174,7 @@ Player.prototype.maybeShoot = function () {
 
   if (keys[this.KEY_SHOOT]) {
     if (this.shootCountdown < 0) {
-      this.shootCountdown = (this.firePowerup) ? 1 : 10;
+      this.shootCountdown = (firePowerup) ? 1 : 10;
    
       // Calculate the direction of the bullet.
       let vX =
@@ -191,7 +188,7 @@ Player.prototype.maybeShoot = function () {
       m_laser.play();
 
       // let entityManager add a Bullet entity
-      if (this.noPowerup) {
+      if (noPowerup) {
         entityManager.firePlayerBullet(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -200,7 +197,7 @@ Player.prototype.maybeShoot = function () {
           -bulletAngle,
           'NORMALBULLET'
         );
-      } else if (this.firePowerup) {
+      } else if (firePowerup) {
         entityManager.firePlayerBulletFire(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -209,7 +206,7 @@ Player.prototype.maybeShoot = function () {
           -bulletAngle,
           'FIREBULLET'
         );
-      } else if (this.triplePowerup) {
+      } else if (triplePowerup) {
         entityManager.firePlayerBulletTriple(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -230,12 +227,14 @@ Player.prototype.takeBulletHit = function () {
 
   // Player takes hit
   //this.lives--;
+  lives--
   this.rotation = 0;
   this.invincibleCooldown = 200;
   this.respawning = true;
 
   // If Player looses all his lives, either respawn at beginning or let entityManager handle it
   if (this.lives === 0) this._isDeadNow = true;
+  if (lives < 0) lives = 5
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed
