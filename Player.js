@@ -1,4 +1,4 @@
-g_player_debug_enableInvincibility = false;
+g_player_debug_enableInvincibility = true;
 
 function Player(descr) {
   Character.call(this, descr);

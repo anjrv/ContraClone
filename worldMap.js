@@ -159,6 +159,19 @@ const worldMap = {
     }
   },
 
+  // returns true if tile doesn't have collision
+  passThrough: function (type) {
+    return type === worldMap.EMPTY_TILE
+        || type === 'QO' || type === 'OO'
+        || type === 'QP' || type === 'OP'
+        || type === 'QQ' || type === 'OQ'
+        || type === 'PO' || type === 'NO'
+        || type === 'PP' || type === 'NP'
+        || type === 'PQ' || type === 'NQ'
+        || type === 'oT' || type === 'oU'
+        || type === 'pT' || type === 'pU';
+  },
+
   debugRender: function (ctx) {
     if (this._debug_showCollisionBoxes) this._debug_RenderCollisionBoxes(ctx); // not really used
     if (g_showWorldCoordinates) this._debug_RenderWorldIndecies(ctx);
