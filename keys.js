@@ -16,7 +16,7 @@ function handleKeydown(evt) {
 
 function startGame() {
   entityManager.init();
-  worldMap.init(level1);
+  worldMap.init(level2);
   main.init(); 
   g_playing = true;
 }

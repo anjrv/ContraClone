@@ -83,7 +83,9 @@ Character.prototype.collideWithMap = function (du) {
   let gridCells = worldMap.getCollisionCells(this);
   this._debug_collisionCells = gridCells;
 
-  let collisionCells = gridCells.filter((cell) => { return cell.content !== worldMap.EMPTY_TILE })
+  let collisionCells = gridCells.filter((cell) => { 
+    return !worldMap.passThrough(cell.content);
+  })
 
   for (let i = 0; i < collisionCells.length; i++) {
     this.pushOut(collisionCells[i]);
@@ -113,7 +115,7 @@ Character.prototype.pushOut = function (cell) {
     ) {
 
     // can not fall on something that has something other than air on top of it
-    if (worldMap.getTileType(cell.row - 1, cell.col) !== worldMap.EMPTY_TILE) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row - 1, cell.col))) return;
 
     this.velY = 0;
     this.cy = cell.cy 
@@ -132,7 +134,7 @@ Character.prototype.pushOut = function (cell) {
     && this.velY < 0 // can only jump into blocks if their velocity is up
     ) {
     // can not jump into something that has something other than air below it
-    if (worldMap.getTileType(cell.row+1, cell.col) !== worldMap.EMPTY_TILE) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row+1, cell.col))) return;
     this.velY = 0;
     this.cy = cell.cy 
       + this.collider.height/2
@@ -145,7 +147,7 @@ Character.prototype.pushOut = function (cell) {
   && prev_charCol > cell.col //&& charCol <= cell.col// can only collide with a block if you pass it
   && this.velX < 0 // can only collide on left if velocity is to the left 
   ) {
-    if (worldMap.getTileType(cell.row, cell.col + 1) !== worldMap.EMPTY_TILE) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row, cell.col + 1))) return;
     this.velX = 0;
     // move character to the cell to the right of the colliding block
     this.cx = cell.cx
@@ -158,7 +160,7 @@ Character.prototype.pushOut = function (cell) {
   if ((cell.row === prev_charRow || cell.row === prev_charRow_lower) 
     && prev_charCol < cell.col //&& charCol >= cell.col 
     && this.velX > 0) {
-    if (worldMap.getTileType(cell.row, cell.col - 1) !== worldMap.EMPTY_TILE) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row, cell.col - 1))) return;
 
     this.velX = 0;
     // move character to the cell to the left of the colliding block
