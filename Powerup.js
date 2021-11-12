@@ -79,6 +79,9 @@ Powerup.prototype.update = function (du) {
       return entityManager.KILL_ME_NOW;
     }
 
+    this.prev_cx = this.cx;
+    this.prev_cy = this.cy;
+
     this.computeSubStep(du, playerLoc);
     this.collideWithMap(du);
 
