@@ -26,7 +26,7 @@ function Charger(descr) {
     cy: this.cy,
     width: this.SPRITE_WIDTH,
     height: this.SPRITE_HEIGHT,
-    offsetY: (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2,
+    offsetY: 0,
   });
 
   // Direction 1 is right, -1 is left.
@@ -64,7 +64,6 @@ Charger.prototype.update = function (du) {
     if (canTakeHit) canTakeHit.call(hitEntity);
     // return entityManager.KILL_ME_NOW;
   }
-
   this.prev_cx = this.cx;
   this.prev_cy = this.cy;
   this.computeSubStep(du, playerLoc);

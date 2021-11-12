@@ -60,6 +60,10 @@ Bullet.prototype.update = function (du) {
     if (this.type === 'FIREBULLET') {
       this.lifeSpan = 300 / NOMINAL_UPDATE_INTERVAL;
     }
+    if (this.type === 'PIERCEBULLET') {
+      this.changeCounter = 2;
+      this.changeBase = 2;
+    }
   }
   spatialManager.unregister(this);
 
@@ -83,10 +87,10 @@ Bullet.prototype.update = function (du) {
   if (hitEntity && hitEntity.shotId !== this.owner && hitEntity.constructor.name !== 'Bullet') {
     const canTakeHit = hitEntity.takeBulletHit;
     if (canTakeHit) canTakeHit.call(hitEntity);
-    return entityManager.KILL_ME_NOW;
+    if (this.type !== 'PIERCEBULLET') return entityManager.KILL_ME_NOW;
   }
 
-  if (this.type === 'FIREBULLET') {
+  if (this.type === 'FIREBULLET' || this.type === 'PIERCEBULLET') {
     this.changeCounter -= du;
     if (this.changeCounter < 0) {
       this.frame++;

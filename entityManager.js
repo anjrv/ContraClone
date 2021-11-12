@@ -28,6 +28,7 @@ const entityManager = {
   _player: [],
   _deaths: [],
   _explosions: [],
+  _powerups: [],
 
   // "PRIVATE" METHODS
 
@@ -54,6 +55,7 @@ const entityManager = {
       this._enemies,
       this._deaths,
       this._explosions,
+      this._powerups
     ];
   },
 
@@ -104,6 +106,18 @@ const entityManager = {
         this._enemies.push(pursuer);
         break;
     }
+  },
+
+  createPowerup: function (cx,cy) {
+    const powerup = new Powerup({
+      cx: cx,
+      cy: cy,
+      velX: util.randomX(),
+      velY: util.randomY(),
+      rotation: 0,
+      power: util.randomPower()
+    });
+    this._powerups.push(powerup);
   },
 
   firePlayerBullet: function (cx, cy, velX, velY, rotation, type) {
@@ -180,6 +194,20 @@ const entityManager = {
     this._bullets.push(bullet1);
     this._bullets.push(bullet2);
     this._bullets.push(bullet3);
+  },
+
+  firePlayerBulletPierce: function (cx, cy, velX, velY, rotation, type) {
+    const bullet = new Bullet({
+      cx: cx,
+      cy: cy,
+      velX: velX,
+      velY: velY,
+      rotation: rotation,
+      owner: 0,
+      anim: 'PIERCE',
+      type: type,
+    });
+    this._bullets.push(bullet);
   },
 
   fireEnemyBullet: function (cx, cy, velX, velY, rotation) {

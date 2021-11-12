@@ -53,15 +53,15 @@ const hud = {
     
     drawPowerup: function(ctx, offsetX, offsetY) {
         ctx.save()
-        if      (noPowerup)     { ctx.drawImage(g_sprites.basepower.image, (80 + lives * 20)- offsetX, 54 - offsetY, 48, 48) }
-        else if (firePowerup)   { ctx.drawImage(g_sprites.firepowerup.image, (80 + lives * 20) - offsetX, 44 - offsetY, 48, 48) }
-        else if (triplePowerup) { ctx.drawImage(g_sprites.triplepowerup.image, (80 + lives * 20) - offsetX, 40 - offsetY, 48, 48) }
+        if      (noPowerup)     { ctx.drawImage(g_sprites.basepower.image, (70 + lives * 20)- offsetX, 54 - offsetY, 48, 48) }
+        else if (firePowerup)   { ctx.drawImage(g_sprites.firepowerup.image, (70 + lives * 20) - offsetX, 44 - offsetY, 48, 48) }
+        else if (triplePowerup) { ctx.drawImage(g_sprites.triplepowerup.image, (70 + lives * 20) - offsetX, 40 - offsetY, 48, 48) }
         ctx.restore()
     },
     
     drawScore: function(ctx, offsetX, offsetY) {
         ctx.font = '26px PressStart2P';
-        ctx.fillText("0000000000", g_canvas.width-160 - offsetX, 80 - offsetY);
+        ctx.fillText("0" + "§", g_canvas.width-100 - offsetX, 80 - offsetY);
     },
 }
 

@@ -138,4 +138,26 @@ const util = {
 
     return -1;
   },
+
+  changeSprite: function (entity) {
+    if (entity.changeCounter < 0) {
+      entity.frame ++;
+      entity.changeCounter = entity.changeBase;
+    }
+  },
+
+  randomX:  function () {
+    return ((Math.random() < 0.5) ? -1 : 1) * Math.random() * 10;
+  },
+
+  randomY:  function () {
+    return -1 * Math.random() * 10;
+  },
+
+  randomPower: function () {
+    let x = Math.random();
+    if (x < 0.33) return 'RED'
+    if (x < 0.66) return 'GREEN' 
+    return 'BLUE'
+  }
 };
