@@ -185,6 +185,7 @@ function oscillateColors(ctx) {
 
 function checkInputs() {
     if (shop && !inShop && (eatKey(KEY_DOWN) || eatKey(KEY_UP))) toggleHighlights();
+
     if (startHighlight && (keys[KEY_JUMP] || keys[KEY_SHOOT])) {
         g_intro = false;
         notStarted = false;
@@ -198,7 +199,7 @@ function checkInputs() {
         mainShop.drawShop();
     } 
 
-    if (inShop && (eatKey(KEY_EXIT))) {
+    if (inShop && (eatKey(KEY_FLYUP))) {
         inShop = false;
         m_menuselect.play()
     }
