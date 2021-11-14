@@ -76,7 +76,7 @@ Coin.prototype.update = function (du) {
     //
     const hitEntity = this.findHitEntity();
     if (hitEntity.isPlayer) {
-      coins += (this.coinType === 'GREEN' ? 10 : 50);
+      s_coins += (this.coinType === 'GREEN' ? 10 : 50);
       m_collect.play()
       return entityManager.KILL_ME_NOW;
     }

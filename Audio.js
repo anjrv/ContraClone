@@ -32,3 +32,13 @@ var m_gameover= new Howl({
     src: ['./sounds/gameover.mp3'],
     volume: 0.2,
   });
+
+var m_menuselect= new Howl({
+    src: ['./sounds/menuSelect.wav'],
+    volume: 0.2,
+  });
+
+var m_purchase= new Howl({
+  src: ['./sounds/purchase.wav'],
+  volume: 0.2,
+})

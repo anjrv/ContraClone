@@ -85,7 +85,7 @@ Player.prototype.update = function (du) {
 
 Player.NOMINAL_ACC = 0.3;
 Player.NOMINAL_FRICTION = 0.2;
-Player.MAX_JUMPS = 2;
+Player.MAX_JUMPS = 1;
 Player.MAX_VEL = 6;
 Player.MAX_TURNAROUND_FORCE = 10.0;
 
@@ -175,7 +175,7 @@ Player.prototype.maybeShoot = function () {
 
   if (keys[this.KEY_SHOOT]) {
     if (this.shootCountdown < 0) {
-      this.shootCountdown = (firePowerup) ? 1 : 10;
+      this.shootCountdown = (s_firePowerup) ? s_fireRate / 10 : s_fireRate;
    
       // Calculate the direction of the bullet.
       let vX =
@@ -189,7 +189,7 @@ Player.prototype.maybeShoot = function () {
       m_laser.play();
 
       // let entityManager add a Bullet entity
-      if (noPowerup) {
+      if (s_noPowerup) {
         entityManager.firePlayerBullet(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -198,7 +198,7 @@ Player.prototype.maybeShoot = function () {
           -bulletAngle,
           'NORMALBULLET'
         );
-      } else if (firePowerup) {
+      } else if (s_firePowerup) {
         entityManager.firePlayerBulletFire(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -207,7 +207,7 @@ Player.prototype.maybeShoot = function () {
           -bulletAngle,
           'FIREBULLET'
         );
-      } else if (triplePowerup) {
+      } else if (s_triplePowerup) {
         entityManager.firePlayerBulletTriple(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -216,7 +216,7 @@ Player.prototype.maybeShoot = function () {
           -bulletAngle,
           'TRIPLEBULLET'
         );
-      } else if (piercePowerup) {
+      } else if (s_piercePowerup) {
         entityManager.firePlayerBulletPierce(
           this.cx + (vX * this.sprite.sWidth),
           this.cy + (vY * this.sprite.sHeight),
@@ -236,14 +236,14 @@ Player.prototype.takeBulletHit = function () {
   if (this.invincibleCooldown > 0 || g_player_debug_enableInvincibility) return;
 
   // Player takes hit
-  //this.lives--;
-  lives--
+  //this.s_lives--;
+  s_lives--
   this.rotation = 0;
   this.invincibleCooldown = 200;
   this.respawning = true;
 
   // If Player looses all his lives, either respawn at beginning or let entityManager handle it
-  if (lives < 0) levelTransition.goToTitleScreen();
+  if (s_lives < 0) levelTransition.goToTitleScreen();
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed

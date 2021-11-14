@@ -28,10 +28,10 @@ const hud = {
         ctx.fillRect(-offsetX, -offsetY, g_canvas.width, 80);
         ctx.strokeStyle = 'blue'
         ctx.lineWidth = 6
-        ctx.strokeRect(40 -offsetX, 40 -offsetY,  70 + (lives * 20), 80);
+        ctx.strokeRect(40 -offsetX, 40 -offsetY,  70 + (s_lives * 20), 80);
         ctx.strokeStyle = 'orange'
         ctx.lineWidth = 2
-        ctx.strokeRect(40 - offsetX + 3, 40 -offsetY + 3, 64 + (lives * 20), 74)
+        ctx.strokeRect(40 - offsetX + 3, 40 -offsetY + 3, 64 + (s_lives * 20), 74)
         ctx.restore()
     },
 
@@ -45,7 +45,7 @@ const hud = {
     
     drawLives: function(ctx, offsetX, offsetY) {
         ctx.save();
-        for (let i = 0; i < lives; i++) {
+        for (let i = 0; i < s_lives; i++) {
             ctx.drawImage(g_sprites.lives.image, (40 + i * 20) - offsetX, 40 - offsetY, 48, 48);
         }
         ctx.restore();
@@ -53,16 +53,16 @@ const hud = {
     
     drawPowerup: function(ctx, offsetX, offsetY) {
         ctx.save()
-        if      (noPowerup)     { ctx.drawImage(g_sprites.basepower.image, (70 + lives * 20)- offsetX, 54 - offsetY, 48, 48) }
-        else if (firePowerup)   { ctx.drawImage(g_sprites.firepowerup.image, (70 + lives * 20) - offsetX, 44 - offsetY, 48, 48) }
-        else if (triplePowerup) { ctx.drawImage(g_sprites.triplepowerup.image, (70 + lives * 20) - offsetX, 40 - offsetY, 48, 48) }
-        else if (piercePowerup) { ctx.drawImage(g_sprites.piercepowerup.image, (70 + lives * 20) - offsetX, 40 - offsetY, 48, 48)}
+        if      (s_noPowerup)     { ctx.drawImage(g_sprites.basepower.image, (70 + s_lives * 20)- offsetX, 54 - offsetY, 48, 48) }
+        else if (s_firePowerup)   { ctx.drawImage(g_sprites.firepowerup.image, (70 + s_lives * 20) - offsetX, 44 - offsetY, 48, 48) }
+        else if (s_triplePowerup) { ctx.drawImage(g_sprites.triplepowerup.image, (70 + s_lives * 20) - offsetX, 40 - offsetY, 48, 48) }
+        else if (s_piercePowerup) { ctx.drawImage(g_sprites.piercepowerup.image, (70 + s_lives * 20) - offsetX, 40 - offsetY, 48, 48)}
         ctx.restore()
     },
     
     drawScore: function(ctx, offsetX, offsetY) {
         ctx.font = '26px PressStart2P';
-        ctx.fillText(coins + "§", g_canvas.width-100 - offsetX, 80 - offsetY);
+        ctx.fillText(s_coins + "§", g_canvas.width-100 - offsetX, 80 - offsetY);
     },
 }
 

@@ -9,7 +9,8 @@ const level1 = {
   layer1: g_sprites.bg_layer1,
   layer2: g_sprites.bg_layer2,
   layer3: g_sprites.bg_layer3,
-  name: "Level 1: Caves",
+  name: "Caves",
+  color: 'orange',
   levelTransitionX: 5000,
   // Structure layers as single rows that can be queried with row/col info
   // This allows us to add additional background/foreground layers somewhat easily 
@@ -51,7 +52,8 @@ const level2 = {
   layer1: g_sprites.bg_layer1,
   layer2: g_sprites.bg_layer2,
   layer3: g_sprites.bg_layer3,
-  name: "Level 2: Alien Base",
+  name: "Alien Base",
+  color: 'indigo',
   levelTransitionX: 6000,
   // Structure layers as single rows that can be queried with row/col info
   // This allows us to add additional background/foreground layers somewhat easily 
