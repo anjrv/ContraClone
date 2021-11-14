@@ -18,7 +18,7 @@ function g_start(ctx) {
 function introLoop(ctx) {
     if (g_playing) return;
     ctx.drawImage(g_images.spaceScene, 0, 0)
-    if (eatKey(KEY_LEFT) || eatKey(KEY_RIGHT) || eatKey(KEY_UP) || eatKey(KEY_DOWN) || eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
+    if (keys[KEY_LEFT] || keys[KEY_RIGHT] || keys[KEY_UP] || keys[KEY_DOWN] || keys[KEY_JUMP] || keys[KEY_SHOOT]) {
         m_Intro.play();
         // setTimeout(function() {m_Boom.play();}, 7000)
         spaceScene(ctx)
@@ -54,7 +54,7 @@ function drawSubScene(ctx, x, y, r, path, baseWidth, baseHeight) {
     ctx.rotate(r*Math.PI/180)
     ctx.drawImage(g_images.ship, -20, -20, baseWidth, baseHeight)
     ctx.restore()
-    if (eatKey(KEY_LEFT) || eatKey(KEY_RIGHT) || eatKey(KEY_UP) || eatKey(KEY_DOWN) || eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
+    if (keys[KEY_LEFT] || keys[KEY_RIGHT] || keys[KEY_UP] || keys[KEY_DOWN] || keys[KEY_JUMP] || keys[KEY_SHOOT]) {
         startOption(ctx);
         return;
     }
@@ -106,6 +106,7 @@ function startOption(ctx) {
         console.log("Something a' matter");
     });
     setTimeout(function() {oscillateColors(ctx)}, 600);
+    setTimeout(function () { checkInputs() }, 100);
 }
 
 var grey = false;
@@ -166,7 +167,21 @@ function oscillateColors(ctx) {
         if (notStarted) setTimeout(function() {oscillateColors(ctx)}, 600);
         return;
         }
+        
 }
+
+function checkInputs() {
+    if (eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
+        g_intro = false;
+        notStarted = false;
+        m_startGame.play();
+        m_Intro.stop();
+        setTimeout(function () { levelTransition.changeLevel(); }, 1200);
+        return; 
+    }
+    setTimeout(function () { checkInputs(); }, 0);
+}
+
 function delay(delayInms) {
     return new Promise(resolve => {
       setTimeout(() => {

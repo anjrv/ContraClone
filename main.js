@@ -175,17 +175,6 @@ main.init = function () {
 
   this._requestNextIteration();
 };
-
-main.goToTitleScreen = function () {
-  main.shutDownManagers();
-  main.gameOver();
-  gameOver.restart();
-};
-
-main.shutDownManagers = function () {
-  entityManager.wipeEntities();
-  spatialManager.wipeCollision();
-}
  
 // main.scaleCanvas = function () {
 //   // Scale the canvas so it keeps the same aspect ratio

@@ -78,6 +78,7 @@ Player.prototype.update = function (du) {
   this.collideWithMap(du);
   this.changeSprite(du);
   this.maybeShoot();
+  this.maybeChangeLevel();
 
   spatialManager.register(this);
 };
@@ -242,7 +243,7 @@ Player.prototype.takeBulletHit = function () {
   this.respawning = true;
 
   // If Player looses all his lives, either respawn at beginning or let entityManager handle it
-  if (lives < 0) main.goToTitleScreen();
+  if (lives < 0) levelTransition.goToTitleScreen();
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed
@@ -317,6 +318,11 @@ Player.prototype.changeSprite = function (du) {
     this.crouching = true;
   }
 };
+
+// Changes level if hits the transition marker
+Player.prototype.maybeChangeLevel = function () {
+    if (this.cx > levels[currentLevel].levelTransitionX) levelTransition.nextLevel();
+}
 
 // Draws the Player on the ctx
 Player.prototype.render = function (ctx) {

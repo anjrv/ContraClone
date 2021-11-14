@@ -6,23 +6,6 @@ const keys = [];
 
 function handleKeydown(evt) {
   keys[evt.keyCode] = true;
-  if (g_intro) {
-    g_intro = false;
-    m_startGame.play();
-    m_Intro.stop();
-    setTimeout(function () {
-      startGame();
-    }, 1200);
-  }
-}
-
-function startGame() {
-  entityManager.setStuff();
-  entityManager.init();
-  worldMap.init(currentLevel);
-  main.restartGame();
-  main.init();
-  g_playing = true;
 }
 
 function handleKeyup(evt) {
