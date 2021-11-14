@@ -1,18 +1,20 @@
+'use strict';
+
 function Charger(descr) {
   Character.call(this, descr);
 
   this.scale = 2;
   this.SPRITE_WIDTH = 20 * this.scale;
   this.SPRITE_HEIGHT = 23 * this.scale;
-  this.sprite = new Sprite(g_images.charger, 5, 2, 20, 23)
+  this.sprite = new Sprite(g_images.charger, 5, 2, 20, 23);
   this.sprite.animations = {
     IDLE: [0],
-    MOVE: [0,1,2,3],
+    MOVE: [0, 1, 2, 3],
     JUMP: [4],
-    HIT_MOVE: [5,6,7,8],
+    HIT_MOVE: [5, 6, 7, 8],
     HIT_JUMP: [9],
-    DEATH: [4,9]
-  }
+    DEATH: [4, 9],
+  };
 
   this.frame = 0;
   this.changeCounter = 3;
@@ -42,7 +44,6 @@ function Charger(descr) {
   this.MAX_TURNAROUND_FORCE = 5.0;
   this.greenCoin = 2;
   this.goldCoin = 1;
-
 }
 
 Charger.prototype = Object.create(Character.prototype);
@@ -55,7 +56,14 @@ Charger.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
+    entityManager.makeEnemyKillAnimation(
+      this.cx,
+      this.cy,
+      this.sprite,
+      this.collider.height,
+      this.greenCoin,
+      this.goldCoin,
+    );
     return entityManager.KILL_ME_NOW;
   }
 
@@ -65,7 +73,7 @@ Charger.prototype.update = function (du) {
   if (hitEntity && hitEntity.isPlayer) {
     const canTakeHit = hitEntity.takeBulletHit;
     if (canTakeHit) canTakeHit.call(hitEntity);
-    // return entityManager.KILL_ME_NOW;
+    // return entityManager.KILL_ME_NOW; Could make this guy suicide on impact?
   }
   this.prev_cx = this.cx;
   this.prev_cy = this.cy;
@@ -161,8 +169,8 @@ Charger.prototype.handleJump = function (acc, currLoc, playerLoc) {
 Charger.prototype.computeSubStep = function (du, playerLoc) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
-  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
-  if (!this.onGround) this.sprite.animation = (this.hit) ? 'HIT_JUMP' : 'JUMP';
+  this.sprite.animation = this.hit ? 'HIT_MOVE' : 'MOVE';
+  if (!this.onGround) this.sprite.animation = this.hit ? 'HIT_JUMP' : 'JUMP';
 
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
@@ -183,7 +191,13 @@ Charger.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.dirX < 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    this.dirX < 0,
+  );
   //this.debugRender(ctx);
 };
 

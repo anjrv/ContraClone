@@ -37,22 +37,22 @@ Explosion.prototype.sprite = g_sprites.explosion;
 Explosion.prototype.rSize = 48;
 
 Explosion.prototype.update = function (du) {
-    spatialManager.unregister(this);
+  spatialManager.unregister(this);
 
-    if (!this.scale) this.scale = this.size / this.rSize;
-  
-    this.lifeSpan -= du;
-    if (this.lifeSpan < 0) {
-        return entityManager.KILL_ME_NOW;
-    }
-  
-    this.changeCounter -= du;
-    if (this.changeCounter < 0) {
-        this.frame++;
-        this.changeCounter = this.changeBase;
-    }
-    spatialManager.register(this);
-  };
+  if (!this.scale) this.scale = this.size / this.rSize;
+
+  this.lifeSpan -= du;
+  if (this.lifeSpan < 0) {
+    return entityManager.KILL_ME_NOW;
+  }
+
+  this.changeCounter -= du;
+  if (this.changeCounter < 0) {
+    this.frame++;
+    this.changeCounter = this.changeBase;
+  }
+  spatialManager.register(this);
+};
 
 Explosion.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;

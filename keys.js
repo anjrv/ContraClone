@@ -2,6 +2,15 @@
 // KEYBOARD HANDLING
 // =================
 
+const KEY_LEFT = 'A'.charCodeAt(0);
+const KEY_RIGHT = 'D'.charCodeAt(0);
+const KEY_UP = 'W'.charCodeAt(0);
+const KEY_DOWN = 'S'.charCodeAt(0);
+const KEY_JUMP = ' '.charCodeAt(0);
+const KEY_SHOOT = 'J'.charCodeAt(0);
+const KEY_FLYUP = 'L'.charCodeAt(0);
+const KEY_CROUCH = 16; // Shift
+
 const keys = [];
 
 function handleKeydown(evt) {

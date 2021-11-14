@@ -1,3 +1,5 @@
+'use strict';
+
 function Collider(descr) {
   for (const property in descr) {
     this[property] = descr[property];
@@ -8,19 +10,19 @@ Collider.prototype.offsetX = 0;
 Collider.prototype.offsetY = 0;
 
 Collider.prototype.collide = function (other) {
-  if (this.type === "Circle") {
-    if (other.type === "Circle") {
+  if (this.type === 'Circle') {
+    if (other.type === 'Circle') {
       return this.collideCircleCircle(other);
     }
-    if (other.type === "Box") {
+    if (other.type === 'Box') {
       return this.collideCircleBox(other);
     }
   }
-  if (this.type === "Box") {
-    if (other.type === "Circle") {
+  if (this.type === 'Box') {
+    if (other.type === 'Circle') {
       return this.collideCircleBox.call(other, this);
     }
-    if (other.type === "Box") {
+    if (other.type === 'Box') {
       return this.collideBoxBox(other);
     }
   }
@@ -59,25 +61,25 @@ Collider.prototype.collideBoxBox = function (other) {
 
 Collider.prototype.render = function (ctx) {
   const prevStyle = ctx.strokeStyle;
-  ctx.strokeStyle = "red";
-  if (this.type === "Circle") {
+  ctx.strokeStyle = 'red';
+  if (this.type === 'Circle') {
     ctx.beginPath();
     ctx.arc(
       this.cx + this.offsetX,
       this.cy + this.offsetY,
       this.radius,
       0,
-      2 * Math.PI
+      2 * Math.PI,
     );
     ctx.stroke();
   }
-  if (this.type === "Box") {
+  if (this.type === 'Box') {
     ctx.beginPath();
     ctx.rect(
       this.cx + this.offsetX - this.width / 2,
       this.cy + this.offsetY - this.height / 2,
       this.width,
-      this.height
+      this.height,
     );
     ctx.stroke();
   }

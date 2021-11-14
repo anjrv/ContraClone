@@ -1,12 +1,14 @@
+'use strict';
+
 function Patrol(descr) {
   Character.call(this, descr);
-  this.sprite = new Sprite(g_images.enemies, 16, 1, 26, 26)
+  this.sprite = new Sprite(g_images.enemies, 16, 1, 26, 26);
   this.sprite.animations = {
     IDLE: [0],
-    MOVE: [0,1,2,3,4,5,6,7],
+    MOVE: [0, 1, 2, 3, 4, 5, 6, 7],
     SHOOT: [0],
-    DEATH: [6,14],
-    HIT_MOVE: [8,9,10,11,12,13,14,15],
+    DEATH: [6, 14],
+    HIT_MOVE: [8, 9, 10, 11, 12, 13, 14, 15],
     HIT_SHOOT: [8],
   };
   this.scale = 2;
@@ -36,7 +38,6 @@ function Patrol(descr) {
   this.hp = 2;
   this.greenCoin = 2;
   this.goldCoin = 0;
-
 }
 
 Patrol.prototype = Object.create(Character.prototype);
@@ -51,9 +52,15 @@ Patrol.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
+    entityManager.makeEnemyKillAnimation(
+      this.cx,
+      this.cy,
+      this.sprite,
+      this.collider.height,
+      this.greenCoin,
+      this.goldCoin,
+    );
     return entityManager.KILL_ME_NOW;
-   
   }
 
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2)) {
@@ -69,7 +76,7 @@ Patrol.prototype.update = function (du) {
 };
 
 Patrol.prototype.attack = function (playerLoc, du) {
-  this.sprite.animation = (this.hit) ? 'HIT_SHOOT' : 'SHOOT';
+  this.sprite.animation = this.hit ? 'HIT_SHOOT' : 'SHOOT';
 
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
@@ -80,18 +87,17 @@ Patrol.prototype.attack = function (playerLoc, du) {
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 100;
 
-  const angle = util.angle(this.cx, this.cy, playerLoc.cx, playerLoc.cy)
+  const angle = util.angle(this.cx, this.cy, playerLoc.cx, playerLoc.cy);
   let vX = Math.cos(angle);
   let vY = Math.sin(angle);
-  this.direction = (vX < 0) ? 1 : -1;
-
+  this.direction = vX < 0 ? 1 : -1;
 
   entityManager.fireEnemyBullet(
     this.cx,
     this.cy,
     vX * g_bulletSpeed,
     vY * g_bulletSpeed,
-    angle 
+    angle,
   );
 };
 
@@ -104,7 +110,7 @@ Patrol.prototype.takeBulletHit = function () {
 Patrol.prototype.computeSubStep = function (du) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
-  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+  this.sprite.animation = this.hit ? 'HIT_MOVE' : 'MOVE';
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
     this.frame++;
@@ -117,7 +123,8 @@ Patrol.prototype.computeSubStep = function (du) {
     const left = worldMap.getTileType(currLoc.row, currLoc.col - 1);
     const leftDown = worldMap.getTileType(currLoc.row + 1, currLoc.col - 1);
 
-    if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE)) this.dirX *= -1;
+    if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE))
+      this.dirX *= -1;
     this.direction = 1;
   }
 
@@ -126,19 +133,25 @@ Patrol.prototype.computeSubStep = function (du) {
     const right = worldMap.getTileType(currLoc.row, currLoc.col + 1);
     const rightDown = worldMap.getTileType(currLoc.row + 1, currLoc.col + 1);
 
-    if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE)) this.dirX *= -1;
+    if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE))
+      this.dirX *= -1;
     this.direction = -1;
   }
 
   this.cx += this.dirX * this.movSpeed * du;
-
 };
 
 Patrol.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    this.direction < 0,
+  );
   this.debugRender(ctx);
 };
 

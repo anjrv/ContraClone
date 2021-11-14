@@ -23,24 +23,18 @@ function Bullet(descr) {
     type: 'Circle',
     cx: this.cx,
     cy: this.cy,
-    radius: this.sprite.sWidth/2,
+    radius: this.sprite.sWidth / 2,
   });
-  // Make a noise when I am created (i.e. fired)
-  //this.fireSound.play();
 
   /*
     // Diagnostics to check inheritance stuff
     this._bulletProperty = true;
     console.dir(this);
-*/
+  */
 }
 
 Bullet.prototype = new Entity();
-Bullet.prototype.constructor = Bullet
-
-// HACKED-IN AUDIO (no preloading)
-//Bullet.prototype.fireSound = new Audio('sounds/bulletFire.ogg');
-//Bullet.prototype.zappedSound = new Audio('sounds/bulletZapped.ogg');
+Bullet.prototype.constructor = Bullet;
 
 // Initial, inheritable, default values
 Bullet.prototype.rotation = 0;
@@ -73,7 +67,6 @@ Bullet.prototype.update = function (du) {
   const nextX = this.cx + this.velX * du;
   const nextY = this.cy + this.velY * du;
 
-
   this.cx = nextX;
   this.cy = nextY;
 
@@ -84,7 +77,11 @@ Bullet.prototype.update = function (du) {
   //
   const hitEntity = this.findHitEntity();
 
-  if (hitEntity && hitEntity.shotId !== this.owner && hitEntity.constructor.name !== 'Bullet') {
+  if (
+    hitEntity &&
+    hitEntity.shotId !== this.owner &&
+    hitEntity.constructor.name !== 'Bullet'
+  ) {
     const canTakeHit = hitEntity.takeBulletHit;
     if (canTakeHit) canTakeHit.call(hitEntity);
     if (this.type !== 'PIERCEBULLET') return entityManager.KILL_ME_NOW;
@@ -128,9 +125,9 @@ Bullet.prototype.record = function (tag) {
   tag.setAttribute('dirx', this.dirX);
   tag.setAttribute('diry', this.dirY);
   tag.setAttribute('ydir', this.yDir);
-  
+
   return tag;
-}
+};
 
 Bullet.parseRecord = function (record) {
   let cx = Number.parseFloat(record.attributes.posx.nodeValue);
@@ -146,5 +143,17 @@ Bullet.parseRecord = function (record) {
   let dirX = Number.parseInt(record.attributes.dirx.nodeValue);
   let dirY = Number.parseInt(record.attributes.diry.nodeValue);
 
-  return {cx, cy, velX, velY, shootV, shootH, shootDU, shootDD, yDir, dirX, dirY};
-}
+  return {
+    cx,
+    cy,
+    velX,
+    velY,
+    shootV,
+    shootH,
+    shootDU,
+    shootDD,
+    yDir,
+    dirX,
+    dirY,
+  };
+};
