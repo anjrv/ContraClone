@@ -19,7 +19,6 @@ const levelTransition = {
     g_playing = true;
   },
 
-<<<<<<< HEAD
     drawLevel: function(ctx) {
         ctx.clearRect(0,0,g_canvas.width, g_canvas.height);
         ctx.save()
@@ -34,32 +33,12 @@ const levelTransition = {
         ctx.fillText(levels[currentLevel].name, g_canvas.width/2, g_canvas.height/2 + g_canvas.height / 15);
         ctx.restore()
     },
-=======
-  drawLevel: function (ctx) {
-    console.log('Drawing level transition');
-    ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
-    ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, g_canvas.width, g_canvas.height);
-    ctx.fillStyle = 'indigo';
-    ctx.font = '50px ZenDots';
-    ctx.textAlign = 'center';
-    ctx.fillText(
-      levels[currentLevel].name,
-      g_canvas.width / 2,
-      g_canvas.height / 2,
-    );
-    ctx.restore();
-    console.log('Level transition');
-  },
->>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
 
   nextLevel: function () {
     levelTransition.endLevel();
     levelTransition.changeLevel();
   },
 
-<<<<<<< HEAD
     goToTitleScreen: function () {
         levelTransition.endLevel();
         levelTransition.restart();
@@ -101,17 +80,6 @@ const levelTransition = {
         g_ctx.textAlign = 'center';
         g_ctx.fillText('Game over', g_canvas.width / 2, g_canvas.height / 2);
       },
-=======
-  goToTitleScreen: function () {
-    levelTransition.endLevel();
-    gameOver.restart();
-  },
-
-  shutDownManagers: function () {
-    entityManager.wipeEntities();
-    spatialManager.wipeCollision();
-  },
->>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
 
   endLevel: function () {
     levelTransition.shutDownManagers();

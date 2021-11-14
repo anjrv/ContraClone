@@ -56,40 +56,6 @@ Coin.prototype.changeCounter = 2;
 Coin.prototype.changeBase = 2;
 
 Coin.prototype.update = function (du) {
-<<<<<<< HEAD
-    const playerLoc = this.shouldUpdate();
-    if (!playerLoc) return;
-    spatialManager.unregister(this);
-
-    if (this.lifeSpan === 20000 / NOMINAL_UPDATE_INTERVAL) {
-        this.sprite.animation = this.coinType;
-        this.sprite.scale = (this.coinType === 'GREEN' ? 1 : 2)
-        this.collider.offsetY = (this.coinType === 'GOLD' ? this.SPRITE_HEIGHT/2 : 0)
-    }
-
-    this.lifeSpan -= du;
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
-
-    this.changeCounter -= du;
-    util.changeSprite(this);
-    // Handle collisions
-    //
-    const hitEntity = this.findHitEntity();
-    if (hitEntity.isPlayer) {
-      s_coins += (this.coinType === 'GREEN' ? 10 : 50);
-      m_collect.play()
-      return entityManager.KILL_ME_NOW;
-    }
-
-    if (this.onGround) this.velX = 0;
-    this.prev_cx = this.cx;
-    this.prev_cy = this.cy;
-
-    this.computeSubStep(du, playerLoc);
-    this.collideWithMap(du);
-
-    spatialManager.register(this);
-=======
   const playerLoc = this.shouldUpdate();
   if (!playerLoc) return;
   spatialManager.unregister(this);
@@ -110,7 +76,7 @@ Coin.prototype.update = function (du) {
   //
   const hitEntity = this.findHitEntity();
   if (hitEntity.isPlayer) {
-    coins += this.coinType === 'GREEN' ? 10 : 50;
+    s_coins += this.coinType === 'GREEN' ? 10 : 50;
     m_collect.play();
     return entityManager.KILL_ME_NOW;
   }
@@ -123,7 +89,6 @@ Coin.prototype.update = function (du) {
   this.collideWithMap(du);
 
   spatialManager.register(this);
->>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
 };
 
 Coin.prototype.computeSubStep = function (du, playerLoc) {

@@ -50,7 +50,6 @@ Powerup.prototype.changeCounter = 2;
 Powerup.prototype.changeBase = 2;
 
 Powerup.prototype.update = function (du) {
-<<<<<<< HEAD
     const playerLoc = this.shouldUpdate();
     if (!playerLoc) return;
     spatialManager.unregister(this);
@@ -89,45 +88,6 @@ Powerup.prototype.update = function (du) {
     this.collideWithMap(du);
 
     spatialManager.register(this);
-=======
-  const playerLoc = this.shouldUpdate();
-  if (!playerLoc) return;
-  spatialManager.unregister(this);
-
-  if (this.lifeSpan === 20000 / NOMINAL_UPDATE_INTERVAL) {
-    this.sprite.animation = this.power;
-    this.sprite.scale = this.scale;
-  }
-
-  if (this.onGround) this.velX = 0;
-
-  this.lifeSpan -= du;
-  if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
-
-  this.changeCounter -= du;
-  util.changeSprite(this);
-  // Handle collisions
-  //
-  const hitEntity = this.findHitEntity();
-  if (hitEntity.isPlayer) {
-    noPowerup = false;
-    firePowerup = false;
-    triplePowerup = false;
-    if (this.power === 'RED') firePowerup = true;
-    else if (this.power === 'BLUE') triplePowerup = true;
-    else if (this.power === 'GREEN') piercePowerup = true;
-    m_powerup.play();
-    return entityManager.KILL_ME_NOW;
-  }
-
-  this.prev_cx = this.cx;
-  this.prev_cy = this.cy;
-
-  this.computeSubStep(du, playerLoc);
-  this.collideWithMap(du);
-
-  spatialManager.register(this);
->>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
 };
 
 Powerup.prototype.computeSubStep = function (du, playerLoc) {
