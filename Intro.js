@@ -40,8 +40,8 @@ function introLoop(ctx) {
   }, 20);
 }
 
-let notStarted = true;
-let endScene = false;
+var notStarted = true;
+var endScene = false;
 
 function spaceScene(ctx) {
   console.log('Drawing space scene');
@@ -170,8 +170,8 @@ function startOption(ctx) {
   }, 100);
 }
 
-let grey = false;
-let white = true;
+var grey = false;
+var white = true;
 
 function oscillateColors(ctx) {
   if (g_playing) return;
@@ -259,6 +259,7 @@ function oscillateColors(ctx) {
 function checkInputs() {
   if (shop && !inShop && (eatKey(KEY_DOWN) || eatKey(KEY_UP)))
     toggleHighlights();
+
   if (startHighlight && (keys[KEY_JUMP] || keys[KEY_SHOOT])) {
     g_intro = false;
     notStarted = false;
@@ -274,7 +275,7 @@ function checkInputs() {
     mainShop.drawShop();
   }
 
-  if (inShop && eatKey(KEY_EXIT)) {
+  if (inShop && eatKey(KEY_FLYUP)) {
     inShop = false;
     m_menuselect.play();
   }
