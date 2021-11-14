@@ -64,10 +64,11 @@ Walker.prototype.update = function (du) {
     return entityManager.KILL_ME_NOW;
   }
 
+  this.dirX = playerLoc.cx < this.cx ? -1 : 1;
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2) || this.shotCooldown > 0) {
     this.computeSubStep(du);
   } else {
-    this.attack(playerLoc, du);
+    this.attack(du);
   }
 
   this.collider.cx = this.cx;
@@ -76,7 +77,7 @@ Walker.prototype.update = function (du) {
   spatialManager.register(this);
 };
 
-Walker.prototype.attack = function (playerLoc, du) {
+Walker.prototype.attack = function (du) {
   this.spriteCooldown = 5;
 
   this.sprite.animation = this.hit ? 'HIT_SHOOT' : 'SHOOT';
@@ -87,19 +88,16 @@ Walker.prototype.attack = function (playerLoc, du) {
     this.hit = false;
   }
 
-  this.dirX = entityManager.getPlayer().cx < this.cx ? -1 : 1;
-
   if (this.shotCooldown > 0) return;
   this.shotCooldown = 60;
 
-  this.direction = this.dirX;
 
   entityManager.fireEnemyBullet(
     this.cx,
     this.cy + this.SPRITE_HEIGHT * 0.15, // Shift point of shot down
-    g_bulletSpeed * this.direction, 
+    g_bulletSpeed * this.dirX,
     0,
-    this.direction === -1 ? Math.PI : 0,
+    this.dirX === -1 ? Math.PI : 0,
   );
 };
 
@@ -124,21 +122,23 @@ Walker.prototype.computeSubStep = function (du) {
   // We're goin left
   if (this.dirX < 0) {
     const left = worldMap.getTileType(currLoc.row, currLoc.col - 1);
-    const leftDown = worldMap.getTileType(currLoc.row + 1, currLoc.col - 1);
+
+    // Slight hack to fit bigboy in the world
+    const leftDown = worldMap.getTileType(currLoc.row + (this.big ? 2 : 1), currLoc.col - 1);
 
     if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE))
       this.dirX *= -1;
-    this.direction = -1;
   }
 
   // We're goin right
   if (this.dirX > 0) {
     const right = worldMap.getTileType(currLoc.row, currLoc.col + 1);
-    const rightDown = worldMap.getTileType(currLoc.row + 1, currLoc.col + 1);
+
+    // Same hack
+    const rightDown = worldMap.getTileType(currLoc.row + (this.big ? 2 : 1), currLoc.col + 1);
 
     if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE))
       this.dirX *= -1;
-    this.direction = 1;
   }
 
   this.cx += this.dirX * this.movSpeed * du;
@@ -153,7 +153,7 @@ Walker.prototype.render = function (ctx) {
     this.cx,
     this.cy,
     this.rotation,
-    -this.dirX < 0,
+    this.dirX > 0,
   );
   this.debugRender(ctx);
 };
