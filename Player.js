@@ -191,41 +191,48 @@ Player.prototype.maybeShoot = function () {
       let bulletAngle = Math.sign(dX) > 0 ? this.angle : -this.angle + Math.PI;
       m_laser.play();
 
+      // Bullet math
+      const bulletX = this.cx + vX * this.sprite.sWidth;
+      let bulletY = this.cy + vY * this.sprite.sHeight + (this.crouching ? this.sprite.sHeight * 0.2 : 0);
+      const bulletXVel = vX * g_bulletSpeed;
+      const bulletYVel = vY * g_bulletSpeed;
+      const angle = -bulletAngle;
+
       // let entityManager add a Bullet entity
       if (noPowerup) {
         entityManager.firePlayerBullet(
-          this.cx + vX * this.sprite.sWidth,
-          this.cy + vY * this.sprite.sHeight,
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
           'NORMALBULLET',
         );
       } else if (firePowerup) {
         entityManager.firePlayerBulletFire(
-          this.cx + vX * this.sprite.sWidth,
-          this.cy + vY * this.sprite.sHeight,
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
           'FIREBULLET',
         );
       } else if (triplePowerup) {
         entityManager.firePlayerBulletTriple(
-          this.cx + vX * this.sprite.sWidth,
-          this.cy + vY * this.sprite.sHeight,
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
           'TRIPLEBULLET',
         );
       } else if (piercePowerup) {
         entityManager.firePlayerBulletPierce(
-          this.cx + vX * this.sprite.sWidth,
-          this.cy + vY * this.sprite.sHeight,
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
           'PIERCEBULLET',
         );
       }

@@ -96,8 +96,8 @@ Walker.prototype.attack = function (playerLoc, du) {
 
   entityManager.fireEnemyBullet(
     this.cx,
-    this.cy,
-    g_bulletSpeed * this.direction,
+    this.cy + this.SPRITE_HEIGHT * 0.15, // Shift point of shot down
+    g_bulletSpeed * this.direction, 
     0,
     this.direction === -1 ? Math.PI : 0,
   );
