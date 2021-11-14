@@ -43,23 +43,26 @@ function Player(descr) {
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.KEY_LEFT = 'A'.charCodeAt(0);
-Player.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
-Player.prototype.KEY_UP = 'W'.charCodeAt(0);
-Player.prototype.KEY_DOWN = 'S'.charCodeAt(0);
-
-Player.prototype.KEY_JUMP = ' '.charCodeAt(0);
-Player.prototype.KEY_SHOOT = 'J'.charCodeAt(0);
-Player.prototype.KEY_FLYUP = 'L'.charCodeAt(0);
-Player.prototype.KEY_CROUCH = 16; // SHIFT
+Player.prototype.KEY_LEFT = KEY_LEFT;
+Player.prototype.KEY_RIGHT = KEY_RIGHT;
+Player.prototype.KEY_UP = KEY_UP;
+Player.prototype.KEY_DOWN = KEY_DOWN;
+Player.prototype.KEY_JUMP = KEY_JUMP;
+Player.prototype.KEY_SHOOT = KEY_SHOOT;
+Player.prototype.KEY_FLYUP = KEY_FLYUP;
+Player.prototype.KEY_CROUCH = KEY_CROUCH;
 
 // Variables that bullets can use.
-var p_velX;
-var p_velY;
+let p_velX;
+let p_velY;
 Player.prototype.update = function (du) {
-  this.shootCountdown = this.shootCountdown < 0 ? this.shootCountdown : this.shootCountdown - du;
-  this.invincibleCooldown = this.invincibleCooldown < 0 ? this.invincibleCooldown : this.invincibleCooldown - du;
-  
+  this.shootCountdown =
+    this.shootCountdown < 0 ? this.shootCountdown : this.shootCountdown - du;
+  this.invincibleCooldown =
+    this.invincibleCooldown < 0
+      ? this.invincibleCooldown
+      : this.invincibleCooldown - du;
+
   spatialManager.unregister(this);
 
   if (this._isDeadNow) return entityManager.KILL_ME_NOW;
@@ -98,7 +101,7 @@ Player.prototype.computeSubStep = function (du) {
     this.applyAccel(-Player.NOMINAL_FRICTION * this.velX, gravityAcc, du);
     return;
   }
-  
+
   let horizAcc = this.computeHorizontalAccel();
 
   gravityAcc = this.handleJump(gravityAcc, du);
@@ -123,7 +126,7 @@ Player.prototype.computeHorizontalAccel = function () {
       util.lerp(
         1.0,
         Player.MAX_TURNAROUND_FORCE,
-        (this.velX + Player.MAX_VEL) / (2 * Player.MAX_VEL)
+        (this.velX + Player.MAX_VEL) / (2 * Player.MAX_VEL),
       );
   } else if (keys[this.KEY_RIGHT]) {
     this.direction = 1;
@@ -132,17 +135,17 @@ Player.prototype.computeHorizontalAccel = function () {
       util.lerp(
         Player.MAX_TURNAROUND_FORCE,
         1.0,
-        (this.velX + Player.MAX_VEL) / (2 * Player.MAX_VEL)
+        (this.velX + Player.MAX_VEL) / (2 * Player.MAX_VEL),
       );
   } else if (this.onGround) {
     acceleration -= Player.NOMINAL_FRICTION * this.velX;
   }
   return acceleration;
-}
+};
 
 // Handles logic for Player jump
 Player.prototype.handleJump = function (acc, du) {
-  // Make controllable jumps by scaling down velY when Player is jumping but 
+  // Make controllable jumps by scaling down velY when Player is jumping but
   // the jump key has been released
   if (!keys[this.KEY_JUMP] && this.jumping) {
     this.velY *= 0.5;
@@ -161,22 +164,27 @@ Player.prototype.handleJump = function (acc, du) {
     this.jumps++;
     this.jumping = true;
   }
-  
+
   // make a sick flip in the air
   if (!this.onGround) this.rotation += 0.3 * du * this.direction;
 
   return acc;
-}
+};
 
 // Shoots if the Player can shoot
 Player.prototype.maybeShoot = function () {
   // If player is respawning they can't shoot
-  if (this.respawning) return; 
+  if (this.respawning) return;
 
   if (keys[this.KEY_SHOOT]) {
     if (this.shootCountdown < 0) {
+<<<<<<< HEAD
       this.shootCountdown = (s_firePowerup) ? s_fireRate / 10 : s_fireRate;
    
+=======
+      this.shootCountdown = firePowerup ? 1 : 10;
+
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
       // Calculate the direction of the bullet.
       let vX =
         this.velX === 0
@@ -188,43 +196,50 @@ Player.prototype.maybeShoot = function () {
       let bulletAngle = Math.sign(dX) > 0 ? this.angle : -this.angle + Math.PI;
       m_laser.play();
 
+      // Bullet math
+      const bulletX = this.cx + vX * this.sprite.sWidth;
+      let bulletY = this.cy + vY * this.sprite.sHeight + (this.crouching ? this.sprite.sHeight * 0.2 : 0);
+      const bulletXVel = vX * g_bulletSpeed;
+      const bulletYVel = vY * g_bulletSpeed;
+      const angle = -bulletAngle;
+
       // let entityManager add a Bullet entity
       if (s_noPowerup) {
         entityManager.firePlayerBullet(
-          this.cx + (vX * this.sprite.sWidth),
-          this.cy + (vY * this.sprite.sHeight),
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
-          'NORMALBULLET'
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
+          'NORMALBULLET',
         );
       } else if (s_firePowerup) {
         entityManager.firePlayerBulletFire(
-          this.cx + (vX * this.sprite.sWidth),
-          this.cy + (vY * this.sprite.sHeight),
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
-          'FIREBULLET'
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
+          'FIREBULLET',
         );
       } else if (s_triplePowerup) {
         entityManager.firePlayerBulletTriple(
-          this.cx + (vX * this.sprite.sWidth),
-          this.cy + (vY * this.sprite.sHeight),
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
-          'TRIPLEBULLET'
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
+          'TRIPLEBULLET',
         );
       } else if (s_piercePowerup) {
         entityManager.firePlayerBulletPierce(
-          this.cx + (vX * this.sprite.sWidth),
-          this.cy + (vY * this.sprite.sHeight),
-          vX * g_bulletSpeed,
-          vY * g_bulletSpeed,
-          -bulletAngle,
-          'PIERCEBULLET'
-        )
+          bulletX,
+          bulletY,
+          bulletXVel,
+          bulletYVel,
+          angle,
+          'PIERCEBULLET',
+        );
       }
     }
   }
@@ -236,8 +251,13 @@ Player.prototype.takeBulletHit = function () {
   if (this.invincibleCooldown > 0 || g_player_debug_enableInvincibility) return;
 
   // Player takes hit
+<<<<<<< HEAD
   //this.s_lives--;
   s_lives--
+=======
+  //this.lives--;
+  lives--;
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
   this.rotation = 0;
   this.invincibleCooldown = 200;
   this.respawning = true;
@@ -247,18 +267,20 @@ Player.prototype.takeBulletHit = function () {
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed
-var p_changeCounter = 50;
-var p_changeBase = p_changeCounter;
+let p_changeCounter = 50;
+let p_changeBase = p_changeCounter;
 
-// Based on the action that the Player is performing, choose a sprite 
+// Based on the action that the Player is performing, choose a sprite
 Player.prototype.changeSprite = function (du) {
   // A counter that changes the sprite when du * velocity reaches a certain number.
 
-  if (this.invincibleCooldown > 0 
-    && Math.floor(this.invincibleCooldown / 5) % 2) {
-      this.sprite.animation = false;
-      return;
-    }
+  if (
+    this.invincibleCooldown > 0 &&
+    Math.floor(this.invincibleCooldown / 5) % 2
+  ) {
+    this.sprite.animation = false;
+    return;
+  }
   if (this.respawning) {
     this.sprite.animation = 'CROUCH';
     this.respawning = this.invincibleCooldown > 150;
@@ -321,8 +343,9 @@ Player.prototype.changeSprite = function (du) {
 
 // Changes level if hits the transition marker
 Player.prototype.maybeChangeLevel = function () {
-    if (this.cx > levels[currentLevel].levelTransitionX) levelTransition.nextLevel();
-}
+  if (this.cx > levels[currentLevel].levelTransitionX)
+    levelTransition.nextLevel();
+};
 
 // Draws the Player on the ctx
 Player.prototype.render = function (ctx) {
@@ -330,12 +353,18 @@ Player.prototype.render = function (ctx) {
 
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    this.direction < 0,
+  );
 
   this.debugRender(ctx);
-}
+};
 
-// Records variables that Player can use to restore itself
+// Records letiables that Player can use to restore itself
 Player.prototype.record = function (tag) {
   tag.setAttribute('type', this.constructor.name);
   tag.setAttribute('posx', this.cx);

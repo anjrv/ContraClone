@@ -12,8 +12,6 @@ const level1 = {
   name: "Caves",
   color: 'orange',
   levelTransitionX: 5000,
-  // Structure layers as single rows that can be queried with row/col info
-  // This allows us to add additional background/foreground layers somewhat easily 
   layers: [
     [
       ['EN', 'EK', 'EL', 'EN', 'EK', 'EL', 'EN', 'EK', 'EL', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '], 
@@ -39,8 +37,6 @@ const level1 = {
       ['GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL', 'GM', 'GN', 'GK', 'GL'],
     ]
   ]
-  // NOTE: Currently using characters for environmental variables
-  // and numbers as "character" entities, 0 being player spawn tile
 }
 
 const level2 = {
@@ -55,8 +51,6 @@ const level2 = {
   name: "Alien Base",
   color: 'indigo',
   levelTransitionX: 6000,
-  // Structure layers as single rows that can be queried with row/col info
-  // This allows us to add additional background/foreground layers somewhat easily 
   layers: [
     [
       ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', 'EL', 'EM', 'EN', 'EK', 'EL', 'EM', 'EN', 'EK', 'EL', 'EM', 'EN', 'EK', 'EL', 'EM', 'EN', 'EK', 'EL', 'EM', 'EN', 'EK', 'EL', 'EM', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', 'EL', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '], 

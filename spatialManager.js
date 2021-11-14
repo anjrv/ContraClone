@@ -19,13 +19,9 @@ e.g. general collision detection.
 const spatialManager = {
   // "PRIVATE" DATA
 
-  _nextSpatialID: 1, // make all valid IDs non-falsey (i.e. don't start at 0)
+  _nextSpatialID: 1,
 
   _entities: [],
-
-  // "PRIVATE" METHODS
-  //
-  // <none yet>
 
   // PUBLIC METHODS
 
@@ -67,7 +63,7 @@ const spatialManager = {
     }
   },
 
-  wipeCollisionObjects: function() {
+  wipeCollisionObjects: function () {
     let i = 0;
     for (let ID in this._entities) {
       i++;
@@ -75,7 +71,7 @@ const spatialManager = {
     }
   },
 
-  wipeCollision: function() {
+  wipeCollision: function () {
     this._entities = [];
-  }
+  },
 };

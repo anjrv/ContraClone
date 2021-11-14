@@ -2,7 +2,7 @@
 // SPRITE STUFF
 // ============
 
-"use strict";
+'use strict';
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
@@ -16,9 +16,18 @@ function Sprite(image, cols = 1, rows = 1, sWidth = 0, sHeight = 0, scale = 1) {
   this.rows = rows;
   this.sWidth = sWidth || image.width;
   this.sHeight = sHeight || image.height;
+<<<<<<< HEAD
   this.animations = {"NONE": Array(cols * rows).fill().map((x,i) => i)};
   this.animation = "NONE";
   this.spriteScale = scale;
+=======
+  this.animations = {
+    NONE: Array(cols * rows)
+      .fill()
+      .map((x, i) => i),
+  };
+  this.animation = 'NONE';
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
 }
 
 // Sprite.prototype.sx = 0;
@@ -26,10 +35,10 @@ function Sprite(image, cols = 1, rows = 1, sWidth = 0, sHeight = 0, scale = 1) {
 Sprite.prototype.frame = 0;
 Sprite.prototype.scale = 1;
 
-Sprite.prototype.updateFrame = function(frame_num) {
-    const anim_frame = frame_num % this.animations[this.animation].length;
-    this.frame = this.animations[this.animation][anim_frame];
-}
+Sprite.prototype.updateFrame = function (frame_num) {
+  const anim_frame = frame_num % this.animations[this.animation].length;
+  this.frame = this.animations[this.animation][anim_frame];
+};
 
 Sprite.prototype.drawAt = function (ctx, x, y) {
   ctx.drawImage(this.image, x, y);
@@ -40,7 +49,7 @@ Sprite.prototype.drawCentredAt = function (
   cx,
   cy,
   rotation = 0,
-  mirror = false
+  mirror = false,
 ) {
   ctx.save();
   ctx.translate(cx, cy);
@@ -51,7 +60,6 @@ Sprite.prototype.drawCentredAt = function (
   // drawImage expects "top-left" coords, so we offset our destination
   // coords accordingly, to draw our sprite centred at the origin
 
-
   ctx.drawImage(
     this.image,
     this.sWidth * (this.frame % this.cols),
@@ -60,47 +68,60 @@ Sprite.prototype.drawCentredAt = function (
     this.sHeight,
     -this.sWidth / 2,
     -this.sHeight / 2,
+<<<<<<< HEAD
     this.sWidth * this.spriteScale,
     this.sHeight * this.spriteScale
+=======
+    this.sWidth,
+    this.sHeight,
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
   );
   ctx.restore();
 };
 
 Sprite.prototype.drawWrappedCentredAt = function (ctx, cx, cy, rotation) {
-    
-    // Get "screen width"
-    var sw = g_canvas.width;
-    
-    // Draw primary instance
-    this.drawWrappedVerticalCentredAt(ctx, cx, cy, rotation);
-    
-    // Left and Right wraps
-    this.drawWrappedVerticalCentredAt(ctx, cx - sw, cy, rotation);
-    this.drawWrappedVerticalCentredAt(ctx, cx + sw, cy, rotation);
+  // Get "screen width"
+  var sw = g_canvas.width;
+
+  // Draw primary instance
+  this.drawWrappedVerticalCentredAt(ctx, cx, cy, rotation);
+
+  // Left and Right wraps
+  this.drawWrappedVerticalCentredAt(ctx, cx - sw, cy, rotation);
+  this.drawWrappedVerticalCentredAt(ctx, cx + sw, cy, rotation);
 };
 
-Sprite.prototype.drawWrappedVerticalCentredAt = function (ctx, cx, cy, rotation) {
+Sprite.prototype.drawWrappedVerticalCentredAt = function (
+  ctx,
+  cx,
+  cy,
+  rotation,
+) {
+  // Get "screen height"
+  var sh = g_canvas.height;
 
-    // Get "screen height"
-    var sh = g_canvas.height;
-    
-    // Draw primary instance
-    this.drawCentredAt2(ctx, cx, cy, rotation);
-    
-    // Top and Bottom wraps
-    this.drawCentredAt2(ctx, cx, cy - sh, rotation);
-    this.drawCentredAt2(ctx, cx, cy + sh, rotation);
+  // Draw primary instance
+  this.drawCentredAt2(ctx, cx, cy, rotation);
+
+  // Top and Bottom wraps
+  this.drawCentredAt2(ctx, cx, cy - sh, rotation);
+  this.drawCentredAt2(ctx, cx, cy + sh, rotation);
 };
 
 Sprite.prototype.drawCentredAt2 = function (ctx, cx, cy, rotation) {
-    
   // This is how to implement default parameters...
   if (rotation === undefined) rotation = 0;
-  
+
   ctx.save();
-  ctx.translate(cx,cy);
+  ctx.translate(cx, cy);
   ctx.rotate(rotation);
-  ctx.translate(-cx,-cy);
-  ctx.drawImage(this.image, cx - (this.width/2), cy - (this.height/2), this.width, this.height);
+  ctx.translate(-cx, -cy);
+  ctx.drawImage(
+    this.image,
+    cx - this.width / 2,
+    cy - this.height / 2,
+    this.width,
+    this.height,
+  );
   ctx.restore();
-};  
+};

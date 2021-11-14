@@ -14,10 +14,6 @@ with suitable 'data' and 'methods'.
 
 'use strict';
 
-// Tell jslint not to complain about my use of underscore prefixes (nomen),
-// my flattening of some indentation (white), or my use of incr/decr ops
-// (plusplus).
-//
 /*jslint nomen: true, white: true, plusplus: true*/
 
 const entityManager = {
@@ -57,7 +53,7 @@ const entityManager = {
       this._deaths,
       this._explosions,
       this._powerups,
-      this._coins
+      this._coins,
     ];
   },
 
@@ -112,7 +108,7 @@ const entityManager = {
           cx: cx,
           cy: cy,
           velX: velX,
-          velY: velY
+          velY: velY,
         });
         this._enemies.push(walker);
         break;
@@ -138,28 +134,28 @@ const entityManager = {
     }
   },
 
-  createPowerup: function (cx,cy,type) {
+  createPowerup: function (cx, cy, type) {
     const powerup = new Powerup({
       cx: cx,
       cy: cy,
       velX: util.randomX(),
       velY: util.randomY(),
       rotation: 0,
-      power: util.randomPower()
+      power: util.randomPower(),
     });
     this._powerups.push(powerup);
   },
 
-  createCoin: function (cx,cy, type) {
+  createCoin: function (cx, cy, type) {
     const coin = new Coin({
       cx: cx,
       cy: cy,
       velX: util.randomX(),
       velY: util.randomY(),
       rotation: 0,
-      coinType: type
-    })
-    this._coins.push(coin)
+      coinType: type,
+    });
+    this._coins.push(coin);
   },
 
   firePlayerBullet: function (cx, cy, velX, velY, rotation, type) {
@@ -266,14 +262,21 @@ const entityManager = {
     this._bullets.push(bullet);
   },
 
-  makeEnemyKillAnimation: function (cx, cy, sprite, height, greenCoin, goldCoin) {
+  makeEnemyKillAnimation: function (
+    cx,
+    cy,
+    sprite,
+    height,
+    greenCoin,
+    goldCoin,
+  ) {
     const death = new Death({
       cx: cx,
       cy: cy,
       sprite: sprite,
       height: height,
       greenCoin: greenCoin,
-      goldCoin: goldCoin
+      goldCoin: goldCoin,
     });
     this._deaths.push(death);
   },
@@ -372,11 +375,27 @@ const entityManager = {
         this._enemies.push(new Patrol(descr));
       }
     }
-    this._categories = [this._player, this._bullets, this._enemies, this._deaths, this._explosions, this._powerups, this._coins];
+    this._categories = [
+      this._player,
+      this._bullets,
+      this._enemies,
+      this._deaths,
+      this._explosions,
+      this._powerups,
+      this._coins,
+    ];
   },
   setStuff: function () {
-    this._categories = [this._player, this._bullets, this._enemies, this._deaths, this._explosions, this._powerups, this._coins];
-  }
+    this._categories = [
+      this._player,
+      this._bullets,
+      this._enemies,
+      this._deaths,
+      this._explosions,
+      this._powerups,
+      this._coins,
+    ];
+  },
 };
 
 // Some deferred setup which needs the object to have been created first

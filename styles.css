@@ -12,6 +12,17 @@ body {
   justify-content: center;
 }
 
+.devtools {
+  background-color: azure;
+  border-radius: 4px;
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  padding: 16px;
+  top: 30vh;
+  z-index: 100;
+}
+
 .container {
   position: relative;
   top: 0;
@@ -46,21 +57,18 @@ body {
 
 .stars {
   z-index: 1;
-  background: #000 url('./Effects/stars.png') repeat top
-    center;
+  background: #000 url('./Effects/stars.png') repeat top center;
 }
 
 .twinkling {
   z-index: 2;
-  background: transparent url('./Effects/twinkling.png')
-    repeat top center;
+  background: transparent url('./Effects/twinkling.png') repeat top center;
   animation: move-twink-back 200s linear infinite;
 }
 
 .clouds {
   z-index: 3;
-  background: transparent url('./Effects/clouds.png') repeat
-    top center;
+  background: transparent url('./Effects/clouds.png') repeat top center;
   animation: move-clouds-back 200s linear infinite;
 }
 

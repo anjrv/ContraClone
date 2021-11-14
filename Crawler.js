@@ -1,101 +1,108 @@
+'use strict';
+
 function Crawler(descr) {
-    Character.call(this, descr);
-    this.scale = (this.big) ? 4 : 2;
-    this.SPRITE_WIDTH = 38 * this.scale;
-    this.SPRITE_HEIGHT = 40 * this.scale;
-    this.sprite = new Sprite(g_images.crawler, 5, 2, 38, 40)
-    this.sprite.animations = {
+  Character.call(this, descr);
+  this.scale = this.big ? 4 : 2;
+  this.SPRITE_WIDTH = 38 * this.scale;
+  this.SPRITE_HEIGHT = 40 * this.scale;
+  this.sprite = new Sprite(g_images.crawler, 5, 2, 38, 40);
+  this.sprite.animations = {
     IDLE: [0],
-    MOVE: [0,1],
-    SHOOT: [2,3,4],
-    HIT_MOVE: [5,6],
-    HIT_SHOOT: [7,8,9],
-    DEATH: [4,9]
-    }
+    MOVE: [0, 1],
+    SHOOT: [2, 3, 4],
+    HIT_MOVE: [5, 6],
+    HIT_SHOOT: [7, 8, 9],
+    DEATH: [4, 9],
+  };
 
-    this.frame = 0;
-    this.changeCounter = 5;
-    this.changeBase = this.changeCounter;
-    this.sprite.animation = 'IDLE';
-    this.cy += (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2;
+  this.frame = 0;
+  this.changeCounter = 5;
+  this.changeBase = this.changeCounter;
+  this.sprite.animation = 'IDLE';
+  this.cy += (worldMap.getTileSize() - this.SPRITE_HEIGHT) / 2;
 
-    // Collisions
-    this.collider = new Collider({
-      type: 'Box',
-      cx: this.cx,
-      cy: this.cy,
-      width: this.SPRITE_WIDTH,
-      height: this.SPRITE_HEIGHT,
-      offsetY: 0,
-    });
+  // Collisions
+  this.collider = new Collider({
+    type: 'Box',
+    cx: this.cx,
+    cy: this.cy,
+    width: this.SPRITE_WIDTH,
+    height: this.SPRITE_HEIGHT,
+    offsetY: 0,
+  });
 
-    // Direction 1 is right, -1 is left.
-    this.dirX = -1;
-    this.movSpeed = 1;
-    this.shotCooldown = -1;
-    this.shotId = 1;
-    this.hp = (this.big) ? 16 : 4;
-    this.greenCoin = (this.big) ? 4 : 2;
-    this.goldCoin = (this.big) ? 2 : 1;
-    this.spriteCooldown = 0;
-
+  // Direction 1 is right, -1 is left.
+  this.dirX = -1;
+  this.movSpeed = 1;
+  this.shotCooldown = -1;
+  this.shotId = 1;
+  this.hp = this.big ? 16 : 4;
+  this.greenCoin = this.big ? 4 : 2;
+  this.goldCoin = this.big ? 2 : 1;
+  this.spriteCooldown = 0;
 }
 
 Crawler.prototype = Object.create(Character.prototype);
 Crawler.prototype.constructor = Crawler;
 
 Crawler.prototype.update = function (du) {
-    const playerLoc = this.shouldUpdate();
-    if (!playerLoc) return;
+  const playerLoc = this.shouldUpdate();
+  if (!playerLoc) return;
 
-    this.shotCooldown -= du;
-    this.spriteCooldown -= du;
+  this.shotCooldown -= du;
+  this.spriteCooldown -= du;
 
-    spatialManager.unregister(this);
+  spatialManager.unregister(this);
 
-    if (this._isDeadNow) {
-      entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
-      return entityManager.KILL_ME_NOW;
-    }
+  if (this._isDeadNow) {
+    entityManager.makeEnemyKillAnimation(
+      this.cx,
+      this.cy,
+      this.sprite,
+      this.collider.height,
+      this.greenCoin,
+      this.goldCoin,
+    );
+    return entityManager.KILL_ME_NOW;
+  }
 
-    if (playerLoc.sqDist > Math.pow(g_aggroRange, 2) || this.shotCooldown > 0) {
-      this.computeSubStep(du);
-    } else {
-      this.attack(playerLoc, du);
-    }
+  if (playerLoc.sqDist > Math.pow(g_aggroRange, 2) || this.shotCooldown > 0) {
+    this.computeSubStep(du);
+  } else {
+    this.attack(playerLoc, du);
+  }
 
-    this.collider.cx = this.cx;
-    this.collider.cy = this.cy;
+  this.collider.cx = this.cx;
+  this.collider.cy = this.cy;
 
-    spatialManager.register(this);
+  spatialManager.register(this);
 };
 
 Crawler.prototype.attack = function (playerLoc, du) {
-    this.spriteCooldown = 5;
+  this.spriteCooldown = 5;
 
-    this.sprite.animation = (this.hit) ? 'HIT_SHOOT' : 'SHOOT';
+  this.sprite.animation = this.hit ? 'HIT_SHOOT' : 'SHOOT';
 
-    this.changeCounter -= du;
-    if (this.changeCounter < 0) {
-      this.changeCounter = this.changeBase;
-      this.hit = false;
-    }
+  this.changeCounter -= du;
+  if (this.changeCounter < 0) {
+    this.changeCounter = this.changeBase;
+    this.hit = false;
+  }
 
-    this.dirX = entityManager.getPlayer().cx < this.cx ? -1 : 1;
+  this.dirX = entityManager.getPlayer().cx < this.cx ? -1 : 1;
 
-    if (this.shotCooldown > 0) return;
-    this.shotCooldown = 15;
+  if (this.shotCooldown > 0) return;
+  this.shotCooldown = 15;
 
-    this.direction = this.dirX;
+  this.direction = this.dirX;
 
-
-    entityManager.fireEnemyBullet(
-      this.cx,
-      this.cy,
-      g_bulletSpeed * this.direction,
-      0,
-      this.direction === -1 ? Math.PI : 0
-    );
+  entityManager.fireEnemyBullet(
+    this.cx,
+    this.cy,
+    g_bulletSpeed * this.direction,
+    0,
+    this.direction === -1 ? Math.PI : 0,
+  );
 };
 
 Crawler.prototype.takeBulletHit = function () {
@@ -107,7 +114,8 @@ Crawler.prototype.takeBulletHit = function () {
 Crawler.prototype.computeSubStep = function (du) {
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
-  if (this.spriteCooldown <= 0) this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+  if (this.spriteCooldown <= 0)
+    this.sprite.animation = this.hit ? 'HIT_MOVE' : 'MOVE';
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
     this.frame++;
@@ -134,14 +142,19 @@ Crawler.prototype.computeSubStep = function (du) {
   }
 
   this.cx += this.dirX * this.movSpeed * du;
-
 };
 
 Crawler.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, -this.dirX < 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    -this.dirX < 0,
+  );
   this.debugRender(ctx);
 };
 

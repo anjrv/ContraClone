@@ -1,5 +1,6 @@
 // INTRO SCREEN
 
+<<<<<<< HEAD
 let KEY_LEFT = "A".charCodeAt(0);
 let KEY_RIGHT = "D".charCodeAt(0);
 let KEY_UP = "W".charCodeAt(0);
@@ -34,12 +35,48 @@ function introLoop(ctx) {
         return;
     }
     setTimeout(function() { introLoop(ctx); }, 20);
+=======
+function g_start(ctx) {
+  g_intro = false;
+  g_playing = false;
+  g_skip = false;
+  introLoop(ctx);
 }
 
-var notStarted = true;
-var endScene = false;
+function introLoop(ctx) {
+  if (g_playing) return;
+  ctx.drawImage(g_images.spaceScene, 0, 0);
+  if (
+    keys[KEY_LEFT] ||
+    keys[KEY_RIGHT] ||
+    keys[KEY_UP] ||
+    keys[KEY_DOWN] ||
+    keys[KEY_JUMP] ||
+    keys[KEY_SHOOT]
+  ) {
+    m_Intro.play();
+    // setTimeout(function() {m_Boom.play();}, 7000)
+    spaceScene(ctx);
+
+    setTimeout(function () {
+      zoomLetters(g_canvas.width / 2, g_canvas.height * 1.3, 1700, ctx);
+    }, 13500);
+    setTimeout(function () {
+      startOption(ctx);
+    }, 18500);
+    return;
+  }
+  setTimeout(function () {
+    introLoop(ctx);
+  }, 20);
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
+}
+
+let notStarted = true;
+let endScene = false;
 
 function spaceScene(ctx) {
+<<<<<<< HEAD
     console.log("Drawing space scene")
     if (g_playing) return;
     let path = 1;
@@ -96,11 +133,98 @@ function zoomLetters(x,y,s,ctx) {
             return;
         }
         setTimeout(function() { zoomLetters(x,y-3.409090909,s-7.454545455,ctx); }, 20);
-    }
+=======
+  if (g_playing) return;
+  let path = 1;
+  let baseWidth = 70;
+  let baseHeight = 70;
+  drawSubScene(ctx, -100, 400, 80, path, baseWidth, baseHeight);
 }
 
+function drawSubScene(ctx, x, y, r, path, baseWidth, baseHeight) {
+  if (g_playing) return;
+  let curve = 0.002;
+  let rotate = 0.015;
+  if (path < -0.2) {
+    curve = 0.1;
+    rotate = 0.1 / curve;
+    baseWidth -= 0.5;
+    baseHeight -= 0.5;
+  }
+  if (endScene) return;
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.drawImage(g_images.spaceScene, 0, 0);
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate((r * Math.PI) / 180);
+  ctx.drawImage(g_images.ship, -20, -20, baseWidth, baseHeight);
+  ctx.restore();
+  if (
+    keys[KEY_LEFT] ||
+    keys[KEY_RIGHT] ||
+    keys[KEY_UP] ||
+    keys[KEY_DOWN] ||
+    keys[KEY_JUMP] ||
+    keys[KEY_SHOOT]
+  ) {
+    startOption(ctx);
+    return;
+  }
+  setTimeout(function () {
+    drawSubScene(
+      ctx,
+      x + 1.5,
+      y - 0.5 * path,
+      r + rotate,
+      path - curve,
+      baseWidth,
+      baseHeight,
+    );
+  }, 15);
+}
+
+function zoomLetters(x, y, s, ctx) {
+  if (g_playing) return;
+  if (g_skip) return;
+  endScene = true;
+  if (s > 60) {
+    g_ZenFont
+      .load()
+      .then(function (font) {
+        document.fonts.add(font);
+
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.drawImage(g_images.spaceScene, 0, 0);
+        ctx.font = `${s}px ZenDots`;
+        ctx.fillStyle = 'red';
+        ctx.save();
+        ctx.textAlign = `center`;
+        ctx.fillText('SPACE CONTRA', x, y);
+        ctx.restore();
+      })
+      .catch(function (error) {
+        console.log("Something a' matter");
+      });
+    if (
+      eatKey(KEY_LEFT) ||
+      eatKey(KEY_RIGHT) ||
+      eatKey(KEY_UP) ||
+      eatKey(KEY_DOWN) ||
+      eatKey(KEY_JUMP) ||
+      eatKey(KEY_SHOOT)
+    ) {
+      startOption(ctx);
+      return;
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
+    }
+    setTimeout(function () {
+      zoomLetters(x, y - 3.409090909, s - 7.454545455, ctx);
+    }, 20);
+  }
+}
 
 function startOption(ctx) {
+<<<<<<< HEAD
     if (g_skipped) return;
     console.log("Start option")
     inShop = false;
@@ -111,42 +235,107 @@ function startOption(ctx) {
     g_intro = true;
     g_skipped = true;
     g_pressStartFont.load().then(function(font) {
+=======
+  if (g_playing) return;
+  if (g_skip) return;
+  g_skip = true;
+  g_intro = true;
+  g_pressStartFont
+    .load()
+    .then(function (font) {
+      document.fonts.add(font);
+      ctx.font = '20px PressStart2P';
+      ctx.fillStyle = 'white';
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.fillText('Press Start', x, 500);
+      ctx.restore();
+    })
+    .catch(function (error) {
+      console.log("Something a' matter");
+    });
+  setTimeout(function () {
+    oscillateColors(ctx);
+  }, 600);
+  setTimeout(function () {
+    checkInputs();
+  }, 100);
+}
+
+let grey = false;
+let white = true;
+
+function oscillateColors(ctx) {
+  if (g_playing) return;
+  let x = g_canvas.width / 2;
+  let y = 251.80909092899515;
+  let s = 67.45454535499714;
+
+  g_ZenFont
+    .load()
+    .then(function (font) {
+      document.fonts.add(font);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.drawImage(g_images.spaceScene, 0, 0);
+      ctx.font = `${s}px ZenDots`;
+      ctx.fillStyle = 'red';
+      ctx.save();
+      ctx.textAlign = `center`;
+      ctx.fillText('SPACE CONTRA', x, y);
+      ctx.restore();
+    })
+    .catch(function (error) {
+      console.log("Something a' matter");
+    });
+
+  if (white) {
+    g_pressStartFont
+      .load()
+      .then(function (font) {
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
         document.fonts.add(font);
         ctx.font = '20px PressStart2P';
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = 'gray';
         ctx.save();
         ctx.textAlign = 'center';
         ctx.fillText('Start Game', x, 460);
         if (shop) ctx.fillText('Shop', x, 520)
         ctx.restore();
-    }).catch(function(error) {
+      })
+      .catch(function (error) {
         console.log("Something a' matter");
-    });
-    setTimeout(function() {oscillateColors(ctx)}, 600);
-    setTimeout(function () { checkInputs() }, 100);
-}
+      });
+    grey = true;
+    white = false;
+    if (notStarted)
+      setTimeout(function () {
+        oscillateColors(ctx);
+      }, 600);
+    return;
+  }
 
-var grey = false;
-var white = true;
-
-function oscillateColors(ctx) {
-    if (g_playing) return;
-    let x = g_canvas.width/2
-    let y = 251.80909092899515 
-    let s = 67.45454535499714
-
-    g_ZenFont.load().then(function(font) {
+  if (grey) {
+    g_pressStartFont
+      .load()
+      .then(function (font) {
         document.fonts.add(font);
+<<<<<<< HEAD
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.drawImage(g_images.spaceScene, 0, 0)
         ctx.font = `${s}px ZenDots`;
         ctx.fillStyle = 'indigo';
+=======
+        ctx.font = '20px PressStart2P';
+        ctx.fillStyle = 'white';
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
         ctx.save();
-        ctx.textAlign = `center`;
-        ctx.fillText('SPACE CONTRA', x, y);
+        ctx.textAlign = 'center';
+        ctx.fillText('Press Start', x, 500);
         ctx.restore();
-    }).catch(function(error) {
+      })
+      .catch(function (error) {
         console.log("Something a' matter");
+<<<<<<< HEAD
     });
 
     if (white) {
@@ -294,6 +483,33 @@ function checkInputs() {
         m_purchase.play()
     }
     setTimeout(function () { checkInputs(); }, 0);
+=======
+      });
+    grey = false;
+    white = true;
+    if (notStarted)
+      setTimeout(function () {
+        oscillateColors(ctx);
+      }, 600);
+    return;
+  }
+}
+
+function checkInputs() {
+  if (eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) {
+    g_intro = false;
+    notStarted = false;
+    m_startGame.play();
+    m_Intro.stop();
+    setTimeout(function () {
+      levelTransition.changeLevel();
+    }, 1200);
+    return;
+  }
+  setTimeout(function () {
+    checkInputs();
+  }, 0);
+>>>>>>> ae2835c38b94f03c541476e1bac430c8c8da11d8
 }
 
 function toggleHighlights() {
@@ -303,9 +519,9 @@ function toggleHighlights() {
 }
 
 function delay(delayInms) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(2);
-      }, delayInms);
-    });
-  }
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInms);
+  });
+}
