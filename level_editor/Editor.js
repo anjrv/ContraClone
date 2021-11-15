@@ -39,9 +39,6 @@ const last_translation = { x: 0, y: 0 }
 
 const translation = { x: 0, y: 0 }
 
-const ZOOM_IN = 'J'.charCodeAt(0);
-const ZOOM_OUT = 'I'.charCodeAt(0);
-
 const getMouseTile = function() {
     const mouseTile = {
         x: Math.floor((g_mouseX - translation.x) / (zoom * g_sprites.tilesheet.sWidth)),
