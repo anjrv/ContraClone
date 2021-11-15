@@ -95,7 +95,7 @@ Player.MAX_TURNAROUND_FORCE = 10.0;
 
 Player.prototype.computeSubStep = function (du) {
   let gravityAcc = this.computeGravity();
-  gravityAcc = Math.min(worldMap.getTileSize() * 0.8, gravityAcc);
+  //gravityAcc = Math.min(worldMap.getTileSize() * 0.8, gravityAcc);
 
   if (this.respawning) {
     // Player is respawning, they are only affected by gravity
@@ -161,7 +161,7 @@ Player.prototype.handleJump = function (acc, du) {
   if (keys[this.KEY_JUMP] && !this.jumping && this.jumps < Player.MAX_JUMPS) {
     this.verticalCollision = false;
     this.onGround = false;
-    acc = -20.0;
+    acc -= 20.0 / du;
     this.jumps++;
     this.jumping = true;
   }
