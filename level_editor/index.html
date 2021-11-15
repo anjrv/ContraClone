@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+    <div style="
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr auto 1fr;
+    ">
+        <div style="display: flex; flex-direction: column;">
+            <h1>Tools</h1>
+            <div id="tool_container">
+                
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <label>
+                    Level Name:
+                    <input type="text" id="levelName" value="Level name" />
+                </label>
+                <label>
+                    Level columns:
+                    <input type="number" min="1" id="levelColumns">
+                </label>
+                <label>
+                    Level rows:
+                    <input type="number" min="1" id="levelRows">
+                </label>
+                <label>
+                    Level transition x:
+                    <input type="number" min="1" id="levelTransitionX">
+                </label>
+                <label>
+                    Level layer:
+                    <input type="number" min="0" max="2" id="levelLayer" value="1">
+                </label>
+                <label>
+                    Only display selected layer:
+                    <input type="checkbox" id="levelOnlyLayer">
+                </label>
+                <button id="levelClearLayer">Clear Layer</button>
+            </div>
+            <div>
+                <button id="downloadLevel">Download data</button>
+                <input type="file" id="uploadLevel" title="Upload level"/>
+            </div>
+            <p>
+                <a href="/">Back to game</a>
+            </p>
+        </div>
+        <canvas id="mapCanvas" width="1000" height="768" style="border: 1px solid black;">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <div>
+            <h2>Palette</h2>
+            <div id="palette_container">
+                
+            </div>
+        </div>
+    </div>
+    
+    <script src="../imagesPreload.js"></script>
+    <script src="../Sprite.js"></script>
+    <script src="./Editor.js"></script>
+    <script src="./levelEdit.js"></script>
+    <script src="../handleMouse.js"></script>
+    <script src="../keys.js"></script>
+</body>
+</html>
