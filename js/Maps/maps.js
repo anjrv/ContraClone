@@ -29,4 +29,8 @@ const loadLevels = async function() {
   level2.id = id++;
   level2.tilesize = 40;
   levels.push(level2);
+
+  level3.id = id++;
+  level3.tilesize = 40;
+  levels.push(level3);
 }
