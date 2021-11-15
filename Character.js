@@ -64,8 +64,8 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
   let oldVelY = this.velY;
 
   // v = u + at
-  this.velX += accelX;
-  this.velY += accelY;
+  this.velX += accelX * du;
+  this.velY += accelY * du;
 
   let averageVelX = (this.velX + oldVelX) / 2;
   let averageVelY = (this.velY + oldVelY) / 2;
