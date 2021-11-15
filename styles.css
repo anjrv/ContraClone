@@ -45,7 +45,8 @@ body {
   height: 768px;
 }
 
-.game {
+.game,
+.shop {
   position: absolute;
   display: block;
   top: 0;

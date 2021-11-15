@@ -277,6 +277,8 @@ function checkInputs() {
 
   if (inShop && eatKey(KEY_FLYUP)) {
     inShop = false;
+    // Wipe shop screen
+    g_shopCtx.clearRect(0, 0, g_canvas.width, g_canvas.height);
     m_menuselect.play();
   }
   if (inShop && eatKey(KEY_DOWN)) {

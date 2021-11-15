@@ -13,6 +13,9 @@ Evil, ugly (but "necessary") globals, which everyone can use.
 
 const g_canvas = document.getElementById('myCanvas');
 const g_ctx = g_canvas.getContext('2d');
+const g_shopCanvas = document.getElementById('myShopCanvas');
+const g_shopCtx = g_shopCanvas.getContext('2d');
+
 const g_bulletSpeed = 10;
 const g_worldOffsetX = g_canvas.width / 3;
 const g_worldOffsetY = g_canvas.height / 2;

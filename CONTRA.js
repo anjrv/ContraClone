@@ -47,19 +47,6 @@ let g_renderSpatialDebug = false;
 let g_play_recording = false;
 let g_record = false;
 
-//const KEY_GRAVITY = keyCode('G');
-//const KEY_AVE_VEL = keyCode('V');
-const KEY_SPATIAL = keyCode('X');
-const KEY_HALT = keyCode('H');
-const KEY_RESET = keyCode('R');
-const KEY_DEVTOOLS = keyCode('0');
-const KEY_1 = keyCode('1');
-const KEY_2 = keyCode('2');
-const KEY_K = keyCode('K');
-const KEY_RECORD = keyCode('8');
-const KEY_PLAY_RECORDING = keyCode('9');
-
-
 function processDiagnostics() {
 
   //if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
