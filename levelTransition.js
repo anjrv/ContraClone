@@ -1,7 +1,7 @@
 const levelTransition = {
     changeLevel: function() {
         g_playing = true;
-        currentLevel = (currentLevel === levels.length-1) ? 0 : currentLevel + 1;
+        currentLevel = (currentLevel >= levels.length - 1) ? 0 : currentLevel + 1;
         setTimeout(function () { levelTransition.drawLevel(g_ctx); }, 5);
         setTimeout(function () { levelTransition.startGame() }, 2500);
     },

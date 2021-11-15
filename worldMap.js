@@ -58,7 +58,7 @@ const worldMap = {
     );
     const right = Math.min(
       left + g_canvas.width / this._tileSize + addedShift,
-      this._layers[0][0].length,
+      this._layers[1][0].length,
     );
     const up = Math.max(
       Math.floor(
@@ -68,12 +68,12 @@ const worldMap = {
     );
     const down = Math.min(
       up + g_canvas.height / this._tileSize + addedShift,
-      this._layers[0].length,
+      this._layers[1].length,
     );
 
     for (let i = up; i < down; i++) {
       for (let j = left; j < right; j++) {
-        const val = this._layers[0][i][j];
+        const val = this._layers[1][i][j];
         if (
           val === '1' ||
           val === '2' ||
@@ -85,7 +85,7 @@ const worldMap = {
         ) {
           const x = j * this._tileSize;
           const y = i * this._tileSize;
-          this._layers[0][i][j] = worldMap.EMPTY_TILE;
+          this._layers[1][i][j] = worldMap.EMPTY_TILE;
           entityManager.spawnEnemy(val, x, y);
         }
       }
@@ -114,12 +114,41 @@ const worldMap = {
 
   render: function (ctx) {
     // this.drawBackgrounds(ctx);
-    for (let i = 0; i < this._layers[0].length; i++) {
-      for (let j = 0; j < this._layers[0][i].length; j++) {
+    for (let l = 0; l < 2; l++) {
+      for (let i = 0; i < this._layers[l].length; i++) {
+        for (let j = 0; j < this._layers[l][i].length; j++) {
+          const x = j * this._tileSize;
+          const y = i * this._tileSize;
+  
+          const val = this._layers[l][i][j];
+          if (
+            val === '  ' ||
+            val === '0' ||
+            val === '1' ||
+            val === '2' ||
+            val === '3' ||
+            val === '4' ||
+            val === '5' ||
+            val === '6' ||
+            val === '7'
+          )
+            continue;
+          this._sprite.animation = this._layers[l][i][j];
+          this._sprite.updateFrame(0);
+          this._sprite.drawCentredAt(ctx, x, y, 0);
+        }
+      }
+    }
+    this.debugRender(ctx);
+  },
+
+  foregroundRender: function(ctx) {
+    for (let i = 0; i < this._layers[2].length; i++) {
+      for (let j = 0; j < this._layers[2][i].length; j++) {
         const x = j * this._tileSize;
         const y = i * this._tileSize;
 
-        const val = this._layers[0][i][j];
+        const val = this._layers[2][i][j];
         if (
           val === '  ' ||
           val === '0' ||
@@ -132,12 +161,11 @@ const worldMap = {
           val === '7'
         )
           continue;
-        this._sprite.animation = this._layers[0][i][j];
+        this._sprite.animation = this._layers[2][i][j];
         this._sprite.updateFrame(0);
         this._sprite.drawCentredAt(ctx, x, y, 0);
       }
     }
-    this.debugRender(ctx);
   },
 
   drawBackgrounds: function (ctx) {
@@ -169,7 +197,7 @@ const worldMap = {
 
   getTileType: function (row, col) {
     try {
-      return this._layers[0][row][col];
+      return this._layers[1][row][col];
     } catch (e) {
       return this.EMPTY_TILE;
     }
@@ -207,8 +235,8 @@ const worldMap = {
     let oldFont = ctx.font;
     let oldAlignment = ctx.textAlign;
     ctx.font = '10px Arial';
-    for (let i = 0; i < this._layers[0].length; i++) {
-      for (let j = 0; j < this._layers[0][i].length; j++) {
+    for (let i = 0; i < this._layers[1].length; i++) {
+      for (let j = 0; j < this._layers[1][i].length; j++) {
         const x = j * this._tileSize;
         const y = i * this._tileSize;
         ctx.fillText(`${i}-${j}`, x, y);
@@ -306,7 +334,7 @@ const worldMap = {
         let content;
         // make sure we don't index out of the array
         try {
-          content = this._layers[0][top][left];
+          content = this._layers[1][top][left];
         } catch (e) {
           content = '  ';
         }
@@ -352,10 +380,10 @@ const worldMap = {
     let grid = this.getGridCoords(entity);
     try {
       let r =
-        this._layers[0][grid[2]][grid[1]] === '  ' &&
-        this._layers[0][grid[2]][grid[3]] === '  ';
-      // this._drop1 = [[grid[2]], grid[1], this._layers[0][grid[2]+1][grid[1]] === '  ']
-      // this._drop2 = [[grid[2]], grid[3], this._layers[0][grid[2]+1][grid[3]] === '  ']
+        this._layers[1][grid[2]][grid[1]] === '  ' &&
+        this._layers[1][grid[2]][grid[3]] === '  ';
+      // this._drop1 = [[grid[2]], grid[1], this._layers[1][grid[2]+1][grid[1]] === '  ']
+      // this._drop2 = [[grid[2]], grid[3], this._layers[1][grid[2]+1][grid[3]] === '  ']
       return r;
     } catch (e) {
       return true;
@@ -368,8 +396,8 @@ const worldMap = {
     let grid = this.getGridCoords(entity);
     try {
       return (
-        this._layers[0][grid[2]][grid[1]] === '  ' &&
-        this._layers[0][grid[0]][grid[1]] === '  '
+        this._layers[1][grid[2]][grid[1]] === '  ' &&
+        this._layers[1][grid[0]][grid[1]] === '  '
       );
     } catch (e) {
       return true;
@@ -381,7 +409,7 @@ const worldMap = {
   isRight: function (entity) {
     let grid = this.getGridCoords(entity);
     try {
-      return this._layers[0][grid[2]][grid[1] + 1] === '  ';
+      return this._layers[1][grid[2]][grid[1] + 1] === '  ';
     } catch (e) {
       return true;
     }
@@ -393,8 +421,8 @@ const worldMap = {
     let grid = this.getGridCoords(entity);
     try {
       return (
-        this._layers[0][grid[2] - 1][grid[1]] === '  ' &&
-        this._layers[0][grid[2] - 1][grid[3]] === '  '
+        this._layers[1][grid[2] - 1][grid[1]] === '  ' &&
+        this._layers[1][grid[2] - 1][grid[3]] === '  '
       );
     } catch (e) {
       return true;

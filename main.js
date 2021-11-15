@@ -33,13 +33,14 @@ const main = {
 main.iter = function (frameTime) {
   // Use the given frameTime to update all of our game-clocks
   this._updateClocks(frameTime);
-
-  // Perform the iteration core to do all the "real" work
-  this._iterCore(this._frameTimeDelta_ms);
-
-  // Diagnostics, such as showing current timer values etc.
-  this._debugRender(g_ctx);
-
+  if (this._frameTimeDelta_ms !== 0) {
+    // Perform the iteration core to do all the "real" work
+    this._iterCore(this._frameTimeDelta_ms);
+  
+    // Diagnostics, such as showing current timer values etc.
+    this._debugRender(g_ctx);
+  }
+  
   // Request the next iteration if needed
   if (!this._isGameOver) this._requestNextIteration();
 };

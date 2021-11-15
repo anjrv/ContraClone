@@ -26,7 +26,7 @@ function update(dt) {
   // Warn about very large dt values -- they may lead to error
   //
   if (dt > 200) {
-    console.log('Big dt =', dt, ': CLAMPING TO NOMINAL');
+    console.warn('Big dt =', dt, ': CLAMPING TO NOMINAL');
     dt = NOMINAL_UPDATE_INTERVAL;
   }
 

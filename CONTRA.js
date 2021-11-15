@@ -97,6 +97,7 @@ function renderSimulation(ctx) {
   ctx.translate(worldMap._offsetX + g_worldOffsetX, worldMap._offsetY + g_worldOffsetY);
   worldMap.render(ctx);
   entityManager.render(ctx);
+  worldMap.foregroundRender(ctx);
   hud.drawHud(ctx, worldMap._offsetX + g_worldOffsetX, worldMap._offsetY + g_worldOffsetY);
   if (g_renderSpatialDebug) spatialManager.render(ctx);
   ctx.restore();
@@ -327,7 +328,8 @@ function preloadDone() {
     oA: [1134],oB: [1135],oC: [1136],oD: [1137],oE: [1138],oF: [1139],oG: [1130],oH: [1141],oI: [1142],oJ: [1143],oK: [1144],oL: [1145],oM: [1146],oN: [1147],oO: [1148],oP: [1149],oQ: [1150],oR: [1151],oS: [1152],oT: [1153],oU: [1154],oV: [1155],oW: [1156],oX: [1157],oY: [1158],oZ: [1159],oÐ: [1160],
     pA: [1161],pB: [1162],pC: [1163],pD: [1164],pE: [1165],pF: [1166],pG: [1167],pH: [1168],pI: [1169],pJ: [1170],pK: [1171],pL: [1172],pM: [1173],pN: [1174],pO: [1175],pP: [1176],pQ: [1177],pR: [1178],pS: [1179],pT: [1180],pU: [1181],pV: [1182],pW: [1183],pX: [1184],pY: [1185],pZ: [1186],pÐ: [1187]
   }
-  g_start(g_ctx)
+  loadLevels();
+  g_start(g_ctx);
 }
 
 // Kick it off
