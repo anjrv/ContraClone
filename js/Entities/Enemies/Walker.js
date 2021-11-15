@@ -38,6 +38,7 @@ function Walker(descr) {
   this.greenCoin = this.big ? 4 : 2;
   this.goldCoin = this.big ? 2 : 1;
   this.spriteCooldown = 0;
+  this.turnCooldown = 0;
 }
 
 Walker.prototype = Object.create(Character.prototype);
@@ -64,7 +65,7 @@ Walker.prototype.update = function (du) {
     return entityManager.KILL_ME_NOW;
   }
 
-  if (this.shotCooldown < 0) this.dirX = playerLoc.cx < this.cx ? -1 : 1;
+  if (this.shotCooldown < 0 && this.turnCooldown < 0) this.dirX = playerLoc.cx < this.cx ? -1 : 1;
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2) || this.shotCooldown > 0) {
     this.computeSubStep(du);
   } else {
@@ -108,6 +109,7 @@ Walker.prototype.takeBulletHit = function () {
 };
 
 Walker.prototype.computeSubStep = function (du) {
+  this.turnCooldown -= du;
   const currLoc = worldMap.getIndeciesFromCoords(this.cx, this.cy);
 
   if (this.spriteCooldown <= 0)
@@ -126,8 +128,11 @@ Walker.prototype.computeSubStep = function (du) {
     // Slight hack to fit bigboy in the world
     const leftDown = worldMap.getTileType(currLoc.row + (this.big ? 2 : 1), currLoc.col - 1);
 
-    if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE))
+    if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE) && this.turnCooldown < 0) {
       this.dirX *= -1;
+      this.turnCooldown = 65;
+    }
+      
   }
 
   // We're goin right
@@ -137,10 +142,11 @@ Walker.prototype.computeSubStep = function (du) {
     // Same hack
     const rightDown = worldMap.getTileType(currLoc.row + (this.big ? 2 : 1), currLoc.col + 1);
 
-    if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE))
+    if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE) && this.turnCooldown < 0) {
       this.dirX *= -1;
+      this.turnCooldown = 65;
+    }
   }
-
   this.cx += this.dirX * this.movSpeed * du;
 };
 
