@@ -336,7 +336,7 @@ Player.prototype.changeSprite = function (du) {
 
 // Changes level if hits the transition marker
 Player.prototype.maybeChangeLevel = function () {
-  if (this.cx > levels[currentLevel].levelTransitionX * levels[currentLevel].tilescale)
+  if (this.cx > levels[currentLevel].levelTransitionX * levels[currentLevel].tilesize)
     levelTransition.nextLevel();
 };
 
