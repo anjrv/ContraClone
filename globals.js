@@ -13,12 +13,18 @@ Evil, ugly (but "necessary") globals, which everyone can use.
 
 const g_canvas = document.getElementById('myCanvas');
 const g_ctx = g_canvas.getContext('2d');
+const g_shopCanvas = document.getElementById('myShopCanvas');
+const g_shopCtx = g_shopCanvas.getContext('2d');
+
 const g_bulletSpeed = 10;
-const g_worldOffsetX = g_canvas.width/3;
-const g_worldOffsetY = g_canvas.height/2;
+const g_worldOffsetX = g_canvas.width / 3;
+const g_worldOffsetY = g_canvas.height / 2;
 const g_playerEntryPos = 12;
 
-var g_pressStartFont = new FontFace('PressStart2P', 'url(fonts/PressStart2P-Regular.ttf)');
+var g_pressStartFont = new FontFace(
+  'PressStart2P',
+  'url(fonts/PressStart2P-Regular.ttf)',
+);
 var g_ZenFont = new FontFace('ZenDots', 'url(fonts/ZenDots-Regular.ttf)');
 var g_skip = false;
 var g_intro = false;
@@ -46,19 +52,13 @@ var p_ssHeight = 2240;
 
 // Calculate where the sprite should appear
 // NOTE! It was made unnecessary after worldmap update
-var p_ground = (p_ssHeight/2);
+var p_ground = p_ssHeight / 2;
 
 var p_ground2 = 0;
 
 var g_sprites = {};
 
-var noPowerup = true;
-var firePowerup = false;
-var triplePowerup = false;
-var piercePowerup = false;
-var baseLives = 5;
-var lives = baseLives;
-var coins = 0;
+var shop = false;
 
 // The "nominal interval" is the one that all of our time-based units are
 // calibrated to e.g. a velocity unit is "pixels per nominal interval"

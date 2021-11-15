@@ -47,19 +47,6 @@ let g_renderSpatialDebug = false;
 let g_play_recording = false;
 let g_record = false;
 
-//const KEY_GRAVITY = keyCode('G');
-//const KEY_AVE_VEL = keyCode('V');
-const KEY_SPATIAL = keyCode('X');
-const KEY_HALT = keyCode('H');
-const KEY_RESET = keyCode('R');
-const KEY_DEVTOOLS = keyCode('0');
-const KEY_1 = keyCode('1');
-const KEY_2 = keyCode('2');
-const KEY_K = keyCode('K');
-const KEY_RECORD = keyCode('8');
-const KEY_PLAY_RECORDING = keyCode('9');
-
-
 function processDiagnostics() {
 
   //if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
@@ -148,7 +135,8 @@ function requestPreloads() {
     firepowerup   :   './Sprites/firepowerup.png',
     triplepowerup :   './Sprites/triplepowerup.png',
     piercepowerup :   './Sprites/piercepowerup.png',
-    coins         :   './Sprites/coins.png'
+    coins         :   './Sprites/coins.png',
+    box           :   './Sprites/box.png'
   }
   imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -281,6 +269,14 @@ function preloadDone() {
     HIT_SHOOT: [13],
     DEATH: [3,10]
   }
+  g_sprites.box          = new Sprite(g_images.box, 5, 1, 4, 4, 3);
+  g_sprites.box.animations = {
+    SQUARE: [0],
+    UP: [1],
+    DOWN: [2],
+    LEFT: [3],
+    RIGHT: [4]
+  }
   g_sprites.tilesheet    = new Sprite(g_images.tilesheet, 27, 44, 16, 16)
   g_sprites.tilesheet.animations = {
     AA: [0],   AB: [1],   AC: [2],   AD: [3],   AE: [4],   AF: [5],   AG: [6],   AH: [7],   AI: [8],   AJ: [9],   AK: [10],  AL: [11],  AM: [12],  AN: [13],  AO: [14],  AP: [15],  AQ: [16],  AR: [17],  AS: [18],  AT: [19],  AU: [20],  AV: [21],  AW: [22],  AX: [23],  AY: [24],  AZ: [25],  AÐ: [26],
@@ -329,7 +325,8 @@ function preloadDone() {
     pA: [1161],pB: [1162],pC: [1163],pD: [1164],pE: [1165],pF: [1166],pG: [1167],pH: [1168],pI: [1169],pJ: [1170],pK: [1171],pL: [1172],pM: [1173],pN: [1174],pO: [1175],pP: [1176],pQ: [1177],pR: [1178],pS: [1179],pT: [1180],pU: [1181],pV: [1182],pW: [1183],pX: [1184],pY: [1185],pZ: [1186],pÐ: [1187]
   }
   loadLevels();
-  g_start(g_ctx);
+  mainShop.init();
+  intro(g_ctx)
 }
 
 // Kick it off

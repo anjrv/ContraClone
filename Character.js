@@ -2,7 +2,7 @@
 // Character STUFF
 // ==========
 
-"use strict";
+'use strict';
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
@@ -56,7 +56,7 @@ Character.prototype.computeGravity = function () {
 };
 
 // updates the Character based on the acceleration and update interval
-// -- uses average velocity to make game play frame indepentant -- 
+// -- uses average velocity to make game play frame indepentant --
 Character.prototype.applyAccel = function (accelX, accelY, du) {
   if (du === 0) du = 1;
 
@@ -66,7 +66,7 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
   // v = u + at
   this.velX += accelX * du;
   this.velY += accelY * du;
-  
+
   let averageVelX = (this.velX + oldVelX) / 2;
   let averageVelY = (this.velY + oldVelY) / 2;
 
@@ -77,28 +77,34 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
   this.collider.cy = this.cy;
 };
 
-// Asks worldMap which collisionCells character is in. Filters out Empty tiles and 
+// Asks worldMap which collisionCells character is in. Filters out Empty tiles and
 // pushes the character out each cell that is left
 Character.prototype.collideWithMap = function (du) {
   let gridCells = worldMap.getCollisionCells(this);
   this._debug_collisionCells = gridCells;
 
-  let collisionCells = gridCells.filter((cell) => { 
+  let collisionCells = gridCells.filter((cell) => {
     return !worldMap.passThrough(cell.content);
-  })
+  });
 
   for (let i = 0; i < collisionCells.length; i++) {
     this.pushOut(collisionCells[i]);
   }
-}
+};
 
 Character.prototype.pushOut = function (cell) {
   if (cell.content === worldMap.EMPTY_TILE) return;
 
   let tileSize = worldMap.getTileSize();
 
-  let prev_charCoords = worldMap.getIndeciesFromCoords(this.prev_cx, this.prev_cy); // just use the center bc then rowLower makes more sense
-  let charCoords = worldMap.getIndeciesFromCoords(this.collider.cx, this.collider.cy); // just use the center bc then rowLower makes more sense
+  let prev_charCoords = worldMap.getIndeciesFromCoords(
+    this.prev_cx,
+    this.prev_cy,
+  ); // just use the center bc then rowLower makes more sense
+  let charCoords = worldMap.getIndeciesFromCoords(
+    this.collider.cx,
+    this.collider.cy,
+  ); // just use the center bc then rowLower makes more sense
 
   let charRow = charCoords.row;
   let charRow_lower = charRow + 1;
@@ -109,19 +115,18 @@ Character.prototype.pushOut = function (cell) {
   let prev_charCol = prev_charCoords.col;
 
   // Character is falling
-  if (prev_charRow_lower <= cell.row
-    && Math.abs(charCol - cell.col) <= 1 // can only fall on blocks that are in the same or adjacent colums
-    && this.velY > 0 // can only stop on block if their velocity is down
-    ) {
-
+  if (
+    prev_charRow_lower <= cell.row &&
+    Math.abs(charCol - cell.col) <= 1 && // can only fall on blocks that are in the same or adjacent colums
+    this.velY > 0 // can only stop on block if their velocity is down
+  ) {
     // can not fall on something that has something other than air on top of it
-    if (!worldMap.passThrough(worldMap.getTileType(cell.row - 1, cell.col))) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row - 1, cell.col)))
+      return;
 
     this.velY = 0;
-    this.cy = cell.cy 
-      - tileSize/2
-      - this.collider.height/2 
-      - this.collider.offsetY;
+    this.cy =
+      cell.cy - tileSize / 2 - this.collider.height / 2 - this.collider.offsetY;
     this.onGround = true;
     if (this.isPlayer) this.sprite.animation = 'IDLE';
     this.rotation = 0;
@@ -129,47 +134,48 @@ Character.prototype.pushOut = function (cell) {
   }
 
   // Character is jumping up
-  if (prev_charRow > cell.row // can only jump into blocks above them
-    && cell.col === charCol // can only jump into blocks in the same column
-    && this.velY < 0 // can only jump into blocks if their velocity is up
-    ) {
+  if (
+    prev_charRow > cell.row && // can only jump into blocks above them
+    cell.col === charCol && // can only jump into blocks in the same column
+    this.velY < 0 // can only jump into blocks if their velocity is up
+  ) {
     // can not jump into something that has something other than air below it
-    if (!worldMap.passThrough(worldMap.getTileType(cell.row+1, cell.col))) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row + 1, cell.col)))
+      return;
     this.velY = 0;
-    this.cy = cell.cy 
-      + this.collider.height/2
-      + this.collider.offsetY;
+    this.cy = cell.cy + this.collider.height / 2 + this.collider.offsetY;
     this.collider.cy = this.cy;
   }
-  
+
   // Character colliding with cell left of them
-  if ((cell.row === prev_charRow || cell.row === prev_charRow_lower) // can only collide with block in the same row
-  && prev_charCol > cell.col //&& charCol <= cell.col// can only collide with a block if you pass it
-  && this.velX < 0 // can only collide on left if velocity is to the left 
+  if (
+    (cell.row === prev_charRow || cell.row === prev_charRow_lower) && // can only collide with block in the same row
+    prev_charCol > cell.col && //&& charCol <= cell.col// can only collide with a block if you pass it
+    this.velX < 0 // can only collide on left if velocity is to the left
   ) {
-    if (!worldMap.passThrough(worldMap.getTileType(cell.row, cell.col + 1))) return;
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row, cell.col + 1)))
+      return;
     this.velX = 0;
     // move character to the cell to the right of the colliding block
-    this.cx = cell.cx
-      + tileSize / 2
-      + this.collider.width / 2;
+    this.cx = cell.cx + tileSize / 2 + this.collider.width / 2;
     this.collider.cx = this.cx;
   }
 
   // Character colliding with cell right of them
-  if ((cell.row === prev_charRow || cell.row === prev_charRow_lower) 
-    && prev_charCol < cell.col //&& charCol >= cell.col 
-    && this.velX > 0) {
-    if (!worldMap.passThrough(worldMap.getTileType(cell.row, cell.col - 1))) return;
+  if (
+    (cell.row === prev_charRow || cell.row === prev_charRow_lower) &&
+    prev_charCol < cell.col && //&& charCol >= cell.col
+    this.velX > 0
+  ) {
+    if (!worldMap.passThrough(worldMap.getTileType(cell.row, cell.col - 1)))
+      return;
 
     this.velX = 0;
     // move character to the cell to the left of the colliding block
-    this.cx = cell.cx 
-      - tileSize / 2
-      - this.collider.width / 2;
+    this.cx = cell.cx - tileSize / 2 - this.collider.width / 2;
     this.collider.cx = this.cx;
-  }  
-}
+  }
+};
 
 // Resets the character to their reset position and rotation
 Character.prototype.reset = function () {
@@ -187,28 +193,34 @@ Character.prototype.halt = function () {
 
 Character.prototype.shouldUpdate = function () {
   const playerLoc = entityManager.getPlayer();
-  const playerLocSq = Math.pow(playerLoc.cx - this.cx, 2) + Math.pow(playerLoc.cy - this.cy, 2);
+  const playerLocSq =
+    Math.pow(playerLoc.cx - this.cx, 2) + Math.pow(playerLoc.cy - this.cy, 2);
 
   if (playerLocSq > Math.pow(g_canvas.height + g_canvas.width, 2)) {
     return null;
   }
 
   return { cx: playerLoc.cx, cy: playerLoc.cy, sqDist: playerLocSq };
-}
+};
 
 // Renders the character to the given context
 Character.prototype.render = function (ctx) {
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.direction < 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    this.direction < 0,
+  );
   this.debugRender(ctx);
 };
 
 // Debug renders
 Character.prototype.debugRender = function (ctx) {
   if (g_char_debug_showCollisions) this._debug_RenderCollsionsCells(ctx);
-
-}
+};
 
 // Renders the cells which the character is colliding with
 // Empty tiles are white and other tiles are green
@@ -219,90 +231,13 @@ Character.prototype._debug_RenderCollsionsCells = function (ctx) {
 
   for (let i = 0; i < this._debug_collisionCells.length; i++) {
     let cell = this._debug_collisionCells[i];
-    util.fillBoxCentered(ctx, 
-      cell.col*tileSize, 
-      cell.row*tileSize,
-      tileSize, tileSize,
+    util.fillBoxCentered(
+      ctx,
+      cell.col * tileSize,
+      cell.row * tileSize,
+      tileSize,
+      tileSize,
       cell.content === worldMap.EMPTY_TILE ? '#fff5' : '#0f05',
-      );
-  }
-}
-
-// depricated collision function
-Character.prototype.collideWithMap_depr = function (du) {
-
-  // Ground logic Part 1
-  if (this.onGround) this.velY = 0;
-
-  // Make grid coordinates for player
-  let grid = worldMap.getGridCoords(this);
-  this._grid = grid;
-  // Look at player's closest collision areas
-  let around = worldMap.isAround(this);
-  
-  // Push out of tile if collision
-  if (!around.T || !around.B || !around.L || !around.R) {
-    this.pushOut(around, grid);
-  }
-
-  // Assign x coordinate
-  if ((around.L && keys[this.KEY_LEFT] || around.R && keys[this.KEY_RIGHT])) {
-    this.cx += du * this.velX; 
-  }
-  else {
-    this.velX = 0;
-  }
-  
-  // Assign y coordinate
-  this.cy += du * this.velY;
-  
-  // Ground logic Part 2
-  if (worldMap.isDrop(this)) {
-    this.onGround = false;
-    this.verticalCollision = false;
-  }
-}
-
-// depricated pushout function
-Character.prototype.pushOut_depr = function (around, grid) {
-  let x = Math.sign(this.velX);
-  let y = Math.sign(this.velY);
-  let tSize = worldMap._tileSize;
-  
-  if (!around.R) {
-    if (x === 1) { 
-      this.cx = grid[3] * tSize //+ p_realSize/1.75;
-      this.velX = 0;
-    }
-  }
-
-  if (!around.L) {
-    if (x === -1) {
-      this.cx = (grid[1]+1) * tSize;
-      this.velX = 0;
-    }
-  }
-  
-  if (!around.T) {
-    if (y === -1) { 
-      // To be able to jump up along walls, not perfect logic yet
-      //if ((around.B && around.L) || (around.B && around.R)) {
-        this.cy = (grid[2]) * tSize //- p_realSize/4; 
-        this.velY = 0;
-      //}
-    }
-  }
-
-  if (!around.B) {
-    if (y === 1) {
-      // To be able to jump up along walls, not perfect logic yet
-      // The tradeoff is that it causes corner glitch
-
-      // if ((around.T && around.L) || (around.T && around.R)) {
-        this.cy = (grid[2]-1) * tSize - p_realSize/4;
-        this.onGround = true;
-        this.velY = 0;
-      // }
-    }
+    );
   }
 };

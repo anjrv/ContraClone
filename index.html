@@ -11,43 +11,34 @@
         Sorry, but your browser does not support the HTML5 canvas tag.
       </canvas>
 
+      <canvas class="shop" id="myShopCanvas" width="1366" height="768">
+      </canvas>
+
       <div class="stars"></div>
       <div class="twinkling"></div>
       <div class="clouds"></div>
     </div>
 
-    <div 
-      id = 'devtools'
-      style =
-        '
-        background-color: azure;
-        border-radius: 4px;
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        padding: 16px;
-        top: 30vh;
-        z-index: 100;
-        '
-    >
+    <div id="devtools" class="devtools">
       <h1>Developer tools</h1>
       <div>
         <label for="showCharCollsionWithWorld">Character Collision</label>
-        <input id="showCharCollsionWithWorld" type="checkbox"/>
+        <input id="showCharCollsionWithWorld" type="checkbox" />
       </div>
       <div>
         <label for="collisionRender">Render Collision Volumes</label>
-        <input id="collisionRender" type="checkbox"/>
+        <input id="collisionRender" type="checkbox" />
       </div>
       <div>
         <label for="indexWorldCoordinates">Index world coorinates</label>
-        <input id="indexWorldCoordinates" type="checkbox"/>
+        <input id="indexWorldCoordinates" type="checkbox" />
       </div>
       <div>
         <label for="enableInvincibility">Enable invincibility</label>
-        <input id="enableInvincibility" type="checkbox"/>
+        <input id="enableInvincibility" type="checkbox" />
       </div>
-      <button onclick="
+      <button
+        onclick="
         let collisionWithWorld = document.getElementById('showCharCollsionWithWorld');
         g_char_debug_showCollisions = collisionWithWorld.checked;
         let collisionRender = document.getElementById('collisionRender');
@@ -57,12 +48,16 @@
         let invincibility = document.getElementById('enableInvincibility');
         g_player_debug_enableInvincibility = invincibility.checked;
         document.getElementById('devtools').style.display = 'none';
-      ">Apply</button>
+      "
+      >
+        Apply
+      </button>
     </div>
 
     <script src="./node_modules/howler/dist/howler.js"></script>
     <script src="Audio.js"></script>
     <script src="globals.js"></script>
+    <script src="Shop.js"></script>
     <script src="consts.js"></script>
     <script src="util.js"></script>
     <script src="keys.js"></script>
@@ -88,7 +83,7 @@
     <script src="Explosion.js"></script>
     <script src="Powerup.js"></script>
     <script src="Coin.js"></script>
-    
+
     <script src="maps.js"></script>
     <script src="worldMap.js"></script>
     <script src="Hud.js"></script>
@@ -101,8 +96,8 @@
     <script src="recording.js"></script>
     <script src="RecordingPlayer.js"></script>
     <script src="main.js"></script>
-    <script src="Intro.js"></script>
     <script src="levelTransition.js"></script>
+    <script src="Intro.js"></script>
 
     <script src="CONTRA.js"></script>
   </body>

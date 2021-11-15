@@ -21,7 +21,6 @@ function handleMouse(evt) {
   else return
   g_mouseX = evt.clientX - g_canvas.offsetLeft;
   g_mouseY = evt.clientY - g_canvas.offsetTop;
-
   // If no button is being pressed, then bail
   const button = evt.buttons === undefined ? evt.which : evt.buttons;
   for (const key in g_mouse_buttons) {

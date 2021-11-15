@@ -34,7 +34,7 @@ function update(dt) {
   // giving us a conveniently scaled "du" to work with.
   //
   var du = dt / NOMINAL_UPDATE_INTERVAL;
-  
+
   // g_play_recording is set in processDiagnostics that happens in updateSimulation
   // so we cant update our frame counter on the same frame that g_play_recording is set
   if (g_play_recording) RECORDINGPLAYER.nextFrame();

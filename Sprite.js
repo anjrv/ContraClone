@@ -8,7 +8,7 @@
 
 // Construct a "sprite" from the given `image`,
 //
-function Sprite(image, cols = 1, rows = 1, sWidth = 0, sHeight = 0) {
+function Sprite(image, cols = 1, rows = 1, sWidth = 0, sHeight = 0, scale = 1) {
   this.image = image;
   this.width = image.width;
   this.height = image.height;
@@ -18,6 +18,7 @@ function Sprite(image, cols = 1, rows = 1, sWidth = 0, sHeight = 0) {
   this.sHeight = sHeight || image.height;
   this.animations = {"NONE": Array(cols * rows).fill().map((x,i) => i)};
   this.animation = "NONE";
+  this.spriteScale = scale;
 }
 
 // Sprite.prototype.sx = 0;
@@ -59,8 +60,8 @@ Sprite.prototype.drawCentredAt = function (
     this.sHeight,
     -this.sWidth / 2,
     -this.sHeight / 2,
-    this.sWidth,
-    this.sHeight
+    this.sWidth * this.spriteScale,
+    this.sHeight * this.spriteScale
   );
   ctx.restore();
 };

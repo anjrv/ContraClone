@@ -1,4 +1,5 @@
 'use strict';
+
 /*jslint nomen: true, white: true, plusplus: true*/
 
 const gameOver = {

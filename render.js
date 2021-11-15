@@ -1,12 +1,12 @@
 // GENERIC RENDERING
 
-let  g_doClear = true;
-let  g_doBox = false;
-let  g_undoBox = false;
-let  g_doFlipFlop = false;
-let  g_doRender = true;
+let g_doClear = true;
+let g_doBox = false;
+let g_undoBox = false;
+let g_doFlipFlop = false;
+let g_doRender = true;
 
-let  g_frameCounter = 1;
+let g_frameCounter = 1;
 
 const TOGGLE_CLEAR = 'C'.charCodeAt(0);
 const TOGGLE_BOX = 'B'.charCodeAt(0);
@@ -44,7 +44,7 @@ function render(ctx) {
     let oldStyle = ctx.fillStyle;
     ctx.beginPath();
     ctx.fillStyle = 'red';
-    util.fillCircle(ctx, 25,25,15);
+    util.fillCircle(ctx, 25, 25, 15);
     ctx.fillStyle = oldStyle;
     ctx.closePath();
   }
@@ -53,7 +53,7 @@ function render(ctx) {
     let oldStyle = ctx.fillStyle;
     ctx.fillStyle = 'white';
     ctx.beginPath();
-    ctx.moveTo(10,10);
+    ctx.moveTo(10, 10);
     ctx.lineTo(10, 60);
     ctx.lineTo(45, 35);
     ctx.lineTo(10, 10);
@@ -88,5 +88,4 @@ function render(ctx) {
   if (g_undoBox) ctx.clearRect(200, 200, 50, 50);
 
   ++g_frameCounter;
-  
 }

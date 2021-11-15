@@ -6,10 +6,6 @@
 Provides a set of common functions which can be "inherited" by all other
 game Entities.
 
-JavaScript's prototype-based inheritance system is unusual, and requires 
-some care in use. In particular, this "base" should only provide shared
-functions... shared data properties are potentially quite confusing.
-
 */
 
 'use strict';
@@ -78,12 +74,16 @@ Entity.prototype.wrapPosition = function () {
   this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
 };
 
-// Records variables needed to restore Entity 
+// Records variables needed to restore Entity
 Entity.prototype.record = function (tag) {
-  throw new Error(`record function not implemented for ${this.constructor.name}`);
-}
+  throw new Error(
+    `record function not implemented for ${this.constructor.name}`,
+  );
+};
 
 // Parses a xml record and returns object to be passed into constructor
 Entity.prototype.parseRecord = function (record) {
-  throw new Error(`parseRecord function is not implemented for ${this.constructor.name}`);
-}
+  throw new Error(
+    `parseRecord function is not implemented for ${this.constructor.name}`,
+  );
+};

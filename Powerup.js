@@ -34,8 +34,7 @@ function Powerup(descr) {
 }
 
 Powerup.prototype = Object.create(Character.prototype);
-Powerup.prototype.constructor = Powerup
-
+Powerup.prototype.constructor = Powerup;
 
 // Initial, inheritable, default values
 Powerup.prototype.rotation = 0;
@@ -71,12 +70,13 @@ Powerup.prototype.update = function (du) {
     //
     const hitEntity = this.findHitEntity();
     if (hitEntity.isPlayer) {
-      noPowerup = false;
-      firePowerup = false;
-      triplePowerup = false;
-      if (this.power === 'RED') firePowerup = true;
-      else if (this.power === 'BLUE') triplePowerup = true;
-      else if (this.power === 'GREEN') piercePowerup = true;
+      s_noPowerup = false;
+      s_firePowerup = false;
+      s_triplePowerup = false;
+      s_piercePowerup = false;
+      if (this.power === 'RED') s_firePowerup = true;
+      else if (this.power === 'BLUE') s_triplePowerup = true;
+      else if (this.power === 'GREEN') s_piercePowerup = true;
       m_powerup.play()
       return entityManager.KILL_ME_NOW;
     }
@@ -91,13 +91,13 @@ Powerup.prototype.update = function (du) {
 };
 
 Powerup.prototype.computeSubStep = function (du, playerLoc) {
-    let gravityAcc = this.computeGravity();
-    this.applyAccel(0, gravityAcc, du);
+  let gravityAcc = this.computeGravity();
+  this.applyAccel(0, gravityAcc, du);
 };
 
 Powerup.prototype.render = function (ctx) {
-    this.sprite.updateFrame(this.frame || 0);
-    this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
+  this.sprite.updateFrame(this.frame || 0);
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, false);
 
-    ctx.globalAlpha = 1;
-}
+  ctx.globalAlpha = 1;
+};

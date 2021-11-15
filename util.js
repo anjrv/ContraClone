@@ -74,13 +74,6 @@ const util = {
   // CANVAS OPS
   // ==========
 
-  // clearCanvas: function (ctx) {
-  //   const prevfillStyle = ctx.fillStyle;
-  //   ctx.fillStyle = 'black';
-  //   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  //   ctx.fillStyle = prevfillStyle;
-  // },
-
   clearCanvas: function (ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   },
@@ -141,23 +134,23 @@ const util = {
 
   changeSprite: function (entity) {
     if (entity.changeCounter < 0) {
-      entity.frame ++;
+      entity.frame++;
       entity.changeCounter = entity.changeBase;
     }
   },
 
-  randomX:  function () {
-    return ((Math.random() < 0.5) ? -1 : 1) * Math.random() * 10;
+  randomX: function () {
+    return (Math.random() < 0.5 ? -1 : 1) * Math.random() * 10;
   },
 
-  randomY:  function () {
+  randomY: function () {
     return -1 * Math.random() * 10;
   },
 
   randomPower: function () {
     let x = Math.random();
-    if (x < 0.33) return 'RED'
-    if (x < 0.66) return 'GREEN' 
-    return 'BLUE'
-  }
+    if (x < 0.33) return 'RED';
+    if (x < 0.66) return 'GREEN';
+    return 'BLUE';
+  },
 };

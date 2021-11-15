@@ -1,15 +1,15 @@
 function Pursuer(descr) {
   Character.call(this, descr);
 
-  this.sprite      = new Sprite(g_images.pursuer, 4, 2, 68, 60)
+  this.sprite = new Sprite(g_images.pursuer, 4, 2, 68, 60);
   this.sprite.animations = {
-    IDLE: [0,1],
-    MOVE: [0,1],
-    SHOOT: [2,3],
-    HIT_MOVE: [4,5],
-    HIT_SHOOT: [6,7],
-    DEATH: [0,4]
-  }
+    IDLE: [0, 1],
+    MOVE: [0, 1],
+    SHOOT: [2, 3],
+    HIT_MOVE: [4, 5],
+    HIT_SHOOT: [6, 7],
+    DEATH: [0, 4],
+  };
   this.scale = 2;
   this.frame = 0;
   this.changeCounter = 5;
@@ -55,7 +55,14 @@ Pursuer.prototype.update = function (du) {
   spatialManager.unregister(this);
 
   if (this._isDeadNow) {
-    entityManager.makeEnemyKillAnimation(this.cx, this.cy, this.sprite, this.collider.height, this.greenCoin, this.goldCoin);
+    entityManager.makeEnemyKillAnimation(
+      this.cx,
+      this.cy,
+      this.sprite,
+      this.collider.height,
+      this.greenCoin,
+      this.goldCoin,
+    );
     return entityManager.KILL_ME_NOW;
   }
 
@@ -163,7 +170,7 @@ Pursuer.prototype.computeSubStep = function (du, playerLoc) {
   const horizAcc = this.computeHorizontalAccel(playerLoc);
   const vertAcc = this.computeVerticalAccel(playerLoc);
 
-  this.sprite.animation = (this.hit) ? 'HIT_MOVE' : 'MOVE';
+  this.sprite.animation = this.hit ? 'HIT_MOVE' : 'MOVE';
   this.changeCounter -= du;
   if (this.changeCounter < 0) {
     this.frame++;
@@ -192,7 +199,13 @@ Pursuer.prototype.render = function (ctx) {
   if (!this.sprite.animation) return;
   this.sprite.scale = this.scale;
   this.sprite.updateFrame(this.frame || 0);
-  this.sprite.drawCentredAt(ctx, this.cx, this.cy, this.rotation, this.dirX > 0);
+  this.sprite.drawCentredAt(
+    ctx,
+    this.cx,
+    this.cy,
+    this.rotation,
+    this.dirX > 0,
+  );
   this.debugRender(ctx);
 };
 
