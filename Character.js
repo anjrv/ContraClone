@@ -65,6 +65,7 @@ Character.prototype.applyAccel = function (accelX, accelY, du) {
 
   // v = u + at
   this.velX += accelX * du;
+  if (Math.abs(this.velX) < 1e-7) this.velX = 0;
   this.velY += accelY * du;
 
   let averageVelX = (this.velX + oldVelX) / 2;
