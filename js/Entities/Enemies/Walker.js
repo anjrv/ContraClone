@@ -64,7 +64,7 @@ Walker.prototype.update = function (du) {
     return entityManager.KILL_ME_NOW;
   }
 
-  this.dirX = playerLoc.cx < this.cx ? -1 : 1;
+  if (this.shotCooldown < 0) this.dirX = playerLoc.cx < this.cx ? -1 : 1;
   if (playerLoc.sqDist > Math.pow(g_aggroRange, 2) || this.shotCooldown > 0) {
     this.computeSubStep(du);
   } else {

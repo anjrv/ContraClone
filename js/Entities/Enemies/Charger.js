@@ -40,7 +40,7 @@ function Charger(descr) {
   this.onGround = true;
   this.stuckCheck = 0;
   this.NOMINAL_ACC = 0.2;
-  this.MAX_VEL = 12.0;
+  this.MAX_VEL = 5.0;
   this.MAX_TURNAROUND_FORCE = 5.0;
   this.greenCoin = 2;
   this.goldCoin = 1;
