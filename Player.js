@@ -94,7 +94,7 @@ Player.MAX_VEL = 6;
 Player.MAX_TURNAROUND_FORCE = 10.0;
 
 Player.prototype.computeSubStep = function (du) {
-  let gravityAcc = this.computeGravity() * du;
+  let gravityAcc = this.computeGravity();
 
   if (this.respawning) {
     // Player is respawning, they are only affected by gravity
