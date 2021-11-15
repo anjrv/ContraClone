@@ -143,7 +143,7 @@ Pursuer.prototype.computeVerticalAccel = function (playerLoc) {
   let acceleration = 0;
   const playerY = playerLoc.cy;
 
-  if (playerY < this.cy) {
+  if (playerY < this.cy - this.SPRITE_HEIGHT * 0.2) {
     acceleration -=
       this.NOMINAL_ACC *
       util.lerp(
@@ -153,7 +153,7 @@ Pursuer.prototype.computeVerticalAccel = function (playerLoc) {
       );
   }
 
-  if (playerY > this.cy) {
+  if (playerY > this.cy - this.SPRITE_HEIGHT * 0.2) {
     acceleration +=
       this.NOMINAL_ACC *
       util.lerp(
@@ -187,8 +187,8 @@ Pursuer.prototype.attack = function (du) {
   this.isShooting = true;
 
   entityManager.fireEnemyBullet(
-    this.cx,
-    this.cy,
+    this.cx + (this.dirX * this.SPRITE_WIDTH * 0.4),
+    this.cy - this.SPRITE_HEIGHT * 0.2,
     g_bulletSpeed * this.dirX,
     0,
     this.dirX > 0 ? 0 : Math.PI,
