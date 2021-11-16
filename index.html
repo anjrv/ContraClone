@@ -19,6 +19,7 @@
       <div class="clouds"></div>
     </div>
 
+    <!--Yes this is horrible but this is also just for dev's to debug-->
     <div id="devtools" class="devtools">
       <h1>Developer tools</h1>
       <div>
@@ -37,6 +38,29 @@
         <label for="enableInvincibility">Enable invincibility</label>
         <input id="enableInvincibility" type="checkbox" />
       </div>
+      <div>
+        <label for="setMaxJumps">Set max jumps</label>
+        <input id="setMaxJumps" title="jumps" type="number" value="1" step="1"/>
+      </div>
+      <div>
+        <label for="setBankAmount">Set $$ amount</label>
+        <input id="setBankAmount" type="number" value="0" step="1"/>
+      </div>
+      <div>
+        <label for="setLives">Set lives</label>
+        <input type="number" id="setLives" value="1"/>
+      </div>
+      <div style='margin-left: 10px'>
+          <p style="margin-left: -10px">Set powerup</p>
+          <input type="radio" id="default" name="powerup" value="DEFAULT" checked>
+          <label for="default">Default</label><br>
+          <input type="radio" id="tripleshot" name="powerup" value="TRIPLESHOT">
+          <label for="tripleshot">Triple shot</label><br>
+          <input type="radio" id="flamethrower" name="powerup" value="FLAMETHROWER">
+          <label for="flamethrower">Flamethrower</label><br>
+          <input type="radio" id="piercing" name="powerup" value="PIERCING">
+          <label for="piercing">Piercing</label> 
+      </div>
       <button
         onclick="
         let collisionWithWorld = document.getElementById('showCharCollsionWithWorld');
@@ -47,6 +71,21 @@
         worldMap._debug_showWorldCoordinates = worldCoordinates.checked;
         let invincibility = document.getElementById('enableInvincibility');
         g_player_debug_enableInvincibility = invincibility.checked;
+        let maxJumps = document.getElementById('setMaxJumps');
+        Player.MAX_JUMPS = Number.parseInt(maxJumps.value);
+        let currency = document.getElementById('setBankAmount');
+        s_coins = Number.parseInt(currency.value);
+        let lives = document.getElementById('setLives');
+        s_baselives = Number.parseInt(lives.value);
+        s_lives = s_baselives;
+
+
+        let powerup = document.querySelector('input[name=powerup]:checked').value
+        s_firePowerup = powerup === 'FLAMETHROWER';
+        s_noPowerup = powerup === 'DEFAULT';
+        s_piercePowerup = powerup === 'PIERCING';
+        s_triplePowerup = powerup === 'TRIPLESHOT';
+        
         document.getElementById('devtools').style.display = 'none';
       "
       >

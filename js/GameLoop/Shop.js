@@ -25,6 +25,7 @@ const mainShop = {
     this.drawBox();
     this.drawTitle();
     this.drawItems();
+    this.drawCloseShop();
   },
 
   drawBox: function () {
@@ -288,4 +289,16 @@ const mainShop = {
     }
     g_shopCtx.restore();
   },
+
+  drawCloseShop: function () {
+    g_shopCtx.save();
+    g_shopCtx.fillStyle = 'white';
+    g_shopCtx.font = '12px PressStart2P';
+    g_shopCtx.textAlign = 'center';
+    g_shopCtx.fillText('Press "L" to close the shop',
+      s_shopOffsetX + (s_shopOffsetX * 2 + s_menuTileSize / 2) / 2, 
+      s_shopOffsetY + 350);
+
+    g_shopCtx.restore();
+  }
 };
