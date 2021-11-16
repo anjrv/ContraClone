@@ -160,7 +160,7 @@ Charger.prototype.handleJump = function (acc, currLoc, playerLoc, du) {
     nextNextNextWall !== worldMap.EMPTY_TILE
   ) {
     this.onGround = false;
-    acc = -20.0;
+    acc = -20.0 / du;
   }
 
   return acc;
