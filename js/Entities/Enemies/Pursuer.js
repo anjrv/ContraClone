@@ -32,7 +32,7 @@ function Pursuer(descr) {
 
   // Direction 1 is right, -1 is left.
   this.dirX = 1;
-  this.hp = 5;
+  this.hp = 8;
   this.rotation = 0;
   this.isPlayer = false;
   this.shotCooldown = -1;
