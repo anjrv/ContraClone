@@ -121,14 +121,14 @@ Charger.prototype.computeHorizontalAccel = function (playerLoc) {
   return acceleration;
 };
 
-Charger.prototype.handleJump = function (acc, currLoc, playerLoc) {
+Charger.prototype.handleJump = function (acc, currLoc, playerLoc, du) {
   if (!this.onGround) return acc;
 
   // I'm fucking stuck
   if (this.stuckCheck > 20) {
     this.onGround = false;
     this.stuckCheck = 0;
-    acc = -20.0;
+    acc = -20.0 / du;
 
     return acc;
   }
@@ -141,7 +141,7 @@ Charger.prototype.handleJump = function (acc, currLoc, playerLoc) {
     Math.abs(playerLoc.cx - this.cx) < 100
   ) {
     this.onGround = false;
-    acc = -20.0;
+    acc = -20.0 / du;
 
     return acc;
   }
@@ -182,7 +182,7 @@ Charger.prototype.computeSubStep = function (du, playerLoc) {
   let gravityAcc = this.computeGravity();
 
   let horizAcc = this.computeHorizontalAccel(playerLoc);
-  gravityAcc = this.handleJump(gravityAcc, currLoc, playerLoc);
+  gravityAcc = this.handleJump(gravityAcc, currLoc, playerLoc, du);
 
   this.applyAccel(horizAcc, gravityAcc, du);
 };
