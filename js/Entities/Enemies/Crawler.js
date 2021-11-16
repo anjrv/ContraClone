@@ -128,8 +128,9 @@ Crawler.prototype.computeSubStep = function (du) {
     const left = worldMap.getTileType(currLoc.row, currLoc.col - 1);
     const leftDown = worldMap.getTileType(currLoc.row + 1, currLoc.col - 1);
 
-    if (!(left === worldMap.EMPTY_TILE)) this.dirX *= -1;
-    this.direction = -1;
+    if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE))
+      this.dirX *= -1;
+      this.direction = -1;
   }
 
   // We're goin right
@@ -137,8 +138,10 @@ Crawler.prototype.computeSubStep = function (du) {
     const right = worldMap.getTileType(currLoc.row, currLoc.col + 1);
     const rightDown = worldMap.getTileType(currLoc.row + 1, currLoc.col + 1);
 
-    if (!(right === worldMap.EMPTY_TILE)) this.dirX *= -1;
-    this.direction = 1;
+    if (!(right === worldMap.EMPTY_TILE && rightDown !== worldMap.EMPTY_TILE)) {
+      this.dirX *= -1;
+      this.direction = 1;
+    }
   }
 
   this.cx += this.dirX * this.movSpeed * du;
