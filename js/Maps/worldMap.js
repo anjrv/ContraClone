@@ -163,6 +163,8 @@ const worldMap = {
   // The foreground is rendered after entities so they can pass behind it
   foregroundRender: function(ctx) {
     let player = entityManager.getPlayer();
+    if (!player) return; // Do not render if we are transitioning levels, player is wiped
+
     let player_center = this.getIndeciesFromCoords(player.cx, player.cy);
 
     for (let i = player_center.row-player.viewRow; i < player_center.row+player.viewRow; i++) {
