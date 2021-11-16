@@ -224,7 +224,7 @@ const mainShop = {
       s_shopOffsetY + 240,
     );
     g_shopCtx.fillStyle = s_menuSelection === 6 ? 'white' : 'grey';
-    g_shopCtx.fillText('Warp to Level 3', s_shopOffsetX + 50, s_shopOffsetY + 270);
+    g_shopCtx.fillText('Warp to Climb', s_shopOffsetX + 50, s_shopOffsetY + 270);
     g_shopCtx.fillStyle = s_menuSelection === 7 ? 'white' : 'grey';
     g_shopCtx.fillText('Warp to Level 4', s_shopOffsetX + 50, s_shopOffsetY + 300);
     if (currentLevel === 0) {
@@ -247,7 +247,7 @@ const mainShop = {
     g_shopCtx.fillStyle = 'blue';
     g_shopCtx.textAlign = 'right';
     g_shopCtx.fillText(
-      2000 + '§',
+      3000 + '§',
       g_canvas.width - s_shopOffsetX - 50,
       s_shopOffsetY + 270,
     );
@@ -259,7 +259,7 @@ const mainShop = {
     g_shopCtx.fillStyle = 'blue';
     g_shopCtx.textAlign = 'right';
     g_shopCtx.fillText(
-      3000 + '§',
+      4000 + '§',
       g_canvas.width - s_shopOffsetX - 50,
       s_shopOffsetY + 300,
     );
