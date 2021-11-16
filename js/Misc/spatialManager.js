@@ -59,7 +59,7 @@ const spatialManager = {
   render: function (ctx) {
     for (let ID in this._entities) {
       const e = this._entities[ID];
-      e?.collider.render(ctx);
+      e?.collider && e.collider.render(ctx);
     }
   },
 
