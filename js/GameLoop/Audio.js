@@ -42,3 +42,21 @@ var m_purchase= new Howl({
   src: ['./sounds/purchase.wav'],
   volume: 0.2,
 })
+
+var m_caves= new Howl({
+  src: ['./Audio/caves.mp4'],
+  volume: 0.2,
+})
+
+var m_alienbase= new Howl({
+  src: ['./Audio/alienbase.mp4'],
+  volume: 0.2,
+})
+
+var m_climb= new Howl({
+  src: ['./Audio/climb.mp4'],
+  volume: 0.2,
+})
+
+
+const m_songs = [m_caves, m_alienbase, m_climb, m_caves];

@@ -1,5 +1,6 @@
 const levelTransition = {
   changeLevel: function () {
+    if (currentLevel > -1) m_songs[currentLevel].stop();
     g_playing = true;
     currentLevel = currentLevel === levels.length - 1 ? 0 : currentLevel + 1;
     setTimeout(function () {
@@ -14,9 +15,14 @@ const levelTransition = {
     entityManager.setStuff();
     entityManager.init();
     worldMap.init(levels[currentLevel]);
+    levelTransition.playSong(currentLevel);
     main.restartGame();
     main.init();
     g_playing = true;
+  },
+
+  playSong: function (level) {
+    m_songs[level].play();
   },
 
     drawLevel: function(ctx) {
@@ -57,6 +63,7 @@ const levelTransition = {
     restart: function () {
         shop = true;
         notStarted = true;
+        m_songs[currentLevel].stop();
         currentLevel = -1;
         m_gameover.play();
         setTimeout(function () {

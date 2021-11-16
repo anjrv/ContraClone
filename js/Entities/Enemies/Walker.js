@@ -35,8 +35,8 @@ function Walker(descr) {
   this.shotCooldown = -1;
   this.shotId = 1;
   this.hp = this.big ? 16 : 4;
-  this.greenCoin = this.big ? 4 : 2;
-  this.goldCoin = this.big ? 2 : 1;
+  this.greenCoin = this.big ? 2 : 2;
+  this.goldCoin = this.big ? 5 : 1;
   this.spriteCooldown = 0;
   this.turnCooldown = 0;
 }
