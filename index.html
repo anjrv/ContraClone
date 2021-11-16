@@ -44,7 +44,7 @@
         let collisionRender = document.getElementById('collisionRender');
         g_renderSpatialDebug = collisionRender.checked;
         let worldCoordinates = document.getElementById('indexWorldCoordinates');
-        g_showWorldCoordinates = worldCoordinates.checked;
+        worldMap._debug_showWorldCoordinates = worldCoordinates.checked;
         let invincibility = document.getElementById('enableInvincibility');
         g_player_debug_enableInvincibility = invincibility.checked;
         document.getElementById('devtools').style.display = 'none';
