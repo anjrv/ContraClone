@@ -1,3 +1,5 @@
+// Class for rendering the world map from the Player's position, spawning
+// enemies when player comes close and provide Player with information about collision cells
 'use strict';
 /*jslint nomen: true, white: true, plusplus: true*/
 
@@ -6,16 +8,18 @@ let g_showWorldCoordinates = false;
 const worldMap = {
   EMPTY_TILE: '  ',
 
+  // mapData is a json object
   init: function (mapData) {
     // Map variables
     this._mapId = mapData.id;
-    this._cols = mapData.cols;
-    this._rows = mapData.rows;
-    this._tileSize = mapData.tilesize;
+    this._cols = mapData.cols; // number of columns
+    this._rows = mapData.rows; // number of rows
+    this._tileSize = mapData.tilesize; // size tiles should be rendered at
+
+    // array with constants that either refer to sprites or enemies
     this._layers = JSON.parse(JSON.stringify(mapData.layers)); // Copy dont refer to
     this._sprite = g_sprites.tilesheet;
-    this._sprite.scale = this._tileSize / this._sprite.sWidth;
-    this._length = mapData.cols * mapData.rows;
+    this._sprite.scale = this._tileSize / this._sprite.sWidth; // calculate what scale the sprite should be at
 
     // Move Player to the start position
     const player = entityManager.getPlayer();
@@ -34,19 +38,26 @@ const worldMap = {
     this.setupDebug();
   },
 
+  // Add attributes used to toggle debugging functionality
+  setupDebug: function () {
+    this._debug_showGridLines = false;
+    this._debug_showCollisionBoxes = false;
+    this._debug_showWorldCoordinates = false;
+  },
+
+  // don't know what this does
   getInitState: function () {
     return this._initState;
   },
 
-  setupDebug: function () {
-    this._debug_showGridLines = false;
-    this._debug_showCollisionBoxes = true;
-  },
-
+  // Getter
   getTileSize: function () {
     return this._tileSize;
   },
 
+  // Looks at where the camera is and spawns enemies close to the camera
+  // by calling the entityManager
+  // Enemies are encoded as 1, 2, ..., 7
   spawnNearbyUnits: function () {
     const addedShift = 5;
 
@@ -92,6 +103,7 @@ const worldMap = {
     }
   },
 
+  // Reads the position of the player and shifts the camera to that postition
   update: function (du) {
     const player = entityManager.getPlayer();
     this.diffX = player.cx + this._offsetX;
@@ -111,23 +123,23 @@ const worldMap = {
 
     this.spawnNearbyUnits();
   },
-
+  
+  // Renders the worldMap. Because the maps have gotten quite big we only render tiles in 
+  // viewDistance of the player
   render: function (ctx) {
-    // Some of the maps are too big to render all tiles and let view port culling handle it
-    // this.drawBackgrounds(ctx);
-
     let player = entityManager.getPlayer();
+    if (!player) return;
     let player_center = this.getIndeciesFromCoords(player.cx, player.cy);
-
 
     for (let l = 0; l < 2; l++) {
       for (let i = player_center.row-player.viewRow; i < player_center.row + player.viewRow; i++) {
         for (let j = player_center.col - player.viewCol; j < player_center.col + player.viewCol; j++) {
-          if (i < 0 || j < 0) continue;
+          if (i < 0 || j < 0 || i >= this._layers[l].length || j >= this._layers[l][i].length) continue;
           const x = j * this._tileSize;
           const y = i * this._tileSize;
   
           const val = this._layers[l][i][j];
+          // we dont render enemies, they are entites and belong with the entityManager
           if (
             val === '  ' ||
             val === '0' ||
@@ -149,6 +161,7 @@ const worldMap = {
     this.debugRender(ctx);
   },
 
+  // The foreground is rendered after entities so they can pass behind it
   foregroundRender: function(ctx) {
     for (let i = 0; i < this._layers[2].length; i++) {
       for (let j = 0; j < this._layers[2][i].length; j++) {
