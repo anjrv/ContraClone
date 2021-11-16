@@ -260,6 +260,10 @@ function checkInputs() {
   if (shop && !inShop && (eatKey(KEY_DOWN) || eatKey(KEY_UP)))
     toggleHighlights();
 
+  if (eatKey(KEY_DEVTOOLS)) {
+    document.getElementById('devtools').style.display = 'flex';
+  }
+
   if (startHighlight && (keys[KEY_JUMP] || keys[KEY_SHOOT])) {
     g_intro = false;
     notStarted = false;
