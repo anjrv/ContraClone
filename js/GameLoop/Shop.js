@@ -226,8 +226,6 @@ const mainShop = {
     );
     g_shopCtx.fillStyle = s_menuSelection === 6 ? 'white' : 'grey';
     g_shopCtx.fillText('Warp to Climb', s_shopOffsetX + 50, s_shopOffsetY + 270);
-    g_shopCtx.fillStyle = s_menuSelection === 7 ? 'white' : 'grey';
-    g_shopCtx.fillText('Warp to Level 4', s_shopOffsetX + 50, s_shopOffsetY + 300);
     if (currentLevel === 0) {
       g_shopCtx.fillStyle = 'green';
       g_shopCtx.textAlign = 'center';
@@ -252,39 +250,27 @@ const mainShop = {
       g_canvas.width - s_shopOffsetX - 50,
       s_shopOffsetY + 270,
     );
-    if (currentLevel === 2) {
-      g_shopCtx.fillStyle = 'green';
-      g_shopCtx.textAlign = 'center';
-      g_shopCtx.fillText('Activated', s_shopOffsetX + 400, s_shopOffsetY + 300);
-    }
-    g_shopCtx.fillStyle = 'blue';
-    g_shopCtx.textAlign = 'right';
-    g_shopCtx.fillText(
-      4000 + '§',
-      g_canvas.width - s_shopOffsetX - 50,
-      s_shopOffsetY + 300,
-    );
 
     // Double jump
     g_shopCtx.textAlign = 'left';
-    g_shopCtx.fillStyle = s_menuSelection === 8 ? 'white' : 'grey';
-    g_shopCtx.fillText('Double Jump', s_shopOffsetX + 50, s_shopOffsetY + 330);
+    g_shopCtx.fillStyle = s_menuSelection === 7 ? 'white' : 'grey';
+    g_shopCtx.fillText('Double Jump', s_shopOffsetX + 50, s_shopOffsetY + 300);
     g_shopCtx.fillStyle = 'green';
     g_shopCtx.textAlign = 'center';
-    g_shopCtx.fillText(Player.MAX_JUMPS, s_shopOffsetX + 400, s_shopOffsetY + 330);
+    g_shopCtx.fillText(Player.MAX_JUMPS, s_shopOffsetX + 400, s_shopOffsetY + 300);
     g_shopCtx.fillStyle = 'blue';
     g_shopCtx.textAlign = 'right';
     if (Player.MAX_JUMPS !== 3) {
       g_shopCtx.fillText(
         Player.MAX_JUMPS * 1000 + '§',
         g_canvas.width - s_shopOffsetX - 50,
-        s_shopOffsetY + 330,
+        s_shopOffsetY + 300,
       );
     } else {
       g_shopCtx.fillText(
         'MAX',
         g_canvas.width - s_shopOffsetX - 50,
-        s_shopOffsetY + 330,
+        s_shopOffsetY + 300,
       );
     }
     g_shopCtx.restore();

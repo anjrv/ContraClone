@@ -58,5 +58,14 @@ var m_climb= new Howl({
   volume: 0.1,
 })
 
+var m_oof= new Howl({
+  src: ['./sounds/Oof!.wav'],
+  volume: 0.2,
+})
 
-const m_songs = [m_caves, m_alienbase, m_climb, m_caves];
+var m_wilhelm= new Howl({
+  src: ['./sounds/wilhelm.wav'],
+  volume: 0.2,
+})
+
+const m_songs = [m_caves, m_alienbase, m_climb];

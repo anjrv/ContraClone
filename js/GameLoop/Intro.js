@@ -286,11 +286,11 @@ function checkInputs() {
     m_menuselect.play();
   }
   if (inShop && eatKey(KEY_DOWN)) {
-    s_menuSelection = s_menuSelection === 8 ? 0 : s_menuSelection + 1;
+    s_menuSelection = s_menuSelection === 7 ? 0 : s_menuSelection + 1;
     m_menuselect.play();
   }
   if (inShop && eatKey(KEY_UP)) {
-    s_menuSelection = s_menuSelection === 0 ? 8 : s_menuSelection - 1;
+    s_menuSelection = s_menuSelection === 0 ? 7 : s_menuSelection - 1;
     m_menuselect.play();
   }
 
@@ -379,7 +379,7 @@ function checkInputs() {
     m_purchase.play();
   }
 
-  // Warp to Level 3
+  // Warp to Climb
   if (
     inShop &&
     s_menuSelection === 6 &&
@@ -391,22 +391,10 @@ function checkInputs() {
     m_purchase.play();
   }
 
-  // Warp to Level 4
-  if (
-    inShop &&
-    s_menuSelection === 7 &&
-    (eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) &&
-    !(s_coins < 4000)
-  ) {
-    s_coins -= 4000;
-    currentLevel = 2;
-    m_purchase.play();
-  }
-
   // Double Jump
   if (
     inShop &&
-    s_menuSelection === 8 &&
+    s_menuSelection === 7 &&
     (eatKey(KEY_JUMP) || eatKey(KEY_SHOOT)) &&
     Player.MAX_JUMPS !== 3 &&
     !(s_coins < Player.MAX_JUMPS * 1000)

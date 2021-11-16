@@ -255,13 +255,17 @@ Player.prototype.takeBulletHit = function () {
 
   // Player takes hit
   //this.s_lives--;
+  m_oof.play()
   s_lives--;
   this.rotation = 0;
   this.invincibleCooldown = 200;
   this.respawning = true;
 
   // If Player looses all his lives, either respawn at beginning or let entityManager handle it
-  if (s_lives < 0) levelTransition.goToTitleScreen();
+  if (s_lives < 0) {
+    m_wilhelm.play()
+    levelTransition.goToTitleScreen();
+  }
 };
 
 // Maybe TODO later, make changeCounter adjusted to Speed
