@@ -130,7 +130,7 @@ Walker.prototype.computeSubStep = function (du) {
 
     if (!(left === worldMap.EMPTY_TILE && leftDown !== worldMap.EMPTY_TILE) && this.turnCooldown < 0) {
       this.dirX *= -1;
-      this.turnCooldown = 65;
+      this.turnCooldown = 35;
     }
       
   }
