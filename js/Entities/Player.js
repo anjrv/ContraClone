@@ -38,6 +38,11 @@ function Player(descr) {
   this.scale = 2;
   this.jumping = false;
   this.crouching = false;
+
+  // View distance, used in worldMap to decide how many rows and columns should be rendered
+  // with respect to player
+  this.viewRow = 20;
+  this.viewCol = 50;
 }
 
 Player.prototype = Object.create(Character.prototype);

@@ -113,10 +113,17 @@ const worldMap = {
   },
 
   render: function (ctx) {
+    // Some of the maps are too big to render all tiles and let view port culling handle it
     // this.drawBackgrounds(ctx);
+
+    let player = entityManager.getPlayer();
+    let player_center = this.getIndeciesFromCoords(player.cx, player.cy);
+
+
     for (let l = 0; l < 2; l++) {
-      for (let i = 0; i < this._layers[l].length; i++) {
-        for (let j = 0; j < this._layers[l][i].length; j++) {
+      for (let i = player_center.row-player.viewRow; i < player_center.row + player.viewRow; i++) {
+        for (let j = player_center.col - player.viewCol; j < player_center.col + player.viewCol; j++) {
+          if (i < 0 || j < 0) continue;
           const x = j * this._tileSize;
           const y = i * this._tileSize;
   
