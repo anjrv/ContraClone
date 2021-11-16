@@ -46,6 +46,10 @@
         <label for="setBankAmount">Set $$ amount</label>
         <input id="setBankAmount" type="number" value="0" step="1"/>
       </div>
+      <div>
+        <label for="setLives">Set lives</label>
+        <input type="number" id="setLives" value="1"/>
+      </div>
       <div style='margin-left: 10px'>
           <p style="margin-left: -10px">Set powerup</p>
           <input type="radio" id="default" name="powerup" value="DEFAULT" checked>
@@ -71,6 +75,10 @@
         Player.MAX_JUMPS = Number.parseInt(maxJumps.value);
         let currency = document.getElementById('setBankAmount');
         s_coins = Number.parseInt(currency.value);
+        let lives = document.getElementById('setLives');
+        s_baselives = Number.parseInt(lives.value);
+        s_lives = s_baselives;
+
 
         let powerup = document.querySelector('input[name=powerup]:checked').value
         s_firePowerup = powerup === 'FLAMETHROWER';
