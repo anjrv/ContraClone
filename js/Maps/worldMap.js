@@ -248,6 +248,7 @@ const worldMap = {
     ctx.font = '10px Arial';
 
     let player = entityManager.getPlayer();
+    if (!player) return;
     let player_center = this.getIndeciesFromCoords(player.cx, player.cy);
 
     for (let i = player_center.row-player.viewRow; i < player_center.row+player.viewRow; i++) {
